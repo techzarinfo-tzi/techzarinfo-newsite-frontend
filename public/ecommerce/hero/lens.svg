@@ -1,0 +1,16 @@
+<svg width="156" height="168" viewBox="0 0 156 168" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(78 84) rotate(6) translate(-70 -77)">
+<rect width="140" height="154" rx="14" fill="white"/>
+<text x="14" y="34" fill="#002461" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="17" font-weight="600">lens</text>
+<g transform="translate(108 16) scale(0.6667)">
+<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" stroke="#FF5A5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<g stroke="#55595F" stroke-linecap="round" stroke-linejoin="round">
+<path d="M14 82.5C14 79.5 16 78 19 78H58C61.5 78 63 79.5 62.5 83L60.5 104C60 108 57.5 110 53.5 110H24.5C20.5 110 18 108 17.5 104L14 86V82.5Z" fill="#E9EDF1" fill-opacity="0.45" stroke-width="2.8"/>
+<path d="M73 83C72.6 79.6 74 78 77.5 78H112C115 78 116.6 79.5 116.4 82.5L114.5 102C114 106 111.6 108 107.6 108H83C79 108 76.7 106 76.2 102L73 83Z" fill="#E9EDF1" fill-opacity="0.45" stroke-width="2.8"/>
+<path d="M62.5 85C65.5 82 70 82 73 85" stroke-width="3"/>
+<path d="M14 81.5L10 80.5" stroke-width="3"/>
+<path d="M116.4 81L130 88.5L131.5 96.5C131.8 98.5 130.6 100 129 100.5" stroke-width="3"/>
+</g>
+</g>
+</svg>

@@ -1,0 +1,870 @@
+/*
+ * Footer. From lg up everything is placed on an 800 x 366 grid (the reference design, tightened):
+ * 1 design unit = var(--u) = 1/800 of the footer width, so the layout scales proportionally
+ * and every block keeps its exact position. Below lg the same markup reflows into a stack.
+ */
+
+.site-footer {
+  --ft-ink: #fefefe;
+  container-type: inline-size;
+  position: relative;
+  overflow: hidden;
+  color: var(--ft-ink);
+background:
+  radial-gradient(
+    ellipse 75% 60% at 50% 100%,
+    #DDEAFF 0%,
+    #65A0FF 35%,
+    #0157E2 65%,
+    transparent 100%
+  ),
+  #001B49;}
+
+/* Animated backdrop (see Footer.js). Screen blend makes the clip's black transparent, so only
+   its soft glow lightens the gradient; the glass panels blur it like everything else behind them. */
+.ft-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.ft-bg img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.site-footer a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.site-footer a:hover {
+  opacity: 0.7;
+}
+
+.site-footer button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.site-footer button:hover {
+  opacity: 0.7;
+}
+
+.site-footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ft-heading {
+  margin: 0;
+  font-weight: 500;
+  color: var(--ft-ink);
+}
+
+/*
+ * Glassmorphism panels, built like a real frosted sheet rather than a flat tint:
+ *  - body: a faint top-left-to-bottom-right falloff (light enters from the top) over a soft blur
+ *  - ::after: a 1px rim that catches light on the top/left edges and fades along the others
+ *  - ::before: a broad, very soft sheen in the top-left corner plus a whisper of frosted grain
+ *  - a low, diffuse navy shadow so the sheet lifts off the gradient without looking pasted on
+ */
+.ft-panel {
+  position: relative;
+  isolation: isolate;
+  border-radius: 6px;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.085) 45%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  -webkit-backdrop-filter: blur(14px) saturate(115%);
+  backdrop-filter: blur(14px) saturate(115%);
+  box-shadow:
+    0 1px 1px rgba(0, 36, 97, 0.04),
+    0 10px 28px -14px rgba(0, 36, 97, 0.28);
+}
+
+.ft-panel::before,
+.ft-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ft-panel::before {
+  z-index: -1;
+  background:
+    radial-gradient(120% 55% at 0% 0%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.2;
+  mix-blend-mode: soft-light;
+}
+
+.ft-panel::after {
+  padding: 1px;
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.22) 30%,
+    rgba(255, 255, 255, 0.06) 65%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+.ft-wordmark {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible; /* the mascot rises above the band the viewBox covers */
+  pointer-events: none;
+}
+
+.ft-wordmark text {
+  font-family: var(--font-plus-jakarta-sans), Arial, Helvetica, sans-serif;
+  font-size: 148px;
+  font-style: italic;
+  font-weight: 600;
+  fill: #ffffff;
+  fill-opacity: 0.4;
+}
+
+/*
+ * Walking mascot. The GIF walks on the spot (one 0.88s stride covers ~21 units), so walking
+ * stretches are carried at that same pace (~24 units/s) to keep the feet from sliding. Route:
+ * appears on the T, hops down, walks the lowercase tops (y 354), jumps onto the h (323), the i's
+ * dot (324.5) and the f (323) with a celebratory hop on each, then walks off the right edge.
+ * The hop down from the T is a forward somersault: it slows into a crouch at the end of the T,
+ * springs off, tucks and spins on the way down (slow-fast-slow), opens out, lands on the e with a
+ * slight over-rotation and absorbs it, then walks on. The hop is kept low so it clears the social
+ * icons above.
+ * While walking it leans slightly forward from the feet, easing in and out as it starts and stops.
+ * Split across nested groups so each axis can ease on its own: x is linear, y uses real jump
+ * arcs, the lean pivots on the feet, the flip turns about the body's centre (23 units above the
+ * feet), and squash/stretch scales around the feet. In the air and while paused it switches to a
+ * still pose so the legs don't keep walking. Transforms on SVG elements are in user units, so
+ * all of this scales with the wordmark. The keyframes below were generated from that route.
+ */
+.ft-walker,
+.ft-walker-y,
+.ft-walker-lean,
+.ft-walker-spin,
+.ft-walker-squash,
+.ft-walker-anim,
+.ft-walker-still,
+.ft-walker-shadow,
+.ft-react,
+.ft-puff {
+  animation-duration: 32.963s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.ft-walker {
+  animation-name: ft-walker-x, ft-walker-fade;
+}
+
+.ft-walker-y {
+  animation-name: ft-walker-y;
+}
+
+.ft-walker-lean {
+  animation-name: ft-walker-lean;
+  animation-timing-function: ease-in-out;
+}
+
+.ft-walker-spin {
+  animation-name: ft-walker-spin;
+}
+
+.ft-walker-squash {
+  animation-name: ft-walker-squash;
+}
+
+.ft-walker-anim {
+  animation-name: ft-walker-pose-anim;
+  animation-timing-function: step-end;
+}
+
+.ft-walker-still {
+  animation-name: ft-walker-pose-still;
+  animation-timing-function: step-end;
+}
+
+.ft-walker-shadow {
+  fill: var(--ft-ink);
+  fill-opacity: 0.22;
+  filter: blur(0.8px);
+  animation-name: ft-walker-shadow;
+  animation-timing-function: step-end;
+}
+
+/* Letter reactions: the letter brightens and a soft ring puffs out from the landing spot */
+.ft-react {
+  fill: #ffffff;
+  fill-opacity: 0.45;
+  opacity: 0;
+}
+
+.ft-react-h { animation-name: ft-react-h; }
+.ft-react-i { animation-name: ft-react-i; }
+.ft-react-f { animation-name: ft-react-f; }
+
+.ft-puff {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 0.8;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-timing-function: ease-out;
+}
+
+.ft-puff-h { animation-name: ft-puff-h; }
+.ft-puff-i { animation-name: ft-puff-i; }
+.ft-puff-f { animation-name: ft-puff-f; }
+
+@keyframes ft-walker-x {
+  0% { transform: translateX(22.00px); }
+  4.589% { transform: translateX(58.00px); animation-timing-function: cubic-bezier(0.3, 0, 0.6, 1); }
+  5.089% { transform: translateX(60.00px); animation-timing-function: cubic-bezier(0.5, 0, 0.9, 0.6); }
+  5.339% { transform: translateX(64.50px); }
+  7.189% { transform: translateX(108.00px); animation-timing-function: cubic-bezier(0.2, 0.6, 0.4, 1); }
+  7.789% { transform: translateX(111.00px); }
+  23.593% { transform: translateX(236.00px); }
+  25.474% { transform: translateX(266.50px); }
+  28.811% { transform: translateX(266.50px); }
+  30.479% { transform: translateX(304.00px); }
+  59.542% { transform: translateX(532.00px); }
+  61.423% { transform: translateX(562.00px); }
+  64.76% { transform: translateX(562.00px); }
+  66.428% { transform: translateX(604.00px); }
+  75.861% { transform: translateX(678.00px); }
+  77.742% { transform: translateX(712.00px); }
+  81.686% { transform: translateX(712.00px); }
+  83.506% { transform: translateX(758.00px); }
+  90.899% { transform: translateX(816.00px); }
+  100% { transform: translateX(816.00px); }
+}
+
+@keyframes ft-walker-y {
+  0% { transform: translateY(324.50px); }
+  4.589% { transform: translateY(324.50px); }
+  5.089% { transform: translateY(324.50px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  5.871% { transform: translateY(309.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  7.189% { transform: translateY(353.00px); }
+  23.593% { transform: translateY(353.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  24.832% { transform: translateY(312.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  25.474% { transform: translateY(323.00px); }
+  26.642% { transform: translateY(323.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  27.218% { transform: translateY(317.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  27.795% { transform: translateY(323.00px); }
+  28.811% { transform: translateY(323.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  29.285% { transform: translateY(317.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  30.479% { transform: translateY(355.00px); }
+  59.542% { transform: translateY(355.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  60.783% { transform: translateY(313.50px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  61.423% { transform: translateY(324.50px); }
+  62.591% { transform: translateY(324.50px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  63.167% { transform: translateY(318.50px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  63.743% { transform: translateY(324.50px); }
+  64.76% { transform: translateY(324.50px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  65.241% { transform: translateY(318.50px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  66.428% { transform: translateY(355.00px); }
+  75.861% { transform: translateY(355.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  77.11% { transform: translateY(312.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  77.742% { transform: translateY(323.00px); }
+  79.122% { transform: translateY(323.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  79.698% { transform: translateY(316.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  80.275% { transform: translateY(323.00px); }
+  81.686% { transform: translateY(323.00px); animation-timing-function: cubic-bezier(0.25, 0.6, 0.45, 1); }
+  82.213% { transform: translateY(317.00px); animation-timing-function: cubic-bezier(0.55, 0, 0.75, 0.4); }
+  83.506% { transform: translateY(353.00px); }
+  100% { transform: translateY(353.00px); }
+}
+
+@keyframes ft-walker-squash {
+  0% { transform: scale(1, 1); }
+  4.589% { transform: scale(1, 1); animation-timing-function: ease-in; }
+  5.089% { transform: scale(1.14, 0.82); animation-timing-function: ease-out; }
+  5.289% { transform: scale(0.9, 1.12); animation-timing-function: ease-in-out; }
+  5.689% { transform: scale(0.94, 0.9); }
+  6.489% { transform: scale(0.94, 0.9); animation-timing-function: ease-out; }
+  6.939% { transform: scale(0.96, 1.06); }
+  7.189% { transform: scale(1, 1); animation-timing-function: ease-out; }
+  7.339% { transform: scale(1.18, 0.78); animation-timing-function: ease-in-out; }
+  7.639% { transform: scale(1.04, 0.94); animation-timing-function: ease-in-out; }
+  7.939% { transform: scale(0.98, 1.02); animation-timing-function: ease-in-out; }
+  8.189% { transform: scale(1, 1); }
+  23.289% { transform: scale(1, 1); }
+  23.593% { transform: scale(1.1, 0.88); }
+  24.063% { transform: scale(0.93, 1.08); }
+  24.832% { transform: scale(1, 1); }
+  25.286% { transform: scale(0.95, 1.06); }
+  25.534% { transform: scale(1.14, 0.84); }
+  26.08% { transform: scale(1, 1); }
+  26.399% { transform: scale(1, 1); }
+  26.642% { transform: scale(1.08, 0.9); }
+  26.884% { transform: scale(0.95, 1.05); }
+  27.795% { transform: scale(1, 1); }
+  27.855% { transform: scale(1.08, 0.92); }
+  28.28% { transform: scale(1, 1); }
+  28.507% { transform: scale(1, 1); }
+  28.811% { transform: scale(1.1, 0.88); }
+  29.228% { transform: scale(0.93, 1.08); }
+  29.285% { transform: scale(1, 1); }
+  30.312% { transform: scale(0.95, 1.06); }
+  30.54% { transform: scale(1.14, 0.84); }
+  31.086% { transform: scale(1, 1); }
+  59.238% { transform: scale(1, 1); }
+  59.542% { transform: scale(1.1, 0.88); }
+  60.012% { transform: scale(0.93, 1.08); }
+  60.783% { transform: scale(1, 1); }
+  61.235% { transform: scale(0.95, 1.06); }
+  61.483% { transform: scale(1.14, 0.84); }
+  62.029% { transform: scale(1, 1); }
+  62.348% { transform: scale(1, 1); }
+  62.591% { transform: scale(1.08, 0.9); }
+  62.833% { transform: scale(0.95, 1.05); }
+  63.743% { transform: scale(1, 1); }
+  63.804% { transform: scale(1.08, 0.92); }
+  64.229% { transform: scale(1, 1); }
+  64.456% { transform: scale(1, 1); }
+  64.76% { transform: scale(1.1, 0.88); }
+  65.177% { transform: scale(0.93, 1.08); }
+  65.241% { transform: scale(1, 1); }
+  66.261% { transform: scale(0.95, 1.06); }
+  66.489% { transform: scale(1.14, 0.84); }
+  67.035% { transform: scale(1, 1); }
+  75.557% { transform: scale(1, 1); }
+  75.861% { transform: scale(1.1, 0.88); }
+  76.331% { transform: scale(0.93, 1.08); }
+  77.11% { transform: scale(1, 1); }
+  77.554% { transform: scale(0.95, 1.06); }
+  77.802% { transform: scale(1.14, 0.84); }
+  78.348% { transform: scale(1, 1); }
+  78.879% { transform: scale(1, 1); }
+  79.122% { transform: scale(1.08, 0.9); }
+  79.365% { transform: scale(0.95, 1.05); }
+  80.275% { transform: scale(1, 1); }
+  80.336% { transform: scale(1.08, 0.92); }
+  80.76% { transform: scale(1, 1); }
+  81.382% { transform: scale(1, 1); }
+  81.686% { transform: scale(1.1, 0.88); }
+  82.141% { transform: scale(0.93, 1.08); }
+  82.213% { transform: scale(1, 1); }
+  83.324% { transform: scale(0.95, 1.06); }
+  83.566% { transform: scale(1.14, 0.84); }
+  84.113% { transform: scale(1, 1); }
+  100% { transform: scale(1, 1); }
+}
+
+@keyframes ft-walker-pose-anim {
+  0% { opacity: 1; }
+  4.589% { opacity: 0; }
+  7.789% { opacity: 1; }
+  23.593% { opacity: 0; }
+  25.474% { opacity: 0; }
+  28.811% { opacity: 0; }
+  30.479% { opacity: 1; }
+  59.542% { opacity: 0; }
+  61.423% { opacity: 0; }
+  64.76% { opacity: 0; }
+  66.428% { opacity: 1; }
+  75.861% { opacity: 0; }
+  77.742% { opacity: 0; }
+  81.686% { opacity: 0; }
+  83.506% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes ft-walker-pose-still {
+  0% { opacity: 0; }
+  4.589% { opacity: 1; }
+  7.789% { opacity: 0; }
+  23.593% { opacity: 1; }
+  25.474% { opacity: 1; }
+  28.811% { opacity: 1; }
+  30.479% { opacity: 0; }
+  59.542% { opacity: 1; }
+  61.423% { opacity: 1; }
+  64.76% { opacity: 1; }
+  66.428% { opacity: 0; }
+  75.861% { opacity: 1; }
+  77.742% { opacity: 1; }
+  81.686% { opacity: 1; }
+  83.506% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes ft-walker-shadow {
+  0% { opacity: 1; }
+  5.089% { opacity: 0; }
+  7.189% { opacity: 1; }
+  23.593% { opacity: 0; }
+  25.474% { opacity: 1; }
+  26.642% { opacity: 0; }
+  27.795% { opacity: 1; }
+  28.811% { opacity: 0; }
+  30.479% { opacity: 1; }
+  59.542% { opacity: 0; }
+  61.423% { opacity: 1; }
+  62.591% { opacity: 0; }
+  63.743% { opacity: 1; }
+  64.76% { opacity: 0; }
+  66.428% { opacity: 1; }
+  75.861% { opacity: 0; }
+  77.742% { opacity: 1; }
+  79.122% { opacity: 0; }
+  80.275% { opacity: 1; }
+  81.686% { opacity: 0; }
+  83.506% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* Forward somersault on the hop down from the T (x 58-111), timed with the hop in ft-walker-y */
+@keyframes ft-walker-spin {
+  0% { transform: translateY(-23px) rotate(0deg) translateY(23px); }
+  4.589% { transform: translateY(-23px) rotate(0deg) translateY(23px); animation-timing-function: ease-in-out; }
+  5.089% { transform: translateY(-23px) rotate(8deg) translateY(23px); animation-timing-function: ease-in; }
+  5.589% { transform: translateY(-23px) rotate(70deg) translateY(23px); }
+  6.489% { transform: translateY(-23px) rotate(310deg) translateY(23px); animation-timing-function: ease-out; }
+  7.189% { transform: translateY(-23px) rotate(368deg) translateY(23px); animation-timing-function: ease-in-out; }
+  7.639% { transform: translateY(-23px) rotate(356deg) translateY(23px); animation-timing-function: ease-in-out; }
+  8.089% { transform: translateY(-23px) rotate(360deg) translateY(23px); }
+  100% { transform: translateY(-23px) rotate(360deg) translateY(23px); }
+}
+
+/* Forward lean while walking, easing in as a walk starts and out as it stops */
+@keyframes ft-walker-lean {
+  0% { transform: rotate(3deg); }
+  4.089% { transform: rotate(3deg); }
+  4.589% { transform: rotate(0deg); }
+  7.789% { transform: rotate(0deg); }
+  8.289% { transform: rotate(3deg); }
+  23.093% { transform: rotate(3deg); }
+  23.593% { transform: rotate(0deg); }
+  30.479% { transform: rotate(0deg); }
+  30.979% { transform: rotate(3deg); }
+  59.042% { transform: rotate(3deg); }
+  59.542% { transform: rotate(0deg); }
+  66.428% { transform: rotate(0deg); }
+  66.928% { transform: rotate(3deg); }
+  75.361% { transform: rotate(3deg); }
+  75.861% { transform: rotate(0deg); }
+  83.506% { transform: rotate(0deg); }
+  84.006% { transform: rotate(3deg); }
+  100% { transform: rotate(3deg); }
+}
+
+@keyframes ft-walker-fade {
+  0% { opacity: 0; }
+  1.82% { opacity: 1; }
+  90.899% { opacity: 1; }
+  90.929% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes ft-react-h {
+  0% { opacity: 0; }
+  25.443% { opacity: 0; }
+  25.656% { opacity: 1; }
+  28.204% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes ft-puff-h {
+  0% { transform: scale(0.3); opacity: 0; }
+  25.443% { transform: scale(0.3); opacity: 0; }
+  25.474% { transform: scale(0.3); opacity: 0.8; }
+  27.142% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes ft-react-i {
+  0% { opacity: 0; }
+  61.392% { opacity: 0; }
+  61.605% { opacity: 1; }
+  64.153% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes ft-puff-i {
+  0% { transform: scale(0.3); opacity: 0; }
+  61.392% { transform: scale(0.3); opacity: 0; }
+  61.423% { transform: scale(0.3); opacity: 0.8; }
+  63.091% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes ft-react-f {
+  0% { opacity: 0; }
+  77.711% { opacity: 0; }
+  77.924% { opacity: 1; }
+  80.472% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes ft-puff-f {
+  0% { transform: scale(0.3); opacity: 0; }
+  77.711% { transform: scale(0.3); opacity: 0; }
+  77.742% { transform: scale(0.3); opacity: 0.8; }
+  79.41% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Reduced motion: the mascot stands still on the "z" and the letters stay put */
+@media (prefers-reduced-motion: reduce) {
+  .ft-walker,
+  .ft-walker-y,
+  .ft-walker-lean,
+  .ft-walker-spin,
+  .ft-walker-squash,
+  .ft-walker-anim,
+  .ft-walker-still,
+  .ft-walker-shadow,
+  .ft-react,
+  .ft-puff {
+    animation: none;
+  }
+
+  .ft-walker {
+    transform: translateX(330px);
+  }
+
+  .ft-walker-y {
+    transform: translateY(354px);
+  }
+
+  .ft-walker-anim {
+    display: none;
+  }
+}
+
+/* ---------- Stacked layout (below lg) ---------- */
+
+.ft {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+  padding: 28px 16px 0;
+}
+
+.ft-logo img {
+  display: block;
+  width: 140px;
+  height: auto;
+}
+
+.ft-contact .ft-heading {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.ft-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ft-contact-row + .ft-contact-row {
+  margin-top: 12px;
+}
+
+.ft-contact-row svg {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 3px;
+}
+
+.ft-contact-mail svg {
+  height: 16px;
+  margin-top: 6px;
+}
+
+.ft-social {
+  display: flex;
+  gap: 18px;
+}
+
+.ft-social a {
+  display: block;
+}
+
+.ft-social svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.ft-social-youtube svg {
+  width: 24px;
+}
+
+.ft-panel {
+  padding: 14px 16px 14px;
+}
+
+.ft-panel .ft-heading {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.ft-panel li {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ft-legal {
+  margin: 0;
+  font-size: 13px;
+  justify-self: end;
+}
+
+.ft-legal a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ft-wordmark {
+  margin: 0 -16px;
+  width: calc(100% + 32px);
+}
+
+@media (min-width: 640px) {
+  .ft {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-inline: 32px;
+  }
+
+  .ft-logo,
+  .ft-legal,
+  .ft-wordmark {
+    grid-column: 1 / -1;
+  }
+
+  .ft-wordmark {
+    margin: 0 -32px;
+    width: calc(100% + 64px);
+  }
+}
+
+/* ---------- Reference grid (lg and up) ---------- */
+
+@media (min-width: 1024px) {
+  .ft {
+    --u: calc(100cqw / 800);
+    display: block;
+    height: calc(366 * var(--u));
+    padding: 0;
+  }
+
+  .ft > * {
+    position: absolute;
+  }
+
+  .ft-logo {
+    left: calc(27.8 * var(--u));
+    top: calc(24 * var(--u));
+  }
+
+  .ft-logo img {
+    width: calc(104 * var(--u));
+  }
+
+  /* Contact */
+  .ft-contact {
+    left: calc(31 * var(--u));
+    top: calc(76 * var(--u));
+  }
+
+  .ft-contact .ft-heading {
+    font-size: calc(10.8 * var(--u));
+    letter-spacing: -0.03em;
+    line-height: calc(13.6 * var(--u));
+    margin: 0;
+  }
+
+  .ft-contact-row {
+    position: absolute;
+    left: 0;
+    display: block;
+    font-size: calc(10.35 * var(--u));
+    line-height: calc(13.6 * var(--u));
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+  }
+
+  .ft-contact-row + .ft-contact-row {
+    margin-top: 0;
+  }
+
+  .ft-contact-row svg {
+    position: absolute;
+    margin: 0;
+  }
+
+  .ft-contact-phone {
+    top: calc(23.3 * var(--u));
+  }
+
+  .ft-contact-phone ul {
+    margin-left: calc(26 * var(--u));
+  }
+
+  .ft-contact-phone svg {
+    left: calc(1 * var(--u));
+    top: calc(4.8 * var(--u));
+    width: calc(17.5 * var(--u));
+    height: calc(17.5 * var(--u));
+  }
+
+  .ft-contact-mail {
+    top: calc(59 * var(--u));
+  }
+
+  .ft-contact-mail ul {
+    margin-left: calc(27 * var(--u));
+  }
+
+  .ft-contact-mail svg {
+    left: calc(1 * var(--u));
+    top: calc(6.6 * var(--u));
+    width: calc(18.5 * var(--u));
+    height: calc(14 * var(--u));
+  }
+
+  /* Social */
+  .ft-social {
+    left: 0;
+    top: calc(176 * var(--u));
+    display: block;
+  }
+
+  .ft-social li {
+    position: absolute;
+    top: 0;
+  }
+
+  .ft-social svg {
+    width: calc(10.8 * var(--u));
+    height: calc(10.8 * var(--u));
+  }
+
+  .ft-social-instagram { left: calc(31.8 * var(--u)); }
+  .ft-social-linkedin { left: calc(53.8 * var(--u)); }
+  .ft-social-x { left: calc(75.8 * var(--u)); }
+  .ft-social-youtube { left: calc(96.2 * var(--u)); }
+
+  .ft-social-youtube svg {
+    width: calc(12.6 * var(--u));
+  }
+
+  /* Glass panels */
+  .ft-panel {
+    top: calc(24 * var(--u));
+    padding: calc(4.1 * var(--u)) 0 0 calc(11 * var(--u));
+  }
+
+  .ft-panel-quick {
+    left: calc(261 * var(--u));
+    width: calc(82 * var(--u));
+    height: calc(100.5 * var(--u));
+  }
+
+  .ft-panel-services {
+    left: calc(352.5 * var(--u));
+    width: calc(173 * var(--u));
+    padding-left: calc(10.5 * var(--u));
+    height: calc(178 * var(--u));
+  }
+
+  .ft-panel-products {
+    left: calc(534.5 * var(--u));
+    width: calc(208 * var(--u));
+    height: calc(162.5 * var(--u));
+    padding-left: calc(10.5 * var(--u));
+  }
+
+  /* AI Guide: stacked under Quick Links in the same column, separated by the same
+     9.5-unit gap the panels keep between each other horizontally */
+  .ft-panel-ai {
+    left: calc(261 * var(--u));
+    top: calc(134 * var(--u));
+    width: calc(82 * var(--u));
+    height: calc(57.5 * var(--u));
+  }
+
+  .ft-panel .ft-heading {
+    font-size: calc(10.8 * var(--u));
+    line-height: calc(13.6 * var(--u));
+    letter-spacing: -0.03em;
+    margin: 0 0 calc(8 * var(--u));
+    white-space: nowrap;
+  }
+
+  .ft-panel li {
+    font-size: calc(9.2 * var(--u));
+    line-height: calc(14.5 * var(--u));
+    letter-spacing: -0.012em;
+    white-space: nowrap;
+  }
+
+  .ft-panel-products .ft-heading {
+    margin-bottom: calc(9 * var(--u));
+  }
+
+  .ft-panel-products li {
+    line-height: calc(13 * var(--u));
+  }
+
+  /* Legal links */
+  .ft-legal {
+    right: calc(24 * var(--u));
+    top: calc(334.5 * var(--u));
+    font-size: calc(10.35 * var(--u));
+    line-height: calc(12.6 * var(--u));
+    letter-spacing: -0.012em;
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  .ft-legal a {
+    text-underline-offset: calc(2 * var(--u));
+    text-decoration-thickness: calc(0.8 * var(--u));
+  }
+
+  /* Watermark: a 119-unit band (its viewBox, y 318-437) pinned to the bottom of the grid.
+     The content above is spaced so the mascot's hops still clear the panels and social icons. */
+  .ft-wordmark {
+    left: 0;
+    top: calc(247 * var(--u));
+    width: calc(800 * var(--u));
+    height: calc(119 * var(--u));
+    margin: 0;
+  }
+}

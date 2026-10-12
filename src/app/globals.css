@@ -8,19 +8,719 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-plus-jakarta-sans);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow {
+    animation: none;
+  }
+}
+
+/* Clients marquee */
+.marquee {
+  --marquee-gap: 2rem;
+  --item-w: 7.5rem;
+  --item-h: 3rem;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+@media (min-width: 640px) {
+  .marquee {
+    --marquee-gap: 3rem;
+    --item-w: 9rem;
+    --item-h: 3.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .marquee {
+    --marquee-gap: 4rem;
+    --item-w: 11rem;
+    --item-h: 4.5rem;
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-ltr var(--marquee-duration, 45s) linear infinite;
+  will-change: transform;
+}
+
+.marquee-reverse {
+  animation-name: marquee-rtl;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--marquee-gap);
+  padding-right: var(--marquee-gap); /* keeps both groups equal width for a seamless loop */
+  margin: 0;
+  list-style: none;
+}
+
+.marquee-item {
+  flex: none;
+  width: var(--item-w);
+  height: var(--item-h);
+}
+
+@keyframes marquee-ltr {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes marquee-rtl {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Floating rocket: transform-only, so layout is never affected */
+@keyframes float-y {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -0.12em, 0); }
+}
+
+.animate-float {
+  animation: float-y 3.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float {
+    animation: none;
+  }
+}
+
+/* Soft pulse ring: hints that the rocket is clickable */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.45; }
+  70%, 100% { transform: scale(1.35, 1.6); opacity: 0; }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-ring {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Two upward arrows that ripple to invite a tap/click */
+@keyframes arrow-up {
+  0%, 100% { transform: translate3d(0, 4px, 0); opacity: 0.25; }
+  50% { transform: translate3d(0, -2px, 0); opacity: 0.9; }
+}
+
+.animate-arrow-up {
+  animation: arrow-up 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-arrow-up {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* Smooth anchor scrolling (native, lands exactly on the target's top edge) */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Smoky blue haze across the bottom of the page: background only, never intercepts input */
+:root {
+  --smoke-cyan: #02abfc;
+  --smoke-blue: #0275fb;
+  --text-smoke: #b2b2b2;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+.bottom-smoke {
+  --smoke-h: 28rem;
+  position: absolute;
+  inset: auto 0 0 0;
+  height: var(--smoke-h);
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bottom-smoke::before,
+.bottom-smoke::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  filter: blur(48px);
+  will-change: transform;
+}
+
+.bottom-smoke::before {
+  background:
+    radial-gradient(ellipse 38% 55% at 12% 100%, color-mix(in srgb, var(--smoke-cyan) 55%, transparent), transparent 70%),
+    radial-gradient(ellipse 42% 60% at 46% 105%, color-mix(in srgb, var(--smoke-blue) 60%, transparent), transparent 70%),
+    radial-gradient(ellipse 36% 50% at 82% 100%, color-mix(in srgb, var(--smoke-cyan) 50%, transparent), transparent 70%);
+  animation: smoke-drift-a 26s ease-in-out infinite alternate;
+}
+
+.bottom-smoke::after {
+  background:
+    radial-gradient(ellipse 45% 45% at 28% 100%, color-mix(in srgb, var(--smoke-blue) 45%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 50% at 68% 102%, color-mix(in srgb, var(--smoke-cyan) 45%, transparent), transparent 70%),
+    radial-gradient(ellipse 30% 40% at 96% 100%, color-mix(in srgb, var(--smoke-blue) 50%, transparent), transparent 70%);
+  animation: smoke-drift-b 32s ease-in-out infinite alternate;
+  opacity: 0.85;
+}
+
+@keyframes smoke-drift-a {
+  from { transform: translate3d(-3%, 0, 0) scale(1); }
+  to { transform: translate3d(3%, -4%, 0) scale(1.06); }
+}
+
+@keyframes smoke-drift-b {
+  from { transform: translate3d(3%, -2%, 0) scale(1.04); }
+  to { transform: translate3d(-3%, 2%, 0) scale(1); }
+}
+
+@media (max-width: 1023px) {
+  .bottom-smoke { --smoke-h: 22rem; }
+  .bottom-smoke::before,
+  .bottom-smoke::after { filter: blur(36px); }
+}
+
+@media (max-width: 639px) {
+  .bottom-smoke { --smoke-h: 16rem; }
+  .bottom-smoke::before,
+  .bottom-smoke::after { filter: blur(28px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottom-smoke::before,
+  .bottom-smoke::after { animation: none; }
+}
+
+/* Flight section hand-off (driven by FlightStage). Without JS / reduced motion everything just stacks. */
+.flight-stage {
+  position: relative;
+}
+
+.flight-stage > .flight-section {
+  position: relative;
+  z-index: 10;
+}
+
+.flight-js > .flight-prev {
+  position: sticky;
+  z-index: 0;
+  will-change: opacity, transform;
+}
+
+.flight-js .flight-rocket-inner,
+.flight-js .flight-cards {
+  will-change: transform, opacity;
+}
+
+/* The (transparent) flight section must not swallow clicks meant for the Welcome rocket while it is pinned behind */
+.flight-js > .flight-section {
+  pointer-events: none;
+}
+
+.flight-js .flight-cards {
+  pointer-events: auto;
+}
+
+/* AI guide: a fixed character that travels the page (transform-only, never affects layout) */
+.ai-guide {
+  --bot: clamp(72px, 8.5vw, 128px);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 45;
+  width: var(--bot);
+  height: var(--bot);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  will-change: transform;
+}
+
+.ai-guide.is-on {
+  opacity: 1;
+}
+
+.ai-guide__bot {
+  width: 100%;
+  height: 100%;
+  animation: ai-bob 3.4s ease-in-out infinite;
+}
+
+.ai-guide__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ai-guide[data-mood="wave"] .ai-guide__bot { animation: ai-wave 2.6s ease-in-out infinite; transform-origin: 50% 90%; }
+.ai-guide[data-mood="hop"] .ai-guide__bot { animation: ai-hop 1.6s ease-in-out infinite; }
+.ai-guide[data-mood="point"] .ai-guide__bot { animation: ai-point 2.8s ease-in-out infinite; transform-origin: 50% 90%; }
+.ai-guide[data-mood="boost"] .ai-guide__bot { animation: ai-boost 1.4s ease-in-out infinite; }
+
+@keyframes ai-bob {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+
+@keyframes ai-wave {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-7deg) translate3d(0, -4px, 0); }
+  40% { transform: rotate(6deg) translate3d(0, -2px, 0); }
+  60% { transform: rotate(-4deg); }
+  80% { transform: rotate(0deg); }
+}
+
+@keyframes ai-hop {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1, 1); }
+  40% { transform: translate3d(0, -14px, 0) scale(0.97, 1.04); }
+  60% { transform: translate3d(0, 0, 0) scale(1.04, 0.96); }
+}
+
+@keyframes ai-point {
+  0%, 100% { transform: rotate(0deg) translate3d(0, 0, 0); }
+  50% { transform: rotate(9deg) translate3d(4px, -6px, 0); }
+}
+
+@keyframes ai-boost {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -10px, 0) scale(1.06); }
+}
+
+.ai-guide__bubble {
+  position: absolute;
+  bottom: 62%;
+  width: max-content;
+  max-width: min(240px, 58vw);
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid #cfe6f7;
+  box-shadow: 0 10px 30px -8px rgba(0, 44, 120, 0.25);
+  color: #002148;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0;
+  transform: scale(0.6) translate3d(0, 8px, 0);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.ai-guide.is-left .ai-guide__bubble { left: 78%; transform-origin: 0% 100%; }
+.ai-guide.is-right .ai-guide__bubble { right: 78%; transform-origin: 100% 100%; }
+
+.ai-guide__bubble.is-show {
+  opacity: 1;
+  transform: scale(1) translate3d(0, 0, 0);
+}
+
+.ai-guide__bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-right: 1px solid #cfe6f7;
+  border-bottom: 1px solid #cfe6f7;
+  transform: rotate(45deg);
+}
+
+.ai-guide.is-left .ai-guide__bubble::after { left: 14px; }
+.ai-guide.is-right .ai-guide__bubble::after { right: 14px; }
+
+.ai-word {
+  display: inline-block;
+  opacity: 0;
+}
+
+.is-show .ai-word {
+  animation: ai-word-in 0.45s ease-out both;
+  animation-delay: calc(var(--i) * 45ms + 200ms);
+}
+
+@keyframes ai-word-in {
+  from { opacity: 0; transform: translate3d(0, 6px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (min-width: 1024px) {
+  .ai-guide__bubble { font-size: 14px; padding: 12px 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-guide__bot { animation: none !important; }
+  .ai-guide__bubble { transition: opacity 0.2s ease; transform: none; }
+  .ai-guide__bubble.is-show { transform: none; }
+  .is-show .ai-word { animation: none; opacity: 1; }
+}
+
+/* Drag interaction: only the character itself takes pointer input, everything else stays click-through */
+.ai-guide__bot {
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ai-guide__img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.ai-guide.is-dragging .ai-guide__bot {
+  cursor: grabbing;
+  animation: none;
+}
+
+.ai-guide.is-dragging .ai-guide__img {
+  filter: drop-shadow(0 14px 14px rgba(0, 44, 120, 0.28));
+}
+
+/* AI Solutions: below lg each part fades up as it scrolls into view (JS adds .ai-io, then .ai-in per element) */
+.ai-io [data-seq] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 0.7s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+
+.ai-io [data-seq].ai-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Desktop: the stage is pinned, so parts start hidden and are driven by scroll */
+.ai-pinned [data-seq] {
+  will-change: transform, opacity;
+}
+
+/* Development Services: layered 3D card stack, scroll-scrubbed (driven by ServiceSequence) */
+.svc-pinned [data-seq="card"] {
+  will-change: transform, opacity;
+}
+
+/* prefers-reduced-motion (or pre-hydration) fallback: drop the pin/stack, show cards in normal flow */
+.svc-static {
+  height: auto !important;
+}
+.svc-static [data-seq="stage"] {
+  position: static;
+  min-height: 0;
+  padding: 0;
+  perspective: none;
+}
+.svc-static [data-seq="stack"] {
+  position: static;
+}
+.svc-static [data-seq="sizer"] {
+  display: none;
+}
+.svc-static [data-seq="card"] {
+  position: static !important;
+  transform: none !important;
+  opacity: 1 !important;
+  z-index: auto !important;
+  margin-bottom: 2.5rem;
+}
+.svc-static [data-seq="caption"],
+.svc-static [data-seq="reveal"] {
+  opacity: 1 !important;
+}
+.svc-static [data-seq="card"]:last-child {
+  margin-bottom: 0;
+}
+
+/* Solutions "pin board": on hover/touch the card *photo* gently sways side to side and floats,
+   purely via transform on the photo itself — never on `.card-hover-zone` (the wrapper that
+   carries the card's real left/top/width and the pin). That keeps the pin pixel-anchored in
+   place, like it's actually holding the photo down, while everything drifts underneath it.
+   `:hover`/`:active` are read off the wrapper (not the photo) so hovering the pin itself, which
+   sits on top of the photo, still starts the float. The transition on the base rule is what lets
+   the photo ease back to rest instead of snapping when the animation is removed. */
+.card-photo {
+  transition: transform 0.5s ease-out;
+  will-change: transform;
+}
+
+.card-hover-zone:hover .card-photo,
+.card-hover-zone:active .card-photo {
+  animation: card-sway 2.6s ease-in-out infinite;
+}
+
+@keyframes card-sway {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-7px, -4px, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+  75% { transform: translate3d(7px, -4px, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover-zone:hover .card-photo,
+  .card-hover-zone:active .card-photo {
+    animation: none;
+  }
+}
+
+/* E-commerce hero: 3D orbit. The person is fixed; the product cards revolve around her.
+   .orbit-y swings a card between the far side (up, smaller) and the near side (down, full size);
+   .orbit-x swings it left/right. Both follow a sine curve a quarter-turn apart, so together they
+   trace one smooth, constant-speed ellipse. Radius, speed and start point come from inline --orbit-*.
+   Each card has a copy under the person and one over her (.orbit-front); the top copy fades out
+   across the far side of the orbit, so the card disappears behind her and reappears in front. */
+.orbit-y {
+  animation: orbit-y var(--orbit-half) cubic-bezier(0.37, 0, 0.63, 1) var(--orbit-dy) infinite alternate;
+  will-change: transform;
+}
+
+.orbit-front {
+  animation:
+    orbit-y var(--orbit-half) cubic-bezier(0.37, 0, 0.63, 1) var(--orbit-dy) infinite alternate,
+    orbit-front var(--orbit-half) linear var(--orbit-dy) infinite alternate;
+  will-change: transform, opacity;
+}
+
+.orbit-x {
+  animation: orbit-x var(--orbit-half) cubic-bezier(0.37, 0, 0.63, 1) var(--orbit-dx) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes orbit-y {
+  from { transform: translate3d(0, calc(var(--orbit-ry) * -1), 0) scale(0.8); }
+  to { transform: translate3d(0, var(--orbit-ry), 0) scale(1); }
+}
+
+@keyframes orbit-x {
+  from { transform: translate3d(calc(var(--orbit-rx) * -1), 0, 0); }
+  to { transform: translate3d(var(--orbit-rx), 0, 0); }
+}
+
+/* Runs on the same clock as orbit-y (far side -> near side). Hidden while on the far side, then a
+   gradual cross-fade around the left/right edges of the orbit, fully visible on the near side. */
+@keyframes orbit-front {
+  0%, 38% { opacity: 0; }
+  62%, 100% { opacity: 1; }
+}
+
+/* Reduced motion: freeze each card at its starting point on the orbit */
+@media (prefers-reduced-motion: reduce) {
+  .orbit-y,
+  .orbit-front,
+  .orbit-x {
+    animation-play-state: paused;
+  }
+}
+
+/* Blockchain services wheel: turns clockwise at a steady speed, so the cards travel along the arc
+   from left to right. One loop = one full list of cards (--spin-to, set inline); the card list is
+   repeated round the wheel, so the end of a loop looks exactly like its start and it never jumps. */
+.services-spin {
+  animation: services-spin 30s linear infinite;
+  will-change: transform;
+}
+
+@keyframes services-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(var(--spin-to)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .services-spin {
+    animation: none;
+  }
+}
+
+/* Blockchain technologies: the six logo tiles run like a straight-six engine. Every timing is a
+   multiple of one crank turn (--cycle) so the parts stay in sync:
+   - .engine-piston: each tile strokes up and down once per turn; its top dead centre (--tdc, a
+     fraction of the turn) follows the firing order 1-5-3-6-2-4, so tiles 1&6, 2&5, 3&4 move together.
+   - ::after: a soft combustion glow at each tile's firing stroke, every second turn (--fire, a
+     fraction of the two-turn cycle).
+   - .engine-gear: the logos turn once per four strokes, neighbours in opposite directions.
+   - .engine-block: a sub-pixel shake on each of the three firings per turn.
+   Negative delays start every part mid-cycle, so nothing jumps on load. */
+.engine-block {
+  --cycle: 1.2s;
+  animation: engine-shake calc(var(--cycle) / 3) ease-in-out infinite;
+  will-change: translate;
+}
+
+.engine-piston {
+  --stroke: calc(var(--t) * 0.11);
+  position: relative;
+  animation: engine-piston var(--cycle) ease-in-out infinite;
+  animation-delay: calc((var(--tdc) - 1) * var(--cycle));
+  will-change: translate;
+}
+
+.engine-piston::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    0 0 calc(var(--t) * 0.4) rgba(2, 117, 251, 0.32),
+    inset 0 0 calc(var(--t) * 0.22) rgba(2, 117, 251, 0.16);
+  opacity: 0;
+  pointer-events: none;
+  animation: engine-fire calc(var(--cycle) * 2) ease-out infinite;
+  animation-delay: calc((var(--fire) - 1) * var(--cycle) * 2);
+}
+
+.engine-gear {
+  animation: engine-gear calc(var(--cycle) * 4) linear infinite;
+  will-change: transform;
+}
+
+.engine-gear-rev {
+  animation-direction: reverse;
+}
+
+@keyframes engine-piston {
+  0%, 100% {
+    translate: 0 calc(var(--stroke) * -1);
+    box-shadow: 0 16px 30px rgba(84, 104, 214, 0.14);
+  }
+  50% {
+    translate: 0 var(--stroke);
+    box-shadow: 0 6px 16px rgba(84, 104, 214, 0.22);
+  }
+}
+
+@keyframes engine-fire {
+  0%, 30%, 100% { opacity: 0; }
+  6% { opacity: 1; }
+}
+
+@keyframes engine-gear {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes engine-shake {
+  0%, 100% { translate: 0 0; }
+  15% { translate: 0.5px -0.4px; }
+  40% { translate: -0.35px 0.3px; }
+  70% { translate: 0.15px -0.1px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .engine-block,
+  .engine-piston,
+  .engine-piston::after,
+  .engine-gear {
+    animation: none;
+  }
+}
+
+/* Blockchain roadmap: a one-off reveal, started by BlockchainRoadmap when the section scrolls into
+   view. data-anim="ready" holds every part in its first keyframe (paused, fill both); "play" runs
+   them. Heading and intro rise in, then the road draws top to bottom at a steady speed over
+   --road-dur, and each step reveals as the line reaches its node (--at, 0..1 along the line): the
+   node pops in, then the numeral, then the title and copy. Fill "both" keeps the final state. */
+.roadmap {
+  --road-start: 0.55s;
+  --road-dur: 3.4s;
+}
+
+.roadmap[data-anim] .roadmap-rise {
+  animation: roadmap-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) both;
+}
+
+.roadmap[data-anim] .roadmap-road {
+  stroke-dasharray: 1 1;
+  animation: roadmap-draw var(--road-dur) linear var(--road-start) both;
+}
+
+.roadmap[data-anim] .roadmap-line {
+  transform-origin: top;
+  animation: roadmap-grow var(--road-dur) linear var(--road-start) both;
+}
+
+.roadmap[data-anim] .roadmap-node {
+  animation: roadmap-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--road-start) + var(--at, 0) * var(--road-dur) - 0.12s) both;
+}
+
+.roadmap[data-anim] .roadmap-num {
+  animation: roadmap-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--road-start) + var(--at, 0) * var(--road-dur) + 0.1s) both;
+}
+
+.roadmap[data-anim] .roadmap-copy {
+  animation: roadmap-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--road-start) + var(--at, 0) * var(--road-dur) + 0.22s) both;
+}
+
+.roadmap[data-anim="ready"] :is(.roadmap-rise, .roadmap-road, .roadmap-line, .roadmap-node, .roadmap-num, .roadmap-copy) {
+  animation-play-state: paused;
+}
+
+@keyframes roadmap-rise {
+  from { opacity: 0; translate: 0 18px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes roadmap-draw {
+  0% { stroke-dashoffset: 1; opacity: 0; }
+  2% { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
+}
+
+@keyframes roadmap-grow {
+  from { scale: 1 0; }
+  to { scale: 1 1; }
+}
+
+@keyframes roadmap-pop {
+  from { opacity: 0; scale: 0.4; }
+  to { opacity: 1; scale: 1; }
 }

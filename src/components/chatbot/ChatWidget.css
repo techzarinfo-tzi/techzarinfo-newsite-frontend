@@ -1,0 +1,174 @@
+/* Website chatbot: the travelling guide steps aside while the chat is open. */
+body.chat-open .ai-guide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+ * The chat is a modal: .chat-modal is the full-viewport backdrop, .chat-panel the glass dialog.
+ * Two sizes; keep the media query in sync with FLOATING_QUERY in ChatWidget.js.
+ *
+ * Compact (phones, and any window narrower than 640px or shorter than 540px): the dialog fills
+ * the screen. The backdrop follows the *visual* viewport (--chat-vvh / --chat-vv-top, set from
+ * JS), so the on-screen keyboard never covers the input.
+ *
+ * Floating (tablets, laptops, desktops): a centred glass card over a blurred page.
+ */
+.chat-modal {
+  position: fixed;
+  z-index: 70; /* above the site navbar (z-50) and the AI guide (z-45) */
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--chat-vvh, 100dvh);
+  transform: translateY(var(--chat-vv-top, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 20, 51, 0.22);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  animation: chat-fade 0.2s ease-out;
+}
+
+.chat-panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  outline: none;
+  /* Glass: translucent white over soft blue light, blurred and saturated like the site navbar. */
+  background:
+    radial-gradient(120% 60% at 0% 0%, rgba(125, 185, 255, 0.35), transparent 60%),
+    radial-gradient(90% 60% at 100% 100%, rgba(11, 87, 183, 0.18), transparent 65%),
+    rgba(255, 255, 255, 0.64);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  backdrop-filter: blur(24px) saturate(150%);
+}
+
+/* Frosted strips for the header and composer: a little more opaque than the body. */
+.chat-glass-bar {
+  background: rgba(255, 255, 255, 0.45);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  backdrop-filter: blur(16px) saturate(150%);
+}
+
+.chat-panel__header {
+  padding: max(10px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 10px
+    max(16px, env(safe-area-inset-left));
+}
+
+.chat-panel__log {
+  overscroll-behavior: contain; /* scrolling the chat never scrolls the page behind it */
+  -webkit-overflow-scrolling: touch;
+  padding: 16px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
+}
+
+.chat-panel__footer {
+  padding: 0 max(12px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+}
+
+/* Stop the page behind the modal from scrolling, without the layout jumping when the
+   scrollbar disappears. */
+html.chat-lock {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+html.chat-lock body {
+  overflow: hidden;
+}
+
+.chat-launcher {
+  position: fixed;
+  z-index: 60;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, calc(env(safe-area-inset-bottom) + 8px));
+}
+
+@media (min-width: 640px) and (min-height: 540px) {
+  .chat-modal {
+    padding: 32px 24px;
+  }
+
+  .chat-panel {
+    width: min(680px, 100%);
+    height: min(760px, 100%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 28px;
+    box-shadow:
+      0 30px 80px -20px rgba(0, 33, 72, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    animation: chat-pop 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.15);
+  }
+
+  .chat-panel__header {
+    padding: 14px 14px 14px 20px;
+  }
+
+  .chat-panel__log {
+    padding: 20px;
+  }
+
+  .chat-panel__footer {
+    padding: 0 16px 10px;
+  }
+
+  .chat-launcher {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+/* Large desktops get a roomier dialog. */
+@media (min-width: 1536px) and (min-height: 900px) {
+  .chat-panel {
+    width: 760px;
+    height: min(820px, 100%);
+  }
+}
+
+/* No blur support, or the visitor asked for less transparency: solid, readable surfaces. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .chat-modal { background: rgba(0, 20, 51, 0.55); }
+  .chat-panel { background: #f5faff; }
+  .chat-glass-bar { background: #ffffff; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .chat-modal { background: rgba(0, 20, 51, 0.55); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .chat-panel { background: #f5faff; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .chat-glass-bar { background: #ffffff; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+@keyframes chat-fade {
+  from { opacity: 0; }
+}
+
+@keyframes chat-pop {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+}
+
+.chat-dot {
+  animation: chat-dot 1s ease-in-out infinite;
+}
+
+@keyframes chat-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-dot,
+  .chat-modal,
+  .chat-panel {
+    animation: none;
+  }
+}
