@@ -177,7 +177,9 @@ export default function AiGuide() {
       const p = i + e;
       const posNear = Math.round(p);
       const settled = Math.abs(p - posNear) < 0.2 && Math.abs(target.x - cur.x) < 40;
-      setShow(settled && !drag.active && !returning && shownIdx === bi);
+      // A step can keep its bubble off on narrow screens (cfg.bubbleMinWidth) where it would cover content.
+      const roomy = !items[bi].cfg.bubbleMinWidth || vw >= items[bi].cfg.bubbleMinWidth;
+      setShow(settled && !drag.active && !returning && shownIdx === bi && roomy);
 
       if (returning && Math.hypot(target.x - cur.x, target.y - cur.y) < 1.5) returning = false;
       const moving =
@@ -273,7 +275,7 @@ export default function AiGuide() {
       </div>
       <div ref={botRef} className="ai-guide__bot">
         <Image
-          src="/ai-guide.png"
+          src="/ai-guide.webp"
           alt=""
           width={384}
           height={384}

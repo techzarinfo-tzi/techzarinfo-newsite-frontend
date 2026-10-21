@@ -4,13 +4,23 @@ import Navbar from "@/components/layout/Navbar";
 import Testimonials from "@/components/layout/Testimonials";
 import AiGuide from "@/components/layout/AiGuide";
 import ChatWidget from "@/components/chatbot/ChatWidget";
+import ContactUsSection from "@/components/layout/ContactUsSection";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta-sans",
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  style: ["normal"],
+});
+
+// The italic is only used by the footer wordmark, so it isn't preloaded: it loads with the page's
+// CSS instead of competing with the above-the-fold content.
+const plusJakartaSansItalic = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans-italic",
+  subsets: ["latin"],
+  style: ["italic"],
+  preload: false,
 });
 
 export const metadata = {
@@ -87,12 +97,13 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${plusJakartaSansItalic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Navbar />
         {children}
         <Testimonials />
+        <ContactUsSection />
         <Footer />
         <AiGuide />
         <ChatWidget />

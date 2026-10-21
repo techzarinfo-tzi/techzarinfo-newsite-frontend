@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const DIAGRAM = "/ecommerce/development-process/development-process.svg";
+const DIAGRAM = "/ecommerce/development-process/development-process.webp";
 const DIAGRAM_W = 1251;
 const DIAGRAM_H = 844;
 

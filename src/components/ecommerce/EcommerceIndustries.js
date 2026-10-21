@@ -6,11 +6,11 @@ const ASSETS = "/ecommerce/industry";
 // label: the design's line breaks. Each image is the complete card (white tile, light-blue
 // border and the round icon) at its native 141 x 171, so only the caption is text.
 const industries = [
-  { src: `${ASSETS}/e-commerce.svg`, label: ["E-Commerce"] },
-  { src: `${ASSETS}/retail.svg`, label: ["Retail"] },
-  { src: `${ASSETS}/fashion.svg`, label: ["Fashion and Apparel"] },
-  { src: `${ASSETS}/food.svg`, label: ["Food and Beverage"] },
-  { src: `${ASSETS}/homeappliance.svg`, label: ["Home Appliances", "and Furniture"] },
+  { src: `${ASSETS}/e-commerce.webp`, label: ["E-Commerce"] },
+  { src: `${ASSETS}/retail.webp`, label: ["Retail"] },
+  { src: `${ASSETS}/fashion.webp`, label: ["Fashion and Apparel"] },
+  { src: `${ASSETS}/food.webp`, label: ["Food and Beverage"] },
+  { src: `${ASSETS}/homeappliance.webp`, label: ["Home Appliances", "and Furniture"] },
 ];
 
 export default function EcommerceIndustries() {

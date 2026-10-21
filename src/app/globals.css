@@ -167,79 +167,9 @@ body {
   }
 }
 
-/* Smoky blue haze across the bottom of the page: background only, never intercepts input */
-:root {
-  --smoke-cyan: #02abfc;
-  --smoke-blue: #0275fb;
-  --text-smoke: #b2b2b2;
-}
-
 body {
   position: relative;
   isolation: isolate;
-}
-
-.bottom-smoke {
-  --smoke-h: 28rem;
-  position: absolute;
-  inset: auto 0 0 0;
-  height: var(--smoke-h);
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.bottom-smoke::before,
-.bottom-smoke::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  filter: blur(48px);
-  will-change: transform;
-}
-
-.bottom-smoke::before {
-  background:
-    radial-gradient(ellipse 38% 55% at 12% 100%, color-mix(in srgb, var(--smoke-cyan) 55%, transparent), transparent 70%),
-    radial-gradient(ellipse 42% 60% at 46% 105%, color-mix(in srgb, var(--smoke-blue) 60%, transparent), transparent 70%),
-    radial-gradient(ellipse 36% 50% at 82% 100%, color-mix(in srgb, var(--smoke-cyan) 50%, transparent), transparent 70%);
-  animation: smoke-drift-a 26s ease-in-out infinite alternate;
-}
-
-.bottom-smoke::after {
-  background:
-    radial-gradient(ellipse 45% 45% at 28% 100%, color-mix(in srgb, var(--smoke-blue) 45%, transparent), transparent 70%),
-    radial-gradient(ellipse 40% 50% at 68% 102%, color-mix(in srgb, var(--smoke-cyan) 45%, transparent), transparent 70%),
-    radial-gradient(ellipse 30% 40% at 96% 100%, color-mix(in srgb, var(--smoke-blue) 50%, transparent), transparent 70%);
-  animation: smoke-drift-b 32s ease-in-out infinite alternate;
-  opacity: 0.85;
-}
-
-@keyframes smoke-drift-a {
-  from { transform: translate3d(-3%, 0, 0) scale(1); }
-  to { transform: translate3d(3%, -4%, 0) scale(1.06); }
-}
-
-@keyframes smoke-drift-b {
-  from { transform: translate3d(3%, -2%, 0) scale(1.04); }
-  to { transform: translate3d(-3%, 2%, 0) scale(1); }
-}
-
-@media (max-width: 1023px) {
-  .bottom-smoke { --smoke-h: 22rem; }
-  .bottom-smoke::before,
-  .bottom-smoke::after { filter: blur(36px); }
-}
-
-@media (max-width: 639px) {
-  .bottom-smoke { --smoke-h: 16rem; }
-  .bottom-smoke::before,
-  .bottom-smoke::after { filter: blur(28px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bottom-smoke::before,
-  .bottom-smoke::after { animation: none; }
 }
 
 /* Flight section hand-off (driven by FlightStage). Without JS / reduced motion everything just stacks. */
@@ -563,6 +493,101 @@ body {
   }
 }
 
+/* Blockchain "Why Choose" glass panel: the footer's frosted sheet (.ft-panel) re-tuned for a white
+   page. A soft brand-blue glow sits behind it (::before, outside the panel) so the blur has colour
+   to frost; the body is a near-white falloff that keeps the navy copy at full contrast; ::after is a
+   1px rim that catches light top-left and picks up a hint of blue bottom-right. */
+.why-glass {
+  isolation: isolate;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(240, 248, 255, 0.66) 50%,
+    rgba(226, 241, 255, 0.6) 100%
+  );
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+
+}
+
+.why-glass::before,
+.why-glass::after {
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.why-glass::before {
+  inset: 8% -4%;
+  z-index: -2;
+  background:
+    radial-gradient(closest-side at 22% 30%, rgba(2, 171, 252, 0.26), transparent),
+    radial-gradient(closest-side at 78% 72%, rgba(2, 117, 251, 0.2), transparent);
+  filter: blur(28px);
+}
+
+.why-glass::after {
+  inset: 0;
+  padding: 1px;
+
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+
+
+.why-orbit {
+  isolation: isolate;
+}
+
+@media (width < 48rem) {
+  .why-orbit {
+    width: calc(2 * var(--r) + var(--coin));
+    aspect-ratio: 1;
+  }
+}
+
+@media (width >= 48rem) {
+  .why-orbit {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .why-orbit[data-ready] {
+    opacity: 1;
+  }
+}
+
+.why-orbit-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--coin);
+  height: var(--coin);
+  margin: calc(var(--coin) / -2) 0 0 calc(var(--coin) / -2);
+  transform: rotate(var(--a)) translate3d(0, calc(var(--r) * -1), 0) rotate(calc(var(--a) * -1));
+  will-change: transform, opacity;
+}
+
+/* Soft brand-blue glow round each coin; on hover the coin lifts and the glow brightens */
+.why-coin {
+  filter: drop-shadow(0 6px 14px rgba(2, 117, 251, 0.28)) drop-shadow(0 0 10px rgba(2, 171, 252, 0.22));
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+  -webkit-user-drag: none;
+}
+
+.why-coin:hover {
+  transform: scale(1.12);
+  filter: drop-shadow(0 10px 22px rgba(2, 117, 251, 0.42)) drop-shadow(0 0 18px rgba(2, 171, 252, 0.45));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-coin {
+    transition: none;
+  }
+}
+
 /* Blockchain services wheel: turns clockwise at a steady speed, so the cards travel along the arc
    from left to right. One loop = one full list of cards (--spin-to, set inline); the card list is
    repeated round the wheel, so the end of a loop looks exactly like its start and it never jumps. */
@@ -723,4 +748,628 @@ body {
 @keyframes roadmap-pop {
   from { opacity: 0; scale: 0.4; }
   to { opacity: 1; scale: 1; }
+}
+
+
+.blog-rise-in,
+.blog-rise {
+  animation: blog-rise-in 1.6s cubic-bezier(0.22, 1, 0.36, 1) var(--rise-delay, 0s) both;
+}
+
+.blog-rise {
+  animation-name: blog-rise;
+}
+
+@keyframes blog-rise-in {
+  from { opacity: 0; translate: 0 100%; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes blog-rise {
+  from { opacity: 0; translate: 0 2rem; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blog-rise-in,
+  .blog-rise {
+    animation: none;
+  }
+}
+
+/* Latest Blogs ticker: posts sit in fixed slots (--i) inside a clipped box. To move on, every post
+   slides up one step together: the top one leaves through the top edge as the next one comes in
+   from below. Then the list re-indexes with the transition off, landing each post exactly where
+   the slide left it. */
+.latest-track {
+  --slot-h: 5rem; /* thumbnail height, so a slot never changes size */
+  --gap: 1rem;
+  --step: calc(var(--slot-h) + var(--gap));
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+  height: calc(var(--rows) * var(--step) - var(--gap));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 40rem) {
+  .latest-track {
+    --slot-h: 6rem;
+  }
+}
+
+/* Beside the featured card: fills the column and spreads four slots over its height */
+@media (min-width: 64rem) {
+  .latest-track {
+    flex: 1;
+    height: auto;
+    min-height: calc(4 * var(--slot-h) + 3 * var(--gap));
+    --step: calc((100cqh - var(--slot-h)) / 3);
+  }
+}
+
+.latest-track > li {
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--i) * var(--step));
+  height: var(--slot-h);
+}
+
+.latest-track > li[data-incoming] {
+  opacity: 0;
+}
+
+.latest-track[data-shifting] > li {
+  translate: 0 calc(-1 * var(--step));
+  transition:
+    translate 1.4s cubic-bezier(0.65, 0, 0.35, 1),
+    opacity 1.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* The leaving post fades as it goes, and the arriving one fades in */
+.latest-track[data-shifting] > li:first-child {
+  opacity: 0;
+}
+
+.latest-track[data-shifting] > li[data-incoming] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .latest-track[data-shifting] > li {
+    transition: none;
+  }
+}
+
+/* Featured card rotation: the new post's face fades in over the old one (its text then rises in
+   with .blog-rise-in), while the old caption fades out quickly so the two never read together. */
+.featured-fade-in {
+  animation: featured-fade-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.featured-text-out {
+  animation: featured-text-out 0.5s ease-out both;
+}
+
+@keyframes featured-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes featured-text-out {
+  from { opacity: 1; translate: 0 0; }
+  to { opacity: 0; translate: 0 -0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-fade-in,
+  .featured-text-out {
+    animation: none;
+  }
+}
+
+/* Services dropdown (Navbar).
+   Animations live on .mega-card itself: an ancestor with opacity < 1 would
+   become a backdrop root and drop the glass blur mid-fade. */
+.mega-menu {
+  visibility: hidden;
+  pointer-events: none;
+  transition: visibility 0s linear 180ms;
+}
+
+.mega-menu[data-open="true"] {
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+
+.mega-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(226, 241, 255, 0.5));
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 30px 60px -24px rgba(0, 36, 97, 0.32),
+    0 12px 24px -16px rgba(10, 80, 165, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  opacity: 0;
+  transform: translate3d(0, -10px, 0) scale(0.985);
+  transform-origin: top center;
+  transition:
+    opacity 180ms ease-in,
+    transform 180ms ease-in;
+}
+
+.mega-menu[data-open="true"] .mega-card {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mega-link {
+  display: flex;
+  align-items: center;
+  margin-inline: -0.75rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #0a50a5;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.mega-link-touch {
+  min-height: 2.75rem;
+  font-size: 0.9375rem;
+}
+
+.mega-link:hover,
+.mega-link:focus-visible {
+  color: #002461;
+  background: rgba(226, 241, 255, 0.85);
+  box-shadow: inset 0 0 0 1px rgba(10, 80, 165, 0.12);
+}
+
+.mega-link:focus-visible {
+  outline: 2px solid #0a50a5;
+  outline-offset: 2px;
+}
+
+/* Name over description (Products menu) */
+.mega-link-stack {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.125rem;
+  margin-inline: 0;
+  padding: 0.75rem 0.875rem;
+}
+
+.mega-link-desc {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: #5b6f95;
+}
+
+.mega-link[aria-current="page"] {
+  color: #002461;
+  font-weight: 600;
+  background: rgba(226, 241, 255, 0.6);
+}
+
+/* Mobile accordion: animates height without measuring it */
+.nav-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-collapse[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+.nav-collapse > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-card,
+  .mega-menu[data-open="true"] .mega-card {
+    transform: none;
+    transition: opacity 120ms linear;
+  }
+
+  .nav-collapse,
+  .mega-link {
+    transition: none;
+  }
+}
+
+/* 404 page (app/not-found.js). Measured from the design frame: --nf-u is 1%
+   of the frame width and the frame is 55.7u tall. On desktop the frame fills
+   the viewport below the navbar; on smaller screens it scales up so the
+   character stays prominent, with the copy centred above it. */
+.nf {
+  --nf-nav: 6.5rem;
+  --nf-u: min(1vw, calc((100svh - var(--nf-nav)) / 55.7));
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  overflow: hidden;
+  padding-top: var(--nf-nav);
+  background: linear-gradient(180deg, #1a81fc 0%, #bad9fd 100%);
+}
+
+@media (max-width: 1023px) {
+  .nf {
+    --nf-nav: 5.5rem;
+    --nf-u: min(1.8vw, calc((100svh - var(--nf-nav)) / 62));
+    /* Hug the content: no empty band between the copy and the character */
+    min-height: auto;
+  }
+}
+
+.nf-copy {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(4.5 * var(--nf-u)) 1rem 0;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .nf-copy {
+    justify-content: flex-end;
+  }
+}
+
+/* Smaller screens: hug the content (no empty band above the character) */
+@media (max-width: 1023px) {
+  .nf-copy {
+    flex: none;
+    padding-top: 3rem;
+  }
+}
+
+.nf-title {
+  font-size: max(1.75rem, calc(3.7 * var(--nf-u)));
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.nf-text {
+  max-width: 36em;
+  margin-top: max(0.5rem, calc(0.9 * var(--nf-u)));
+  font-size: max(0.9375rem, calc(1.65 * var(--nf-u)));
+  line-height: 1.36;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.nf-button {
+  margin-top: max(0.75rem, var(--nf-u));
+  padding: max(0.5rem, calc(1.03 * var(--nf-u))) max(1rem, calc(1.5 * var(--nf-u)));
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: max(4px, calc(0.5 * var(--nf-u)));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(226, 241, 255, 0.18));
+  box-shadow:
+    0 10px 24px -12px rgba(0, 36, 97, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  font-size: max(0.8125rem, calc(1.25 * var(--nf-u)));
+  font-weight: 500;
+  line-height: 1.2;
+  color: #ffffff;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.nf-button:hover {
+  border-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 14px 28px -12px rgba(0, 36, 97, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.nf-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+/* Digits + character: the bottom 43.8u of the frame, tucked 6u under the button */
+.nf-stage {
+  position: relative;
+  flex: none;
+  align-self: center;
+  width: calc(100 * var(--nf-u));
+  height: calc(43.8 * var(--nf-u));
+  margin-top: calc(-2 * var(--nf-u));
+}
+
+/* Baseline sits on the frame's bottom edge (Bebas Neue: glyphs span 0.1em-0.8em of a 1em line box) */
+.nf-digits {
+  position: absolute;
+  left: 50%;
+  bottom: -0.2em;
+  transform: translateX(-50%);
+  font-size: calc(55.7 * var(--nf-u));
+  line-height: 1;
+  white-space: nowrap;
+  color: transparent;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 10%, rgba(255, 255, 255, 0.5) 80%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  user-select: none;
+}
+
+/* The glasses (not the image box) are centred on the frame */
+.nf-character {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  width: calc(46.3 * var(--nf-u));
+  max-width: none;
+  height: auto;
+  transform: translateX(-48.75%);
+}
+
+/* 404 character entrance: rises from below into place once, on page load.
+   Keeps the centring translateX; the section's overflow clips it below. */
+.nf-character {
+  animation: nf-rise 1000ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
+}
+
+@keyframes nf-rise {
+  from {
+    opacity: 0;
+    transform: translate(-48.75%, 35%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-48.75%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-character {
+    animation: none;
+  }
+}
+
+/* LMS "Tailor-Made" section: scroll-driven theme. LmsTailorMade.js scrubs --tm-dark (0 = light,
+   1 = dark) on the section as it scrolls; every colour is mixed from its light and dark value by
+   that one number, so the background, cards, text and glow all shift together, continuously and in
+   step with the cards (no transitions to lag behind the scroll). Only colours change, so the
+   layout never shifts. */
+.lms-tm {
+  --tm-dark: 0;
+  --tm-mix: calc(var(--tm-dark) * 100%);
+  --tm-bg: color-mix(in oklab, #ffffff, #051231 var(--tm-mix));
+  --tm-heading: color-mix(in oklab, #002461, #ffffff var(--tm-mix));
+  --tm-text: color-mix(in oklab, rgba(0, 36, 97, 0.85), #b7c7e6 var(--tm-mix));
+  --tm-card-from: color-mix(in oklab, #f0f7ff, rgba(85, 147, 255, 0.16) var(--tm-mix));
+  --tm-card-to: color-mix(in oklab, #e3effd, rgba(0, 94, 255, 0.06) var(--tm-mix));
+  --tm-card-border: color-mix(in oklab, #cfe3fb, rgba(85, 147, 255, 0.3) var(--tm-mix));
+  --tm-card-text: color-mix(in oklab, rgba(0, 36, 97, 0.8), #a9bcdf var(--tm-mix));
+  --tm-card-shadow: color-mix(in oklab, rgba(0, 36, 97, 0.05), rgba(0, 0, 0, 0.25) var(--tm-mix));
+  --tm-icon: color-mix(in oklab, #005eff, #5593ff var(--tm-mix));
+  --tm-glow: color-mix(in oklab, rgba(0, 94, 255, 0), rgba(0, 94, 255, 0.22) var(--tm-mix));
+  --tm-shrink: 0.45;
+  background-color: var(--tm-bg);
+}
+
+/* Tailor-Made cards, scrubbed by scroll (values set per card by the JS):
+   --k     triangle: 0 = in place, 1 = gathered at the slot's point of the compact triangle
+           (--tm-fx/--tm-fy), shrunk and transparent. Used for the first set's entrance.
+   --tm-y  vertical offset for the swap: the old set rises away, the new one rises in from below.
+   --tm-o  swap opacity.
+   Transform and opacity only, so nothing around it moves. Cards start invisible (--k: 1, --tm-o: 0)
+   until the script places them, so they never flash in place first. */
+.tm-card {
+  --k: 1;
+  --tm-o: 0;
+  opacity: calc((1 - var(--k)) * var(--tm-o));
+  transform: translate3d(
+      calc(var(--tm-fx, 0px) * var(--k)),
+      calc(var(--tm-fy, 0px) * var(--k) + var(--tm-y, 0px)),
+      0
+    )
+    scale(calc(1 - var(--tm-shrink) * var(--k)));
+  will-change: transform, opacity;
+}
+
+/* Tailor-Made swap window (toggled on each slot's window box by LmsTailorMade.js once the entrance
+   is done). The box already reaches 48px past the slot's sides, 24px above and 48px below; the
+   mask hides everything outside it and fades to nothing across those top and bottom margins, so a
+   card at rest is fully shown while a rising card dissolves out of the top and its replacement
+   dissolves in at the bottom, never cut by a hard edge. */
+.tm-window-masked {
+  --tm-mask: linear-gradient(to bottom, transparent 0, #000 24px, #000 calc(100% - 48px), transparent 100%);
+  -webkit-mask-image: var(--tm-mask);
+  mask-image: var(--tm-mask);
+}
+
+/* LMS feature drive (LmsFeatureDrive.js): nine tilted cards in a row that drives sideways on scroll.
+   --hs-card / --hs-gap / --hs-pad size the row; the row starts and ends on the site's 10.35vw
+   content edge. The spacer (the pinned scroll distance) is sized here from the same numbers so the
+   page has its full height from the first paint; the script then sets the exact figure. */
+.lms-drive {
+  --hs-card: clamp(260px, 21vw, 320px);
+  --hs-gap: clamp(14px, 1.4vw, 22px);
+  --hs-pad: clamp(1rem, 10.35vw, 11rem);
+}
+
+.hs-spacer {
+  height: max(0px, calc(9 * var(--hs-card) + 8 * var(--hs-gap) + 2 * var(--hs-pad) - 100vw));
+}
+
+/* Speed effects set on the row per frame: stretch along the direction of travel, and lean (back
+   when speeding up, forward when braking), each card about its own centre. */
+.hs-motion {
+  transform: skewX(var(--hs-lean, 0deg)) scaleX(var(--hs-stretch, 1));
+}
+
+/* LMS industry flip cards (LmsIndustries.js). The card turns about its vertical axis inside the
+   button's perspective; both faces hide their reverse side, and the back is pre-turned 180° so its
+   text reads correctly once flipped. The perspective on the button gives the turn its depth: the
+   near edge swings towards the viewer as the card rotates. */
+.ind-flip {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.45, 0.05, 0.25, 1);
+  will-change: transform;
+}
+
+.ind-flip.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.ind-face {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  /* Own compositing layer per face: no flicker where the two faces swap */
+  transform: translateZ(0.1px);
+}
+
+.ind-back {
+  transform: rotateY(180deg) translateZ(0.1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ind-flip {
+    transition-duration: 0.01s;
+  }
+}
+
+/* LMS "Which LMS Fits" entrance (LmsWhichFits.js). Everything waits hidden until the section's
+   data-inview turns true, then: the card slides in from the left, the column headings fade up, and
+   the rows rise in staggered by --i, each icon tile popping in with a slight overshoot.
+   Keyframes with fill-mode "backwards" hold the start state only during each delay and hand back to
+   the normal styles when done, so the hover lift on the tiles stays instant afterwards.
+   Transform and opacity only, so nothing around them moves. */
+@keyframes fit-slide {
+  from {
+    opacity: 0;
+    transform: translate3d(-40px, 0, 0);
+  }
+}
+
+@keyframes fit-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--fit-rise, 24px), 0);
+  }
+}
+
+@keyframes fit-pop {
+  from {
+    transform: scale(0.6) rotate(-12deg);
+  }
+}
+
+.lms-fit[data-inview="false"] .fit-anim {
+  opacity: 0;
+}
+
+.lms-fit[data-inview="true"] .fit-card {
+  animation: fit-slide 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+.lms-fit[data-inview="true"] .fit-heading {
+  --fit-rise: 14px;
+  animation: fit-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) calc(0.2s + var(--i, 0) * 0.08s) backwards;
+}
+
+.lms-fit[data-inview="true"] .fit-item {
+  animation: fit-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) calc(0.3s + var(--i, 0) * 0.08s) backwards;
+}
+
+.lms-fit[data-inview="true"] .fit-tile {
+  animation: fit-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) calc(0.35s + var(--i, 0) * 0.08s) backwards;
+}
+
+/* Hover: the row's tile lifts */
+.lms-fit .fit-tile {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.lms-fit .fit-item:hover .fit-tile {
+  transform: translate3d(0, -4px, 0);
+  box-shadow: 0 14px 24px -10px rgba(26, 88, 200, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lms-fit[data-inview] .fit-anim,
+  .lms-fit[data-inview] .fit-tile {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ERP hero entrance (ErpHero.js). Plays once on load (it's the first thing on the page, so no
+   scroll trigger): the copy rises in line by line (--d staggers it) and the dashboard glides in from
+   the right, then floats gently. Keyframes with fill-mode "backwards" hold the start state only until
+   each starts. Transform and opacity only, so nothing shifts. */
+@keyframes erp-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+}
+
+@keyframes erp-glide {
+  from {
+    opacity: 0;
+    transform: translate3d(60px, 24px, 0);
+  }
+}
+
+@keyframes erp-float {
+  50% {
+    transform: translate3d(0, -10px, 0);
+  }
+}
+
+.erp-hero-line {
+  animation: erp-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) backwards;
+}
+
+.erp-hero-art {
+  animation: erp-glide 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s backwards;
+}
+
+.erp-hero-float {
+  animation: erp-float 7s ease-in-out 1.3s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .erp-hero-line,
+  .erp-hero-art,
+  .erp-hero-float {
+    animation: none;
+  }
 }

@@ -4,7 +4,7 @@ import AiSequence from "./AiSequence";
 
 // Asset paths supplied by design.
 const BACKGROUND = "/home/hero-background.png";
-const BOT = "/home/ai-development/ai bot 1.svg";
+const BOT = "/home/ai-development/ai bot 1.webp";
 // Transparent copies of the supplied icon files (originals sit alongside in /home/ai-development).
 const ICONS = "/home/ai-development/icons/";
 
@@ -68,7 +68,6 @@ export default function AiSolutions() {
               width={1104}
               height={1425}
               unoptimized
-              priority
               className="h-auto w-full"
             />
           </div>

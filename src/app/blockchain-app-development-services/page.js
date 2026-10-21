@@ -6,6 +6,7 @@ import BlockchainWhyChoose from "@/components/blockchain/BlockchainWhyChoose";
 import BlockchainBenefits from "@/components/blockchain/BlockchainBenefits";
 import BlockchainTechnologies from "@/components/blockchain/BlockchainTechnologies";
 import BlockchainRoadmap from "@/components/blockchain/BlockchainRoadmap";
+import BlockchainFaq from "@/components/blockchain/BlockchainFaq";
 
 const path = "/blockchain-app-development-services";
 
@@ -24,11 +25,12 @@ export default function BlockchainAppDevelopmentServicesPage() {
       <BlockchainHero />
       <BlockchainWhatIs />
       <BlockchainServices />
-      <BlockchainCryptoServices />
       <BlockchainWhyChoose />
       <BlockchainBenefits />
+      <BlockchainCryptoServices />
       <BlockchainTechnologies />
       <BlockchainRoadmap />
+      <BlockchainFaq />
     </>
   );
 }

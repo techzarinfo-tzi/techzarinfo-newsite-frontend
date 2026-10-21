@@ -72,7 +72,7 @@ export default function Services() {
             <div className="flight-rocket-inner absolute inset-0">
             {/* The artwork is baked in at an angle; this counter-rotation makes the rocket stand upright */}
             <Image
-              src="/home/flights/rocket img 1.svg"
+              src="/home/flights/rocket img 1.webp"
               alt="Rocket"
               width={762}
               height={631}

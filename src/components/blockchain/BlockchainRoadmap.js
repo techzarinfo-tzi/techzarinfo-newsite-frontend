@@ -213,10 +213,11 @@ export default function BlockchainRoadmap() {
   return (
     <section
       ref={sectionRef}
+      data-guide="bcRoadmap"
       className="roadmap bg-white px-4 pt-14 pb-16 sm:px-6 sm:pt-16 sm:pb-20 lg:px-8 lg:pt-[104px] lg:pb-[106px]"
     >
       <div className="text-center">
-        <h2 className="roadmap-rise mx-auto max-w-[600px] text-[26px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
+        <h2 className="roadmap-rise mx-auto max-w-[600px] text-[32px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
           Roadmap of Our Blockchain Development Process
         </h2>
         <p

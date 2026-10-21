@@ -12,7 +12,7 @@ const rowOne = [
 ];
 
 const rowTwo = [
-  "goverment.svg",
+  "goverment.webp",
   "icecream 1.svg",
   "lisrc 1.svg",
   "maxmoney 1.svg",
@@ -22,7 +22,7 @@ const rowTwo = [
 ];
 
 function altFor(file) {
-  return file.replace(/\.svg$/, "").replace(/\s+\d+$/, "");
+  return file.replace(/\.(svg|webp)$/, "").replace(/\s+\d+$/, "");
 }
 
 function MarqueeRow({ files, reverse = false, duration }) {

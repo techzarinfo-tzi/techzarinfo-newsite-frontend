@@ -58,7 +58,6 @@ export default function TziIntro() {
                 src={PHONE}
                 alt="TZI mobile app"
                 fill
-                priority
                 sizes="(min-width: 1024px) 1440px, 440px"
                 className="origin-[50%_58%] scale-[1.75] object-cover drop-shadow-[0_30px_40px_rgba(20,60,140,0.22)] lg:scale-100 lg:object-contain"
               />

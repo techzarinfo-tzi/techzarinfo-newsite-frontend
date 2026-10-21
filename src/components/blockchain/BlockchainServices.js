@@ -57,9 +57,9 @@ function CubeIcon() {
 
 export default function BlockchainServices() {
   return (
-    <section className="relative overflow-hidden bg-white pt-8 sm:pt-10 lg:pt-10">
+    <section data-guide="bcServices" className="relative overflow-hidden bg-white pt-8 sm:pt-10 lg:pt-10">
       <div className="px-4 text-center sm:px-6">
-        <h2 className="mx-auto max-w-[540px] text-[28px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
+        <h2 className="mx-auto max-w-[540px] text-[32px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
           Our Prestigious Blockchain Development Services
         </h2>
         <p className="mx-auto mt-3 max-w-[620px] text-base leading-[1.45] text-[#002461]/80 lg:text-lg">

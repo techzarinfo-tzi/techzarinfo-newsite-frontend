@@ -39,7 +39,7 @@ export default function EcommerceServices() {
 
       <div className="relative grid grid-cols-1 items-center gap-10 px-4 py-14 sm:px-6 sm:py-16 lg:mx-auto lg:max-w-300 lg:grid-cols-[auto_minmax(0,540px)] lg:justify-center lg:gap-x-[clamp(48px,6.7vw,110px)] lg:px-8">
         <Image
-          src="/ecommerce/webdevelop/trally.svg"
+          src="/ecommerce/webdevelop/trally.webp"
           alt="Shopping cart full of blue shopping bags"
           width={386}
           height={372}

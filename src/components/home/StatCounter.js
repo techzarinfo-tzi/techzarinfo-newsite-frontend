@@ -19,12 +19,13 @@ export default function StatCounter({ value, start, duration = 1500 }) {
     if (!start || !hasNumber || hasAnimated.current) return;
     hasAnimated.current = true;
 
+    let frameId;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setCount(target);
-      return;
+      // Show the final value straight away (on the next frame, not mid-effect)
+      frameId = requestAnimationFrame(() => setCount(target));
+      return () => cancelAnimationFrame(frameId);
     }
 
-    let frameId;
     const startTime = performance.now();
     const tick = (now) => {
       const progress = Math.min((now - startTime) / duration, 1);

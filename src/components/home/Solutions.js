@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const BASE = "/home/solution/";
-const PIN = BASE + "pin.svg";
+const PIN = BASE + "pin.webp";
 
 // Each card image already has its title, copy, icon, tilt and shadow baked in by design,
 // so this only has to place them (plus the pushpin overlay) where the design puts them.
@@ -84,7 +84,7 @@ const cards = [
   },
 ];
 
-// pin.svg's own solid pushpin graphic isn't centred in its 89x89 canvas (there's extra
+// The pin image's own solid pushpin graphic isn't centred in its 89x89 canvas (there's extra
 // transparent margin left/top for its drop shadow) — its measured centroid sits at
 // (60.4%, 50.8%) of the canvas. Translating by that instead of the usual 50/50 is what
 // makes the pin's actual tip land exactly on `pin.x`/`pin.y`, not the middle of its empty

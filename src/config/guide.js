@@ -53,6 +53,92 @@ export const guideSteps = {
     mood: "wave",
     text: "Ready when you are! Start a project or book a free demo, I'll be right here.",
   },
+  // Blockchain page, in scroll order (data-guide on each section). Sides alternate and end on
+  // "right" before the site-wide testimonials ("left"), so the guide sweeps across at every step.
+  // The short "What is" intro keeps the hero's line. Tapping the guide opens the TZI Assistant chat,
+  // so the lines point visitors to it.
+  bcHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Tap me anytime to ask about blockchain, tokenization and smart contracts.",
+  },
+  bcServices: {
+    side: "right",
+    mood: "point",
+    text: "BaaS, consulting, custom networks and full platforms, the wheel keeps turning with everything we build.",
+  },
+  bcWhyChoose: {
+    side: "left",
+    mood: "hop",
+    text: "With TZI you never just hand over an idea, we work through every question and decision with you.",
+  },
+  bcBenefits: {
+    side: "right",
+    mood: "boost",
+    text: "Blockchain plus AI: safer transactions, smarter automation and data you can trust.",
+  },
+  bcCrypto: {
+    side: "left",
+    mood: "point",
+    text: "Exchanges, wallets, payment gateways and RWA tokenization. Tap a row to open it!",
+  },
+  bcTech: {
+    side: "right",
+    mood: "hop",
+    text: "Ethereum, Polygon, Solana, BNB Smart Chain, Cardano and Hyperledger, we pick the right chain for you.",
+  },
+  bcRoadmap: {
+    side: "left",
+    mood: "point",
+    text: "Six clear steps from consultation to launch and support, as transparent as blockchain itself.",
+  },
+  bcFaq: {
+    side: "right",
+    mood: "wave",
+    text: "Still curious? Open a question below, or tap me to chat with our AI.",
+  },
+  // LMS page hero (data-guide="lmsHero"). Parks on the left, clear of the dashboard on the right.
+  lmsHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Let's build training your team will actually enjoy.",
+  },
+  lmsWhiteLabel: {
+    side: "right",
+    mood: "point",
+    text: "Your brand, your courses, your analytics, a white label LMS built around how your team learns.",
+  },
+  lmsTailorMade: {
+    side: "left",
+    mood: "hop",
+    text: "Keep scrolling, there's more to a tailor-made LMS than meets the eye!",
+  },
+  lmsFeatureDrive: {
+    side: "right",
+    mood: "boost",
+    text: "Buckle up! Scroll faster and watch nine LMS features race by.",
+  },
+  lmsWhyChoose: {
+    side: "left",
+    mood: "point",
+    text: "Built for your users, ready to scale. Open a point to see why teams choose TZI.",
+  },
+  lmsWhichFits: {
+    side: "right",
+    mood: "hop",
+    text: "Your own brand or ready to go? Compare White-Label and SaaS LMS side by side.",
+  },
+  lmsCta: {
+    side: "right",
+    mood: "wave",
+    text: "Ready to build your LMS? Start a project or book a free demo, I'll be right here.",
+  },
+  // ERP page hero (data-guide="erpHero"). Parks on the left, clear of the dashboard on the right.
+  erpHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Let's bring your teams, data and daily operations into one place.",
+  },
   clients: {
     side: "right",
     mood: "hop",
@@ -100,6 +186,16 @@ export const guideSteps = {
     side: "left",
     mood: "wave",
     text: "Don't just take our word for it, here's what real TZI clients have to say.",
+  },
+  // Used by the site-wide Contact Us section (data-guide="contact"), between the testimonials and
+  // the footer on every page. Parks on the right, just above the chat launcher.
+  // bubbleMinWidth: below tablet width the bubble would sit over the form, so the guide just parks
+  // there quietly.
+  contact: {
+    side: "right",
+    mood: "point",
+    text: "Ready to talk? Fill in the form, or tap me to chat with our AI.",
+    bubbleMinWidth: 768,
   },
   // Used by the site-wide footer (data-guide="footer"): the last stop on every page. Opposite
   // side from "testimonials" so the guide sweeps across one final time to say goodbye.

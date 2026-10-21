@@ -18,8 +18,8 @@ const ORBIT = {
 
 // phase: start point as a fraction of the orbit (0 = far left, 0.25 = front, 0.5 = far right, 0.75 = back)
 const cards = [
-  { label: "Shirt", src: "/ecommerce/hero/shirt.svg", width: 171, height: 182, size: 24.9, phase: 0 },
-  { label: "Shoes", src: "/ecommerce/hero/shoes.svg", width: 174, height: 184, size: 25.4, phase: 1 / 3 },
+  { label: "Shirt", src: "/ecommerce/hero/shirt.webp", width: 171, height: 182, size: 24.9, phase: 0 },
+  { label: "Shoes", src: "/ecommerce/hero/shoes.webp", width: 174, height: 184, size: 25.4, phase: 1 / 3 },
   { label: "Lens", src: "/ecommerce/hero/lens.svg", width: 156, height: 168, size: 22.8, phase: 2 / 3 },
 ];
 
@@ -109,7 +109,7 @@ export default function EcommerceHero() {
             <OrbitCard key={`${card.label}-back`} card={card} layer="back" />
           ))}
           <Image
-            src="/ecommerce/hero/person.svg"
+            src="/ecommerce/hero/person.webp"
             alt="Shopper browsing an online store on a phone"
             width={561}
             height={749}

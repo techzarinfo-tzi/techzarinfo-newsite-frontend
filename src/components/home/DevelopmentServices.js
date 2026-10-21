@@ -2,19 +2,19 @@ import ServiceSequence from "./ServiceSequence";
 
 const services = [
   {
-    image: "/home/service/web-application.svg",
+    image: "/home/service/web-application.webp",
     title: "Web Application",
     content:
       "Get ready to create smarter, faster, and scalable digital solutions with our web application development services tailored to your business.",
   },
   {
-    image: "/home/service/mobile-application%20(2).svg",
+    image: "/home/service/mobile-application%20(2).webp",
     title: "Mobile Application",
     content:
       "Turn your ideas into engaging & high-performance mobile app development that is built around your business goals.",
   },
   {
-    image: "/home/service/blockchain.svg",
+    image: "/home/service/blockchain.webp",
     title: "Blockchain Product Development",
     content:
       "We can power your next digital breakthrough with our blockchain development solutions. From decentralized ecosystems to Defi Products etc.",

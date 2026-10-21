@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
-const ROCKET_SRC = "/home/flights/rocket img 1.svg";
+const ROCKET_SRC = "/home/flights/rocket img 1.webp";
 
 // Builds a fixed-position copy of the rocket image only that sits
 // exactly on top of the original, so the hand-off is invisible.

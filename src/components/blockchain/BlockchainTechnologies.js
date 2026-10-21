@@ -22,8 +22,8 @@ const tools = [
 // centre at the firing point (--tdc). Logos turn like meshing gears and the row shakes on each firing.
 export default function BlockchainTechnologies() {
   return (
-    <section className="bg-white px-4 pt-14 pb-16 text-center sm:px-6 sm:pt-16 sm:pb-20 lg:px-8 lg:pt-[88px] lg:pb-[164px]">
-      <h2 className="mx-auto max-w-[720px] text-[26px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
+    <section data-guide="bcTech" className="bg-white px-4 pt-14 pb-16 text-center sm:px-6 sm:pt-16 sm:pb-20 lg:px-8 lg:pt-[88px] lg:pb-[164px]">
+      <h2 className="mx-auto max-w-[720px] text-[32px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
         Technologies We Use for Blockchain Application Development
       </h2>
       <p className="mx-auto mt-2 max-w-[620px] text-[15px] leading-[1.45] text-[#002461] sm:text-lg lg:mt-1 lg:text-[19px]">

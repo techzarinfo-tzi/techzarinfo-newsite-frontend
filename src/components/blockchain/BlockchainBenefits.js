@@ -72,9 +72,9 @@ const benefits = [
 // with the viewport height (clamp on svh), reaching the full design values on screens ~960px tall.
 export default function BlockchainBenefits() {
   return (
-    <section className="bg-white lg:flex lg:h-svh lg:min-h-fit lg:flex-col">
+    <section data-guide="bcBenefits" className="bg-white lg:flex lg:h-svh lg:min-h-fit lg:flex-col">
       <div className="px-4 pt-14 pb-8 text-center sm:px-6 sm:pt-[88px] sm:pb-6 lg:px-8 lg:pt-[92px] lg:pb-[clamp(12px,2svh,28px)]">
-        <h2 className="mx-auto max-w-[820px] text-[26px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[32px] lg:text-[clamp(30px,4.4svh,44px)] lg:leading-[1.2]">
+        <h2 className="mx-auto max-w-[820px] text-[32px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[clamp(30px,4.4svh,44px)] lg:leading-[1.2]">
           Smart Business Benefits of AI-Powered <br className="hidden sm:block" />
           Blockchain Applications
         </h2>

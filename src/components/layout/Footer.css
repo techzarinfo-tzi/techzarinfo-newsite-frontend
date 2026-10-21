@@ -140,7 +140,7 @@ background:
 }
 
 .ft-wordmark text {
-  font-family: var(--font-plus-jakarta-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-plus-jakarta-sans-italic), Arial, Helvetica, sans-serif;
   font-size: 148px;
   font-style: italic;
   font-weight: 600;

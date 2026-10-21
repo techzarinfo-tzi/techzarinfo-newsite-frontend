@@ -352,7 +352,7 @@ export default function ChatWidget() {
         >
           <header className="chat-panel__header chat-glass-bar flex shrink-0 items-center gap-3 border-b border-white/60">
             <span className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-[#0B57B7] to-[#002148] shadow-[0_6px_16px_-4px_rgba(11,87,183,0.55)] ring-2 ring-white/80">
-              <Image src="/ai-guide.png" alt="" width={40} height={40} unoptimized className="h-9 w-9 object-contain" />
+              <Image src="/ai-guide.webp" alt="" width={40} height={40} unoptimized className="h-9 w-9 object-contain" />
             </span>
             <div className="min-w-0 flex-1">
               <h2 id="tzi-chat-title" className="truncate text-[16px] font-semibold leading-tight text-[#002148]">
@@ -384,7 +384,7 @@ export default function ChatWidget() {
             <div className={`${bubble} ${assistantBubble}`}>{GREETING}</div>
 
             {messages.length === 0 && !locked && (
-              <div className="grid gap-2 pt-1 sm:grid-cols-2">
+              <div className="grid gap-2 pt-1">
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
@@ -484,9 +484,9 @@ export default function ChatWidget() {
         aria-expanded={open}
         aria-controls="tzi-chat"
         aria-label="Chat with the TZI assistant"
-        className="chat-launcher flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-[#0B57B7] to-[#002148] text-white shadow-lg shadow-blue-900/30 ring-4 ring-white/40 transition-transform hover:scale-105"
+        className="chat-launcher flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-[#0B57B7] to-[#002148] text-white shadow-lg shadow-blue-900/30 ring-[3px] ring-white/40 transition-transform hover:scale-105"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-[22px] w-[22px]" aria-hidden="true">
           <path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z" />
           <path d="M8.5 12h.01M12 12h.01M15.5 12h.01" />
         </svg>

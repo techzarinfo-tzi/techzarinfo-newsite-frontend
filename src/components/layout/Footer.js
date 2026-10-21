@@ -61,7 +61,7 @@ export default function Footer() {
           footer is below the fold. */}
       <picture className="ft-bg">
         <source media="(prefers-reduced-motion: reduce)" srcSet="/footer-bg-still.jpg" />
-        <img src="/footer-bg.gif" alt="" loading="lazy" decoding="async" />
+        <img src="/footer-bg.webp" alt="" loading="lazy" decoding="async" />
       </picture>
       <div className="ft">
         <Link href="/" className="ft-logo" aria-label={`${siteConfig.name} home`}>
@@ -154,7 +154,7 @@ export default function Footer() {
               <g className="ft-walker-lean">
                 <g className="ft-walker-spin">
                   <g className="ft-walker-squash">
-                    <image className="ft-walker-anim" href="/ai-walk.gif" x="-10.67" y="-45.49" width="20.93" height="46" />
+                    <image className="ft-walker-anim" href="/ai-walk.webp" x="-10.67" y="-45.49" width="20.93" height="46" />
                     <image className="ft-walker-still" href="/ai-walk-still.png" x="-10.67" y="-45.49" width="20.93" height="46" />
                   </g>
                 </g>

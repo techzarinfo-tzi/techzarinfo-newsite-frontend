@@ -23,7 +23,7 @@ const offerings = [
   },
 ];
 
-const SPIRE = "/ecommerce/gimini/gimini.svg";
+const SPIRE = "/ecommerce/gimini/gimini.webp";
 
 function BagIcon() {
   return (

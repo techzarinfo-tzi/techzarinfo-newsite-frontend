@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const GIF = "/ecommerce/why-choose/whychoose.gif";
+const GIF = "/ecommerce/why-choose/whychoose.webp"; // animated WebP (same frames as the original GIF)
 
 // Desktop (lg+): the section is half the screen height (never under 400px, so the copy always
 // fits). Heading pinned top-left and copy bottom-right; horizontal positions and type sizes follow

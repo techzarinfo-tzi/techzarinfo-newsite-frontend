@@ -4,7 +4,7 @@ export default function HeroGraphic() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-md sm:max-w-lg lg:max-w-none">
       <Image
-        src="/home/homepage-hero.svg"
+        src="/home/homepage-hero.webp"
         alt=""
         fill
         priority

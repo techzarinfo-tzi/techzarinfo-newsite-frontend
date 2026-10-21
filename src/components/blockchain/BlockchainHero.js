@@ -9,7 +9,7 @@ import CoinOrbit from "./CoinOrbit";
 // Below lg the copy stacks above the artwork, both centred.
 export default function BlockchainHero() {
   return (
-    <section className="relative overflow-hidden bg-[#e2f1ff]">
+    <section data-guide="bcHero" className="relative overflow-hidden bg-[#e2f1ff]">
       {/* Sky-blue wash: brighter haze up top, softening to white at the bottom edge */}
       <div
         aria-hidden="true"
@@ -26,8 +26,10 @@ export default function BlockchainHero() {
             Blockchain Development Company
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-snug text-[#002461] sm:text-lg lg:mx-0 lg:max-w-[600px] lg:text-[clamp(18px,1.4vw,22px)]">
-            Build your business on trust, transparency, and security with Techzarinfo&apos;s blockchain
-            solutions—from crypto and wallets to smart contracts, DeFi, and Web3.
+            Techzarinfo is a blockchain development company in India, builds
+            crypto exchanges, digital wallets, smart contracts, DeFi platforms,
+            and Web3 applications to help businesses grow with blockchain
+            technology.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:mt-10 lg:justify-start lg:gap-6">

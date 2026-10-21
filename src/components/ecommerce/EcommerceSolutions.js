@@ -16,7 +16,7 @@ const cards = [
   {
     title: ["Global Market", "Reach"],
     text: "Reach customers across regions with a scalable e-commerce store built to support your products and growing market presence.",
-    image: { src: `${ASSETS}/global-market.svg`, width: 321, height: 344 },
+    image: { src: `${ASSETS}/global-market.webp`, width: 321, height: 344 },
     place: "md:order-1 lg:order-none lg:col-start-1 lg:row-span-2 lg:row-start-1",
     outlined: true,
   },
@@ -28,7 +28,7 @@ const cards = [
   {
     title: ["Scalability &", "Flexibility"],
     text: "Expand your online store as your business grows with flexible features, integrations, and technology built for changing needs.",
-    image: { src: `${ASSETS}/scalblity.svg`, width: 321, height: 368 },
+    image: { src: `${ASSETS}/scalblity.webp`, width: 321, height: 368 },
     place: "md:order-2 lg:order-none lg:col-start-2 lg:row-span-3 lg:row-start-1",
   },
   {
@@ -39,7 +39,7 @@ const cards = [
   {
     title: ["Improved Operational", "Efficiency"],
     text: "Simplify everyday operations by connecting your store with payments, inventory, CRM, shipping, and essential business tools.",
-    image: { src: `${ASSETS}/improvement.svg`, width: 298, height: 223 },
+    image: { src: `${ASSETS}/improvement.webp`, width: 298, height: 223 },
     place: "md:order-5 md:col-span-2 lg:order-none lg:col-span-1 lg:col-start-3 lg:row-span-2 lg:row-start-2",
   },
 ];

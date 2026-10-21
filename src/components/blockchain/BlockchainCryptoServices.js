@@ -23,7 +23,12 @@ const items = [
 
 function Arrow({ up }) {
   return (
-    <svg viewBox="0 0 24 24" className="h-7 w-7 lg:h-9 lg:w-9" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-7 w-7 lg:h-9 lg:w-9"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d={up ? "M12 20V5M6 11l6-6 6 6" : "M12 4v15M6 13l6 6 6-6"}
         stroke="currentColor"
@@ -35,16 +40,26 @@ function Arrow({ up }) {
   );
 }
 
-// Accordion from the 1440px design: 1154px-wide rows, 21px apart, on the hero's left edge.
+// Accordion from the 1440px design: centred heading, then 1154px-wide rows, 21px apart.
 // Open row: solid sky blue, title left, description in the right half, up arrow bottom-right.
-// Closed rows: blue fading to pale blue, title only, down arrow. One row is open at a time.
+// Closed rows: blue fading to pale blue, title only (vertically centred), down arrow centred on the
+// right. Open and closed rows share a 58px side inset (matching the arrow), so a title never shifts
+// sideways when its row opens. One row is open at a time.
 // Below lg the open row stacks its description under the title.
 export default function BlockchainCryptoServices() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="bg-white px-4 py-10 sm:px-6 lg:px-8 lg:pt-[42px] lg:pb-14">
-      <ul className="mx-auto flex max-w-[1154px] flex-col gap-4 lg:gap-[21px]">
+    <section data-guide="bcCrypto" className="bg-white px-4 pt-12 pb-10 sm:px-6 sm:pt-14 sm:pb-12 lg:px-8 lg:pt-16 lg:pb-14">
+      <h2 className="mx-auto max-w-[720px] text-center text-[26px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
+        Our Blockchain Solutions Built for the New Digital Era{" "}
+      </h2>
+      <p className="mx-auto mt-2 max-w-[620px] text-center text-[15px] leading-[1.45] text-[#002461] sm:text-lg lg:mt-1 lg:text-[19px]">
+        Your vision can go beyond a single blockchain product - we help you
+        build a complete crypto ecosystem where assets, users, and transactions
+        work together. 
+      </p>
+      <ul className="mx-auto mt-8 flex max-w-[1154px] flex-col gap-4 sm:mt-10 lg:mt-12 lg:gap-[21px]">
         {items.map(({ title, text }, i) => {
           const isOpen = open === i;
           const panelId = `crypto-service-${i}`;
@@ -57,8 +72,8 @@ export default function BlockchainCryptoServices() {
                 aria-controls={panelId}
                 className={`relative grid w-full text-left text-white ${
                   isOpen
-                    ? "min-h-[200px] gap-4 bg-[#35b6f3] px-6 pt-7 pb-16 lg:min-h-[271px] lg:grid-cols-[minmax(0,1fr)_minmax(0,49%)] lg:gap-6 lg:pt-[30px] lg:pr-[37px] lg:pb-[70px] lg:pl-[42px]"
-                    : "min-h-[110px] bg-linear-to-b from-[#41baf4] to-[#b3e5fd] px-6 py-6 lg:min-h-[132px] lg:py-[22px] lg:pr-[75px] lg:pl-[70px]"
+                    ? "min-h-[200px] gap-4 bg-[#35b6f3] px-6 pt-7 pb-16 lg:min-h-[271px] lg:grid-cols-[minmax(0,1fr)_minmax(0,49%)] lg:gap-6 lg:pt-[30px] lg:pr-[58px] lg:pb-[70px] lg:pl-[58px]"
+                    : "min-h-[110px] content-center bg-linear-to-b from-[#41baf4] to-[#b3e5fd] py-6 pr-16 pl-6 lg:min-h-[132px] lg:py-[22px] lg:pr-[120px] lg:pl-[58px]"
                 }`}
               >
                 <span className="text-[22px] font-medium leading-[1.3] sm:text-[26px] lg:text-[33px]">
@@ -69,11 +84,16 @@ export default function BlockchainCryptoServices() {
                   ))}
                 </span>
                 {isOpen && (
-                  <span id={panelId} className="text-[15px] leading-[1.4] text-white/95 lg:pt-1.5 lg:text-[19px] lg:leading-[1.35]">
+                  <span
+                    id={panelId}
+                    className="text-[15px] leading-[1.4] text-white/95 lg:pt-1.5 lg:text-[19px] lg:leading-[1.35]"
+                  >
                     {text}
                   </span>
                 )}
-                <span className={`absolute right-6 lg:right-[58px] ${isOpen ? "bottom-6 lg:bottom-[22px]" : "bottom-6 lg:top-1/2 lg:bottom-auto lg:-translate-y-1/3"}`}>
+                <span
+                  className={`absolute right-6 flex lg:right-[58px] ${isOpen ? "bottom-6 lg:bottom-[22px]" : "top-1/2 -translate-y-1/2"}`}
+                >
                   <Arrow up={isOpen} />
                 </span>
               </button>

@@ -17,14 +17,10 @@ export default function StatsRow({ stats }) {
       window.innerHeight || document.documentElement.clientHeight;
     const alreadyVisible = rect.top < viewportHeight && rect.bottom > 0;
 
-    if (alreadyVisible) {
-      setVisible(true);
-      return;
-    }
-
-    if (typeof IntersectionObserver === "undefined") {
-      setVisible(true);
-      return;
+    // Already on screen (or no IntersectionObserver): start on the next frame, not mid-effect
+    if (alreadyVisible || typeof IntersectionObserver === "undefined") {
+      const frame = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(frame);
     }
 
     const observer = new IntersectionObserver(
