@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Folder, GraduationCap, Palette, PenTool, Plug, ShieldCheck } from "lucide-react";
 
 const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
 const easeOut = (t) => 1 - (1 - t) ** 3;
@@ -37,49 +38,14 @@ const GAP = 48;
 // (.tm-window-masked in globals.css), so the cards dissolve out of the top of their own slot and in
 // from the bottom, instead of drifting over the heading or being cut off by a hard edge.
 
-// Icons in the design's filled-blue style; they take the theme's icon colour via currentColor.
+// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
 const icons = {
-  creation: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m14.5 5.5 4 4L8 20H4v-4L14.5 5.5Z" />
-      <path d="m12.5 7.5 4 4" />
-      <path d="M19 2v3M17.5 3.5h3M21 9v2M20 10h2" />
-    </svg>
-  ),
-  management: (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h3.6a2 2 0 0 1 1.4.6L12 6h6.5A2.5 2.5 0 0 1 21 8.5v9a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Z" />
-      <path d="M3 10h18" stroke="var(--tm-card-from)" strokeWidth="1.5" />
-    </svg>
-  ),
-  journeys: (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 3 1.5 8.5 12 14l8.5-4.45V16h2V8.5L12 3Z" />
-      <path d="M5.5 12.6v3.9c0 1.9 2.9 3.5 6.5 3.5s6.5-1.6 6.5-3.5v-3.9L12 16l-6.5-3.4Z" />
-    </svg>
-  ),
-  branding: (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2.5a9.5 9.5 0 0 0 0 19c1.3 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8h2.1a4.7 4.7 0 0 0 4.7-4.7C21.5 6 17.2 2.5 12 2.5Z" />
-      <circle cx="7.5" cy="11" r="1.4" fill="var(--tm-card-from)" />
-      <circle cx="10" cy="7" r="1.4" fill="var(--tm-card-from)" />
-      <circle cx="14.5" cy="7" r="1.4" fill="var(--tm-card-from)" />
-      <circle cx="17" cy="11" r="1.4" fill="var(--tm-card-from)" />
-    </svg>
-  ),
-  integrations: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 3v5M15 3v5" />
-      <path d="M6 8h12v3a6 6 0 0 1-12 0V8Z" />
-      <path d="M12 17v4" />
-    </svg>
-  ),
-  security: (
-    <svg viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" />
-      <path d="m8.5 12 2.5 2.5 4.5-4.5" fill="none" stroke="var(--tm-card-from)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
+  creation: PenTool,
+  management: Folder,
+  journeys: GraduationCap,
+  branding: Palette,
+  integrations: Plug,
+  security: ShieldCheck,
 };
 
 // One slot per position; each slot holds a card from both sets, stacked in the same grid cell, so
@@ -317,7 +283,10 @@ export default function LmsTailorMade() {
                 >
                   <div className="flex items-start gap-3">
                     <span aria-hidden="true" className="mt-0.5 size-6 shrink-0 text-(--tm-icon)">
-                      {icons[card.icon]}
+                      {(() => {
+  const Icon = icons[card.icon];
+  return <Icon aria-hidden="true" strokeWidth={2} className="size-full" />;
+})()}
                     </span>
                     <div>
                       <h3 className="text-lg font-medium leading-snug text-(--tm-heading) lg:text-xl">{card.title}</h3>

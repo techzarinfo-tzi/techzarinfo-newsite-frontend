@@ -1,6 +1,10 @@
 import ErpHero from "@/components/erp/ErpHero";
 import Clients from "@/components/home/Clients";
 import ErpWhatIs from "@/components/erp/ErpWhatIs";
+import ErpServices from "@/components/erp/ErpServices";
+import ErpFeaturesOrbit from "@/components/erp/ErpFeaturesOrbit";
+import ErpBenefits from "@/components/erp/ErpBenefits";
+import ErpCostEstimator from "@/components/erp/ErpCostEstimator";
 
 const path = "/erp-software-development";
 
@@ -19,6 +23,10 @@ export default function ErpSoftwareDevelopmentPage() {
       <ErpHero />
       <Clients />
       <ErpWhatIs />
+      <ErpServices />
+      <ErpFeaturesOrbit />
+      <ErpBenefits />
+      <ErpCostEstimator />
     </>
   );
 }

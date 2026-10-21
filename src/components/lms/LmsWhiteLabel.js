@@ -1,73 +1,22 @@
 import Image from "next/image";
+import { ChartColumn, ChartLine, ClipboardCheck, FolderOpen, Layers, LayoutDashboard, MonitorSmartphone, Navigation, Plug, Search, UserCog, Users } from "lucide-react";
 
 const ASSETS = "/product/LMS/whitelable";
 
-// Stroke icons (24px grid) for the feature bullets, drawn white on a blue disc.
+// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
 const icons = {
-  navigation: <path d="M3 11 21 3l-8 18-2-8-8-2Z" />,
-  devices: (
-    <>
-      <rect x="2" y="4" width="14" height="10" rx="1.5" />
-      <path d="M6 18h6" />
-      <rect x="17" y="8" width="5" height="12" rx="1" />
-    </>
-  ),
-  dashboard: (
-    <>
-      <rect x="3" y="3" width="7" height="9" rx="1" />
-      <rect x="14" y="3" width="7" height="5" rx="1" />
-      <rect x="14" y="12" width="7" height="9" rx="1" />
-      <rect x="3" y="16" width="7" height="5" rx="1" />
-    </>
-  ),
-  search: (
-    <>
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-    </>
-  ),
-  layers: (
-    <>
-      <path d="m12 3 9 5-9 5-9-5 9-5Z" />
-      <path d="m3 13 9 5 9-5" />
-    </>
-  ),
-  progress: (
-    <>
-      <path d="M3 3v18h18" />
-      <path d="m7 15 4-4 3 3 5-6" />
-    </>
-  ),
-  assessment: (
-    <>
-      <rect x="5" y="3" width="14" height="18" rx="2" />
-      <path d="m9 12 2 2 4-4" />
-    </>
-  ),
-  collaboration: (
-    <>
-      <circle cx="9" cy="8" r="3.5" />
-      <path d="M2.5 20a6.5 6.5 0 0 1 13 0" />
-      <path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6" />
-    </>
-  ),
-  roles: (
-    <>
-      <circle cx="10" cy="8" r="4" />
-      <path d="M3 21a7 7 0 0 1 11-5.7" />
-      <circle cx="18" cy="18" r="2.5" />
-      <path d="M18 13.5v2M18 20.5v2M13.5 18h2M20.5 18h2" />
-    </>
-  ),
-  content: <path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6Z" />,
-  analytics: <path d="M5 21V11M12 21V4M19 21v-7" />,
-  integration: (
-    <>
-      <path d="M9 3v5M15 3v5" />
-      <path d="M6 8h12v3a6 6 0 0 1-12 0V8Z" />
-      <path d="M12 17v4" />
-    </>
-  ),
+  navigation: Navigation,
+  devices: MonitorSmartphone,
+  dashboard: LayoutDashboard,
+  search: Search,
+  layers: Layers,
+  progress: ChartLine,
+  assessment: ClipboardCheck,
+  collaboration: Users,
+  roles: UserCog,
+  content: FolderOpen,
+  analytics: ChartColumn,
+  integration: Plug,
 };
 
 // Three alternating feature cards from the 1440px design (1240px wide, ~480px tall): copy on one
@@ -133,17 +82,10 @@ function FeatureIcon({ name }) {
       aria-hidden="true"
       className="flex size-8 shrink-0 items-center justify-center rounded-full bg-linear-to-b from-[#005EFF] to-[#5593FF] shadow-[0_4px_10px_rgba(0,94,255,0.25)] lg:size-9"
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="size-4 text-white lg:size-[18px]"
-      >
-        {icons[name]}
-      </svg>
+      {(() => {
+  const Icon = icons[name];
+  return <Icon aria-hidden="true" strokeWidth={2} className="size-4 text-white lg:size-[18px]" />;
+})()}
     </span>
   );
 }

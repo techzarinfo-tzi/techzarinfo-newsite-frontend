@@ -1,70 +1,21 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { Award, ChartNoAxesCombined, LibraryBig, Plug, Route, ShieldCheck, Smartphone, Trophy, Workflow } from "lucide-react";
 
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 
-// Stroke icons (24px grid)
+// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
 const icons = {
-  hub: (
-    <>
-      <path d="m12 3 9 5-9 5-9-5 9-5Z" />
-      <path d="m3 12.5 9 5 9-5" />
-      <path d="m3 17 9 5 9-5" />
-    </>
-  ),
-  automation: (
-    <>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1" />
-    </>
-  ),
-  paths: (
-    <>
-      <circle cx="9" cy="8" r="3.5" />
-      <path d="M2.5 20a6.5 6.5 0 0 1 10.5-5.1" />
-      <path d="M16 13v8M20 17h-8" />
-    </>
-  ),
-  reports: (
-    <>
-      <path d="M3 3v18h18" />
-      <path d="M7 15l4-4 3 3 6-7" />
-    </>
-  ),
-  assessments: (
-    <>
-      <circle cx="12" cy="9" r="6" />
-      <path d="m9.5 9 2 2 3.5-3.5" />
-      <path d="m8.5 14.5-1.5 7 5-2.5 5 2.5-1.5-7" />
-    </>
-  ),
-  mobile: (
-    <>
-      <rect x="6" y="2" width="12" height="20" rx="2.5" />
-      <path d="M10.5 18.5h3" />
-    </>
-  ),
-  engagement: (
-    <>
-      <path d="M8 21h8M12 17v4" />
-      <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
-      <path d="M7 6H4v1.5A3.5 3.5 0 0 0 7.5 11M17 6h3v1.5a3.5 3.5 0 0 1-3.5 3.5" />
-    </>
-  ),
-  integrations: (
-    <>
-      <path d="M9 3v5M15 3v5" />
-      <path d="M6 8h12v3a6 6 0 0 1-12 0V8Z" />
-      <path d="M12 17v4" />
-    </>
-  ),
-  compliance: (
-    <>
-      <path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z" />
-      <path d="m8.5 12 2.5 2.5 4.5-4.5" />
-    </>
-  ),
+  hub: LibraryBig,
+  automation: Workflow,
+  paths: Route,
+  reports: ChartNoAxesCombined,
+  assessments: Award,
+  mobile: Smartphone,
+  engagement: Trophy,
+  integrations: Plug,
+  compliance: ShieldCheck,
 };
 
 // The four card styles from the design, used in order and repeated: deep navy, pale blue (with a
@@ -309,9 +260,10 @@ export default function LmsFeatureDrive() {
                       aria-hidden="true"
                       className={`flex size-10 items-center justify-center rounded-lg shadow-[0_4px_10px_rgba(0,36,97,0.15)] ${tone.tile}`}
                     >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-5">
-                        {icons[feature.icon]}
-                      </svg>
+                      {(() => {
+  const Icon = icons[feature.icon];
+  return <Icon aria-hidden="true" strokeWidth={1.8} className="size-5" />;
+})()}
                     </span>
                     <h3 className="mt-7 text-[clamp(20px,1.7vw,24px)] font-medium leading-tight">{feature.title}</h3>
                     <p className="mt-4 text-[clamp(13px,1vw,15px)] leading-normal text-white/90">{feature.text}</p>

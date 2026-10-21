@@ -139,6 +139,26 @@ export const guideSteps = {
     mood: "wave",
     text: "Hi, I'm your TZI AI guide! Let's bring your teams, data and daily operations into one place.",
   },
+  erpServices: {
+    side: "right",
+    mood: "point",
+    text: "Five ways we build ERP. Hover or tap a card to bring it to the front!",
+  },
+  erpFeatures: {
+    side: "left",
+    mood: "boost",
+    text: "Six power-packed features, always in motion. Scroll faster and watch them spin!",
+  },
+  erpBenefits: {
+    side: "right",
+    mood: "point",
+    text: "Lower costs, faster ROI and data you can trust, that's what a TZI ERP delivers.",
+  },
+  erpEstimator: {
+    side: "left",
+    mood: "point",
+    text: "Four quick steps and our team will send you a personalized ERP cost estimate.",
+  },
   clients: {
     side: "right",
     mood: "hop",

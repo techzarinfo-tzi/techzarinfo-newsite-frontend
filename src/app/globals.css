@@ -1373,3 +1373,89 @@ body {
     animation: none;
   }
 }
+
+/* ERP services fan (ErpServices.js, desktop). --card: card width, up to 340px, sized so the whole
+   fan (one card plus four pitches, 3.7 card widths) plus the slide-aside room on both sides (PUSH,
+   0.34 card widths each) fits the content width, so no card ever leaves the screen; --pitch: the step between cards
+   (67.5% of a card, so each overlaps the next by about a third); --card-h: card height (the design's
+   1.12 ratio, never under 355px so the longest copy always fits; the fan only shows from 1280px). The box is exactly the resting fan, plus
+   room above for the selected card to rise into. */
+.erp-fan {
+  --card: min(340px, calc((100vw - 5rem) / 4.38));
+  --pitch: calc(var(--card) * 0.675);
+  --card-h: max(calc(var(--card) * 1.12), 355px);
+  width: calc(var(--card) + var(--pitch) * 4);
+  height: calc(var(--card-h) + 24px);
+  padding-top: 24px;
+}
+
+.erp-fan > .erp-svc-card {
+  top: 24px;
+}
+
+/* ERP features orbit (ErpFeaturesOrbit.js). Each item is a zero-size point on the orbit; its icon
+   disc is centred on the point and its pill (md and up, ~28% of the stage wide) wraps the icon at its
+   inner end and extends outwards: to the right on the right half of the ring, to the left on the left
+   half (data-side, set by the script). --pill (0..1) fades the pill out near the top and bottom of the
+   ring, where it swaps sides. */
+.orbit-item {
+  --icon: clamp(44px, 5.4vw, 62px);
+}
+
+.orbit-pill {
+  width: calc(var(--S) * 0.28);
+  padding-block: 14px;
+  opacity: var(--pill, 1);
+}
+
+.orbit-item[data-side="right"] .orbit-pill {
+  left: calc(var(--icon) / -2 - 10px);
+  padding-left: calc(var(--icon) + 22px);
+  padding-right: 18px;
+}
+
+.orbit-item[data-side="left"] .orbit-pill {
+  right: calc(var(--icon) / -2 - 10px);
+  padding-right: calc(var(--icon) + 22px);
+  padding-left: 18px;
+}
+
+/* ERP benefits horizon (ErpBenefits.js): each of the three arcs slowly shrinks about its own centre
+   (which pulls its visible top down and its sides in) and drifts down a little, then eases back, on
+   its own loop (--arc-dur, offset by --arc-delay) so the three never move in step. Alternating,
+   eased both ways, so the loop has no seam; transform only (the centring uses the separate translate
+   property, so it is untouched). */
+@keyframes benefit-arc {
+  to {
+    transform: translate3d(0, var(--arc-move, 8px), 0) scale(var(--arc-shrink, 0.97));
+  }
+}
+
+.benefit-arc {
+  animation: benefit-arc var(--arc-dur, 10s) ease-in-out var(--arc-delay, 0s) infinite alternate;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .benefit-arc {
+    animation: none;
+  }
+}
+
+/* ERP cost estimator (ErpCostEstimator.js): each step fades and rises in when it replaces the last */
+@keyframes est-step-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+
+.est-step {
+  animation: est-step-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .est-step {
+    animation: none;
+  }
+}

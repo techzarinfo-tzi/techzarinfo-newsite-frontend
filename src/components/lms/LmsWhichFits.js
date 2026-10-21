@@ -2,46 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { BadgeCheck, Gem, ListChecks, Paintbrush, Puzzle, WandSparkles, Wrench, Zap } from "lucide-react";
 
-// Stroke icons (24px grid), drawn white on the blue tiles
+// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
 const icons = {
-  brush: (
-    <>
-      <path d="M18.4 2.6a2 2 0 0 1 2.9 2.9l-8.6 8.6-2.9-2.9 8.6-8.6Z" />
-      <path d="M9.4 11.6c-2 0-3.5 1.6-3.5 3.5 0 1.4-.8 2.5-2.4 3.4 4.9 2 9.4.4 9.4-3.5" />
-    </>
-  ),
-  puzzle: (
-    <path d="M10 3.5a2 2 0 0 1 4 0V5h3a2 2 0 0 1 2 2v3h-1.5a2 2 0 0 0 0 4H19v3a2 2 0 0 1-2 2h-3v-1.5a2 2 0 0 0-4 0V19H7a2 2 0 0 1-2-2v-3h1.5a2 2 0 0 0 0-4H5V7a2 2 0 0 1 2-2h3V3.5Z" />
-  ),
-  diamond: (
-    <>
-      <path d="M6 3h12l4 6-10 12L2 9l4-6Z" />
-      <path d="M2 9h20M12 21 8 9l4-6 4 6-4 12" />
-    </>
-  ),
-  customize: (
-    <>
-      <path d="m14 7 3 3M5 16l9.5-9.5a2.1 2.1 0 0 1 3 3L8 19H5v-3Z" />
-      <path d="M4 4l4 4M7 3 3 7M17 13l4 4M20 14l-4 4" />
-    </>
-  ),
-  ready: (
-    <>
-      <path d="M12 2.5 14.6 4l3-.2.8 2.9 2.4 1.8-1 2.8.6 2.9-2.6 1.4-1.2 2.7-3-.3-2.6 1.6L9.4 18l-3 .2-.8-2.9-2.4-1.8 1-2.8-.6-2.9 2.6-1.4L7.4 3.7l3 .3L12 2.5Z" />
-      <path d="m8.8 11.5 2.2 2.2 4.2-4.2" />
-    </>
-  ),
-  plans: (
-    <>
-      <path d="m3.5 6 1.5 1.5L8 4.5M3.5 12.5 5 14l3-3M3.5 19l1.5 1.5L8 17.5" />
-      <path d="M12 6h8.5M12 12.5h8.5M12 19h8.5" />
-    </>
-  ),
-  setup: <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />,
-  maintenance: (
-    <path d="M14.7 6.3a4 4 0 0 0 5 5L21.5 13a6 6 0 0 1-7.7 1.4L6.5 21.7a2.1 2.1 0 0 1-3-3l7.3-7.3A6 6 0 0 1 12.2 3.7L14 5.5l.7.8Z" />
-  ),
+  brush: Paintbrush,
+  puzzle: Puzzle,
+  diamond: Gem,
+  customize: WandSparkles,
+  ready: BadgeCheck,
+  plans: ListChecks,
+  setup: Zap,
+  maintenance: Wrench,
 };
 
 // lines: the titles as the design breaks them
@@ -144,9 +116,10 @@ export default function LmsWhichFits() {
                     aria-hidden="true"
                     className="fit-tile flex size-14 shrink-0 items-center justify-center rounded-[10px] bg-linear-to-b from-[#2b6ee0] to-[#1a58c8] text-white shadow-[0_8px_18px_-8px_rgba(26,88,200,0.6)] lg:size-[60px]"
                   >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="size-6">
-                      {icons[item.icon]}
-                    </svg>
+                    {(() => {
+  const Icon = icons[item.icon];
+  return <Icon aria-hidden="true" strokeWidth={1.8} className="size-6" />;
+})()}
                   </span>
                   <span className="text-xl leading-snug text-[#002461] lg:text-[clamp(20px,1.6vw,23px)]">
                     {item.lines.map((line) => (
