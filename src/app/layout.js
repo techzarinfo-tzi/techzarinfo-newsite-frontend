@@ -78,9 +78,7 @@ export const metadata = {
       "max-video-preview": -1,
     },
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  // Icons come from the app/ file conventions: favicon.ico, icon.png and apple-icon.png
   manifest: "/manifest.webmanifest",
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,

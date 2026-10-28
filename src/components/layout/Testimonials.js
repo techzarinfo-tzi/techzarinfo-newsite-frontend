@@ -1,11 +1,33 @@
-import Image from "next/image";
+import TestimonialVideo from "./TestimonialVideo";
 
 // Site-wide section (rendered from the root layout, like Navbar) — appears under every page,
-// not just the homepage. The supplied photo is itself a finished testimonial graphic (its own
-// logo, avatar, stars and quote are already printed into the image), so it's used as-is for the
-// three video-style cards rather than layered under our own duplicate name/avatar text — this is
-// why VideoCard below only adds a play button, not the caption the Figma reference shows.
-const PHOTO = "/testimonial/download.jpg";
+// not just the homepage. The three video cards play real client videos; each already carries its
+// own captions (and name), so the card only adds a play button.
+// Emily's and Roland's clips are 720p web encodes of the supplied 1080p files
+// (public/*_9x16_captioned.mp4), at a fraction of the size; Abdul's is used as supplied.
+const videos = {
+  emily: {
+    src: "/testimonial/emily.mp4",
+    poster: "/testimonial/emily-poster.webp",
+    width: 1080,
+    height: 1920,
+    label: "Emily Strotman's client testimonial video",
+  },
+  abdul: {
+    src: "/Abdul_Testimonial_Clean_Captioned_v2.mp4",
+    poster: "/testimonial/abdul-poster.webp",
+    width: 464,
+    height: 832,
+    label: "Abdul's client testimonial video",
+  },
+  roland: {
+    src: "/testimonial/roland.mp4",
+    poster: "/testimonial/roland-poster.webp",
+    width: 1080,
+    height: 1920,
+    label: "Roland's client testimonial video",
+  },
+};
 
 const testimonial = {
   name: "Adam smith",
@@ -60,42 +82,21 @@ function QuoteCard() {
   );
 }
 
-function VideoCard() {
-  return (
-    <div className="relative aspect-[169/220] w-full overflow-hidden rounded-2xl bg-[#0a1f4d]">
-      <Image
-        src={PHOTO}
-        alt="Client testimonial"
-        fill
-        sizes="(min-width: 640px) 33vw, 90vw"
-        className="object-cover"
-      />
-      <button
-        type="button"
-        aria-label="Play client testimonial video"
-        className="absolute inset-0 m-auto flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-[#002148] shadow-lg transition-transform hover:scale-105"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 translate-x-[1px]">
-          <path d="M8 5v14l11-7z" />
-        </svg>
-      </button>
-    </div>
-  );
-}
-
 // Three independent columns (not a shared-row grid) — each column stacks its own two cards at
 // their natural heights, which is why the quote card and video card swap order per column
 // rather than being forced into equal-height rows, matching the source design.
 const columns = [
-  ["quote", "video"],
-  ["video", "quote"],
-  ["quote", "video"],
+  ["quote", "emily"],
+  ["abdul", "quote"],
+  ["quote", "roland"],
 ];
 
 function Column({ order }) {
   return (
     <div className="flex flex-col gap-4 sm:gap-5 lg:gap-6">
-      {order.map((kind, i) => (kind === "quote" ? <QuoteCard key={i} /> : <VideoCard key={i} />))}
+      {order.map((kind) =>
+        kind === "quote" ? <QuoteCard key={kind} /> : <TestimonialVideo key={kind} {...videos[kind]} />
+      )}
     </div>
   );
 }
