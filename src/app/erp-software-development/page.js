@@ -5,6 +5,8 @@ import ErpServices from "@/components/erp/ErpServices";
 import ErpFeaturesOrbit from "@/components/erp/ErpFeaturesOrbit";
 import ErpBenefits from "@/components/erp/ErpBenefits";
 import ErpCostEstimator from "@/components/erp/ErpCostEstimator";
+import ErpTechnologies from "@/components/erp/ErpTechnologies";
+import ErpFaq from "@/components/erp/ErpFaq";
 
 const path = "/erp-software-development";
 
@@ -27,6 +29,8 @@ export default function ErpSoftwareDevelopmentPage() {
       <ErpFeaturesOrbit />
       <ErpBenefits />
       <ErpCostEstimator />
+      <ErpTechnologies />
+      <ErpFaq />
     </>
   );
 }

@@ -1,20 +1,27 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, HardHat, Layers, Plug, Settings } from "lucide-react";
+import { Boxes, Building2, ChartLine, ClipboardCheck, HardHat, Layers, Plug, Settings, ShieldCheck, TrendingUp } from "lucide-react";
 
-// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
+// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor. Names, not
+// components, so pages (server components) can pass their cards in as plain data.
 const icons = {
   custom: Layers,
   smes: Settings,
   enterprise: Building2,
   integration: Plug,
   construction: HardHat,
+  // CMMS page
+  productivity: TrendingUp,
+  reliability: ShieldCheck,
+  inventory: Boxes,
+  compliance: ClipboardCheck,
+  insights: ChartLine,
 };
 
 // Card styles from the design, left to right: deep navy, pale blue, bright blue, royal blue, and a
 // very light blue one with navy text and a blue icon tile.
-const services = [
+const erpServices = [
   {
     icon: "custom",
     title: "Custom ERP Development",
@@ -69,7 +76,7 @@ const restZ = [1, 2, 5, 3, 4];
 const PUSH = 0.34;
 const FALLOFF = 0.85;
 
-function fanTransform(i, active) {
+function fanTransform(services, i, active) {
   const { tilt } = services[i];
   if (active === null) return `translate3d(0, 0, 0) rotate(${tilt}deg) scale(1)`;
   if (i === active) return "translate3d(0, -18px, 0) rotate(0deg) scale(1.08)";
@@ -78,7 +85,7 @@ function fanTransform(i, active) {
   return `translate3d(calc(var(--card) * ${(side * shift).toFixed(3)}), 6px, 0) rotate(${tilt * 1.2}deg) scale(0.94)`;
 }
 
-function stackTransform(i, active) {
+function stackTransform(services, i, active) {
   const tilt = services[i].tilt * 0.5;
   if (active === null) return `translate3d(0, 0, 0) rotate(${tilt}deg) scale(1)`;
   if (i === active) return "translate3d(0, 0, 0) rotate(0deg) scale(1.04)";
@@ -110,7 +117,30 @@ function Card({ service, className = "", style, ...rest }) {
   );
 }
 
+// Each card's look (gradient, icon tile, tilt), by position in the fan
+const fanLooks = erpServices.map(({ card, tile, tilt }) => ({ card, tile, tilt }));
+
 export default function ErpServices() {
+  return (
+    <ServicesFan
+      guide="erpServices"
+      title="Our ERP Software Development Services"
+      text={
+        <>
+          Every business has its own objectives and goals, and likewise, every client has unique
+          operational needs. At Techzarinfo, we understand this diversity and deliver tailored ERP
+          software development services in India to match your specific requirements
+        </>
+      }
+      services={erpServices}
+    />
+  );
+}
+
+// Shared with other pages (e.g. CMMS): pass the heading, an optional intro and five cards (icon
+// name, title, text). Each card takes the look of the ERP card in the same position.
+export function ServicesFan({ guide, title, text, services, titleWidth = "max-w-[620px]" }) {
+  const items = services.map((service, i) => ({ ...fanLooks[i], ...service }));
   const [active, setActive] = useState(null);
   // The last card to leave the front keeps a raised layer until its transition ends, so it doesn't
   // drop behind its neighbours while it is still shrinking back into the fan.
@@ -137,27 +167,27 @@ export default function ErpServices() {
   };
 
   return (
-    <section data-guide="erpServices" className="overflow-x-clip bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+    <section data-guide={guide} className="overflow-x-clip bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
       <div className="mx-auto max-w-[820px] text-center">
-        <h2 className="mx-auto max-w-[620px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
-          Our ERP Software Development Services
+        <h2 className={`mx-auto ${titleWidth} text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]`}>
+          {title}
         </h2>
-        <p className="mx-auto mt-3 max-w-[760px] text-[15px] leading-normal text-[#002461] sm:text-base lg:text-lg">
-          Every business has its own objectives and goals, and likewise, every client has unique
-          operational needs. At Techzarinfo, we understand this diversity and deliver tailored ERP
-          software development services in India to match your specific requirements
-        </p>
+        {text && (
+          <p className="mx-auto mt-3 max-w-[760px] text-[15px] leading-normal text-[#002461] sm:text-base lg:text-lg">
+            {text}
+          </p>
+        )}
       </div>
 
       {/* Desktop (1280px and up): the fan */}
       <div className="erp-fan relative mx-auto mt-14 hidden xl:block" onPointerLeave={hover(clear)}>
-        {services.map((service, i) => (
+        {items.map((service, i) => (
           <Card
             key={service.title}
             service={service}
             aria-hidden="true"
             className="absolute top-0 h-(--card-h) w-(--card) transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:duration-0"
-            style={{ left: `calc(var(--pitch) * ${i})`, zIndex: zFor(i), transform: fanTransform(i, active) }}
+            style={{ left: `calc(var(--pitch) * ${i})`, zIndex: zFor(i), transform: fanTransform(items, i, active) }}
             onTransitionEnd={onSettled(i)}
           />
         ))}
@@ -165,7 +195,7 @@ export default function ErpServices() {
             the cards sliding aside can't shift which card is under the pointer. They also carry the
             accessible content and keyboard focus for the fan. */}
         <ul className="absolute inset-0 z-30 flex">
-          {services.map((service, i) => (
+          {items.map((service, i) => (
             <li key={service.title} className="h-full flex-1">
               <button
                 type="button"
@@ -187,7 +217,7 @@ export default function ErpServices() {
 
       {/* Below 1280px (phones, tablets, small laptops): an overlapping stack */}
       <ul className="mx-auto mt-10 flex max-w-[420px] flex-col xl:hidden">
-        {services.map((service, i) => (
+        {items.map((service, i) => (
           <li key={service.title} className="relative [&:not(:first-child)]:-mt-7" style={{ zIndex: zFor(i) }}>
             <Card
               service={service}
@@ -195,7 +225,7 @@ export default function ErpServices() {
               tabIndex={0}
               aria-pressed={active === i}
               className="cursor-pointer touch-manipulation transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#005EFF] motion-reduce:duration-0"
-              style={{ transform: stackTransform(i, active) }}
+              style={{ transform: stackTransform(items, i, active) }}
               onClick={() => toggle(i)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {

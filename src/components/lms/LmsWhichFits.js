@@ -39,7 +39,7 @@ const columns = [
 ];
 
 // Flips true once the element is well into view (once only), to start the entrance.
-function useInView(ref) {
+export function useInView(ref) {
   const [inView, setInView] = useState(false);
   useEffect(() => {
     const el = ref.current;

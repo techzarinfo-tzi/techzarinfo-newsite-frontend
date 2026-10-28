@@ -29,9 +29,9 @@ export default function Hero() {
               You Dream Big. We Build Bigger.
             </h1>
             <p className="mx-auto mt-4 max-w-md text-[20px] leading-relaxed text-[#01215A] sm:text-base lg:mx-0">
-              Your dream isn&apos;t just another project to us. We turn your
-              ambitious visions into powerful digital products &amp; services
-              that move your businesses forward.
+              Your dream isn’t just another project to us. We turn your
+              ambitious visions into powerful digital products & services that
+              move your businesses forward.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">

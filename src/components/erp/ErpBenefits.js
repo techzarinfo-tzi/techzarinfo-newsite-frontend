@@ -1,4 +1,17 @@
-import { Coins, Expand, Gauge, MapPin, ShieldCheck, TrendingUp } from "lucide-react";
+import {
+  CircleDollarSign,
+  Coins,
+  Database,
+  Expand,
+  Gauge,
+  GitBranch,
+  MapPin,
+  ShieldCheck,
+  Target,
+  TrendingUp,
+  UserCheck,
+  Users,
+} from "lucide-react";
 
 /// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
 const icons = {
@@ -8,10 +21,17 @@ const icons = {
   roi: TrendingUp,
   scale: Expand,
   security: ShieldCheck,
+  // CRM page
+  relationships: Users,
+  workflow: GitBranch,
+  sales: CircleDollarSign,
+  data: Database,
+  retention: UserCheck,
+  target: Target,
 };
 
 // In the design's reading order: left column, right column, row by row
-const benefits = [
+const erpBenefits = [
   { icon: "cost", title: "Cost-Effective Solutions", text: "High-quality ERP development at competitive prices" },
   { icon: "efficiency", title: "Enhanced Efficiency", text: "Automate repetitive tasks to boost productivity and reduce errors" },
   { icon: "local", title: "Localized Expertise", text: "Deep understanding of regional business needs" },
@@ -25,9 +45,28 @@ const benefits = [
 // horizon: the top of a circle ~103vw across, peaking just under the heading (~197px down at 1440)
 // with a bright blue rim and a pale haze inside, fading out towards the section bottom.
 // Tablet: same two columns, narrower. Phone: one column.
-export default function ErpBenefits() {
+// Shared by other pages: title, children (the subtitle), benefits (icon names from `icons` above) and
+// guide default to the ERP page's own content, so that page passes nothing.
+export default function ErpBenefits({
+  title = (
+    <>
+      {/* The design's line break from tablets up; phones balance the lines themselves */}
+      Key Benefits of Using Our ERP <br className="hidden md:block" />
+      Development Services
+    </>
+  ),
+  children = (
+    <>
+      By using our ERP development services, your business can reach new heights in its industry
+      while gaining significant benefits such as streamlined operations, and smarter{" "}
+      <span className="whitespace-nowrap">decision-making.</span>
+    </>
+  ),
+  benefits = erpBenefits,
+  guide = "erpBenefits",
+}) {
   return (
-    <section data-guide="erpBenefits" className="relative overflow-hidden bg-white px-4 pt-16 pb-20 sm:px-6 lg:px-8 lg:pt-[104px] lg:pb-[110px]">
+    <section data-guide={guide} className="relative overflow-hidden bg-white px-4 pt-16 pb-20 sm:px-6 lg:px-8 lg:pt-[104px] lg:pb-[110px]">
       {/* The glowing horizon: three parallel arcs (the tops of three equal circles stacked ~40px
           apart at 1440), each breathing on its own slow loop (.benefit-arc in globals.css) */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 [--arc-gap:clamp(26px,2.8vw,40px)] [--arc-top:clamp(150px,13.7vw,197px)]">
@@ -52,14 +91,10 @@ export default function ErpBenefits() {
 
       <div className="relative mx-auto max-w-[860px] text-center">
         <h2 className="mx-auto max-w-[620px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] md:max-w-none lg:text-[40px]">
-          {/* The design's line break from tablets up; phones balance the lines themselves */}
-          Key Benefits of Using Our ERP <br className="hidden md:block" />
-          Development Services
+          {title}
         </h2>
         <p className="mx-auto mt-3 max-w-[845px] text-[15px] leading-normal text-[#002461] sm:text-base lg:max-w-[790px] lg:text-[19px] lg:leading-[1.3]">
-          By using our ERP development services, your business can reach new heights in its industry
-          while gaining significant benefits such as streamlined operations, and smarter{" "}
-          <span className="whitespace-nowrap">decision-making.</span>
+          {children}
         </p>
       </div>
 

@@ -1,6 +1,9 @@
-import Image from "next/image";
+import LazyVideo from "@/components/common/LazyVideo";
 
-const GIF = "/ecommerce/why-choose/whychoose.webp"; // animated WebP (same frames as the original GIF)
+// The original GIF's frames as an H.264 loop: ~365KB instead of a 1.5MB animated WebP, and decoded
+// by the video pipeline rather than the main thread.
+const GIF = "/ecommerce/why-choose/whychoose.mp4";
+const POSTER = "/ecommerce/why-choose/whychoose-poster.jpg";
 
 // Desktop (lg+): the section is half the screen height (never under 400px, so the copy always
 // fits). Heading pinned top-left and copy bottom-right; horizontal positions and type sizes follow
@@ -8,7 +11,7 @@ const GIF = "/ecommerce/why-choose/whychoose.webp"; // animated WebP (same frame
 // section height (a square as tall as the section) and centred, so it shrinks with the section.
 // The GIF has a solid black background, so the section is black too and its edges disappear.
 // Below lg everything stacks: heading, sphere, then the copy pulled up into the GIF's empty lower
-// third. The GIF is served as-is (unoptimized) so it keeps animating.
+// third.
 export default function EcommerceWhyChoose() {
   return (
     <section data-guide="ecommerceWhyChoose" className="relative overflow-hidden bg-black text-white">
@@ -19,12 +22,11 @@ export default function EcommerceWhyChoose() {
           </h2>
 
           <div className="relative mx-auto mt-6 w-full max-w-[520px] -mb-[calc(min(100%,520px)*0.3)] lg:absolute lg:top-0 lg:left-[51%] lg:mt-0 lg:mb-0 lg:aspect-square lg:h-full lg:w-auto lg:max-w-none lg:-translate-x-1/2">
-            <Image
+            <LazyVideo
               src={GIF}
-              alt=""
+              poster={POSTER}
               width={500}
               height={500}
-              unoptimized
               className="h-auto w-full lg:h-full"
               // Soft edges so the GIF's square frame never shows against the section background
               style={{

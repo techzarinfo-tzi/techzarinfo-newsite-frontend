@@ -34,7 +34,7 @@ const features = [
       ["search", "Easy Course Search & Enrolment"],
     ],
     image: {
-      src: `${ASSETS}/whitelable-1.svg`,
+      src: `${ASSETS}/whitelable-1.webp`,
       width: 582,
       height: 498,
       alt: "Learner home screen on desktop and mobile, showing continue learning progress and enrolled courses",
@@ -50,7 +50,7 @@ const features = [
       ["collaboration", "Learner Collaboration"],
     ],
     image: {
-      src: `${ASSETS}/whitelable-2.svg`,
+      src: `${ASSETS}/whitelable-2.webp`,
       width: 615,
       height: 447,
       alt: "Course player with video lesson, lesson checklist, quick quiz and assignment upload",
@@ -67,7 +67,7 @@ const features = [
       ["integration", "Integration & Scalability"],
     ],
     image: {
-      src: `${ASSETS}/whitelable-3.svg`,
+      src: `${ASSETS}/whitelable-3.webp`,
       width: 612,
       height: 457,
       alt: "Admin overview dashboard with learner stats, engagement chart, user roles and content library",

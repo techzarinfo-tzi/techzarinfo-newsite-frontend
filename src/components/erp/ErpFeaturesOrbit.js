@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Cloud, Cog, Database, Hourglass, LayoutGrid, Users } from "lucide-react";
+import { Bell, Box, ChartColumn, Cloud, Cog, Database, Gauge, Hourglass, LayoutGrid, Smartphone, Users } from "lucide-react";
 
-// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor
+// Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor. Names, not
+// components, so pages (server components) can pass their feature lists in as plain data.
 const icons = {
   database: Database,
   analytics: Hourglass,
@@ -11,11 +12,18 @@ const icons = {
   tenant: Users,
   interface: LayoutGrid,
   automation: Cog,
+  // CMMS page
+  inventory: Box,
+  technicians: Users,
+  reports: ChartColumn,
+  dashboard: Gauge,
+  mobile: Smartphone,
+  alerts: Bell,
 };
 
 // Clockwise from the top left, at the angles they sit in the design (degrees, 0 = right, y down):
 // six evenly spaced points on one circle.
-const features = [
+const erpFeatures = [
   { icon: "database", title: "Centralized Database", text: "Manage all your data from a single platform", angle: -120 },
   { icon: "analytics", title: "Real-Time Analytics", text: "Make informed decisions with up-to-date insights", angle: -60 },
   { icon: "cloud", title: "Cloud-Based ERP Solutions", text: "Access your ERP system anytime, anywhere", angle: 0 },
@@ -62,6 +70,12 @@ const pillOpacity = (deg) => smoothstep(FADE_FROM, FADE_TO, Math.abs(Math.cos(de
 // (no re-renders). It runs only while the section is on screen and the tab is visible; with
 // prefers-reduced-motion everything stays at the design's positions.
 export default function ErpFeaturesOrbit() {
+  return <FeaturesOrbit guide="erpFeatures" title="Power Packed Features of Our Custom ERP Software" features={erpFeatures} />;
+}
+
+// Shared with other pages (e.g. CMMS): pass the centre heading and six features (icon name, title,
+// text, angle).
+export function FeaturesOrbit({ guide, title, features }) {
   const stageRef = useRef(null);
   const itemRefs = useRef([]);
 
@@ -127,12 +141,14 @@ export default function ErpFeaturesOrbit() {
       io.disconnect();
       document.removeEventListener("visibilitychange", start);
     };
-  }, []);
+  }, [features]);
 
   return (
-    <section data-guide="erpFeatures" className="overflow-x-clip bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+    <section data-guide={guide}className="overflow-x-clip bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      {/* data-guide-busy: the pills keep circling, so the AI guide never parks over the stage */}
       <div
         ref={stageRef}
+        data-guide-busy
         className="erp-orbit relative mx-auto h-(--S) w-(--S) [--disc:0.5] [--orbit:0.41] [--ring:0.41] [--S:min(92vw,420px)] md:h-[calc(var(--S)*0.69)] md:[--disc:0.25] md:[--orbit:0.246] md:[--ring:0.28] md:[--S:min(1100px,94vw)]"
       >
         {/* The ring */}
@@ -145,7 +161,7 @@ export default function ErpFeaturesOrbit() {
             the soft outer glow */}
         <div className="absolute top-1/2 left-1/2 z-10 flex size-[calc(var(--S)*var(--disc))] -translate-1/2 items-center justify-center rounded-full border border-white bg-[radial-gradient(circle_closest-side,#F5F9FE_39%,#ECF5FF_93%,#B4D5FF_100%)] text-center shadow-[0_0_0_10px_rgba(207,224,255,0.45),0_0_60px_10px_rgba(0,94,255,0.18),inset_0_0_24px_rgba(0,94,255,0.12)]">
           <h2 className="w-[80%] text-[clamp(17px,5vw,22px)] font-medium leading-tight tracking-tight text-[#002461] md:text-[max(15px,calc(var(--S)*0.019))]">
-            Power Packed Features of Our Custom ERP Software
+            {title}
           </h2>
         </div>
 

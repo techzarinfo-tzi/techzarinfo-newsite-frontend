@@ -52,8 +52,8 @@ export const productsMenu = {
   items: [
     { name: "LMS", description: "Learning Management System", href: "/corporate-learning-management-system" },
     { name: "ERP", description: "Enterprise Resource Planning", href: "/erp-software-development" },
-    { name: "CRM", description: "Customer Relationship Management", href: "/products/custom-crm-solutions" },
-    { name: "CMMS", description: "Computerized Maintenance Management", href: "/products/cmms" },
+    { name: "CRM", description: "Customer Relationship Management", href: "/custom-crm-solutions" },
+    { name: "CMMS", description: "Computerized Maintenance Management", href: "/cmms-application" },
     { name: "SMS", description: "Student Management System", href: "/products/sms" },
     { name: "ZAAR", description: "Field Reporting Solution", href: "/products/field-report" },
   ],

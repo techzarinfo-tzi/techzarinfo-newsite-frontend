@@ -8,6 +8,7 @@ export default function HeroGraphic() {
         alt=""
         fill
         priority
+        sizes="(min-width: 1280px) 730px, (min-width: 1024px) 58vw, (min-width: 640px) 512px, 448px"
         className="animate-spin-slow object-contain"
       />
     </div>
