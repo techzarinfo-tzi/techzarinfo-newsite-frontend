@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import HeroButton, { HeroButtonGroup } from "@/components/common/HeroButton";
 import HeroGraphic from "./HeroGraphic";
 import StatsRow from "./StatsRow";
 
@@ -34,20 +34,10 @@ export default function Hero() {
               move your businesses forward.
             </p>
 
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-              <Link
-                href="/contact"
-                className="rounded-lg bg-blue-950 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-900"
-              >
-                Start a Project
-              </Link>
-              <Link
-                href="/demo"
-                className="rounded-lg border border-blue-950 px-5 py-2.5 text-sm font-semibold text-blue-950 transition-colors hover:bg-blue-950/5"
-              >
-                Schedule a Demo
-              </Link>
-            </div>
+            <HeroButtonGroup tone="home">
+              <HeroButton tone="home" label="Start a Project" href="#contact" />
+              <HeroButton tone="home" label="Schedule a Demo" href="/demo" variant="secondary" />
+            </HeroButtonGroup>
 
             <StatsRow stats={stats} />
           </div>

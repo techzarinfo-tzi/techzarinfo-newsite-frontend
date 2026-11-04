@@ -1,4 +1,5 @@
-import Link from "next/link";
+import HeroButton, { HeroButtonGroup } from "@/components/common/HeroButton";
+import { DEMO_URL } from "@/config/demo";
 import CoinOrbit from "./CoinOrbit";
 
 // Desktop follows the 1440px design (the same hero system as the e-commerce page): copy on the
@@ -32,20 +33,10 @@ export default function BlockchainHero() {
             technology.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:mt-10 lg:justify-start lg:gap-6">
-            <Link
-              href="/contact"
-              className="rounded-[3px] border border-[#002461] bg-[#002461] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#0a3480] lg:text-base"
-            >
-              Start a Project
-            </Link>
-            <Link
-              href="/demo"
-              className="rounded-[3px] border border-[#002461] px-5 py-2.5 text-sm font-medium text-[#002461] transition-colors hover:bg-[#002461]/5 lg:text-base"
-            >
-              Free Demo
-            </Link>
-          </div>
+          <HeroButtonGroup>
+            <HeroButton label="Start a Project" href="#contact" />
+            <HeroButton label="Free Demo" href={DEMO_URL} variant="secondary" />
+          </HeroButtonGroup>
         </div>
 
         {/* The wrist runs a little past the section edge, into the white fade */}

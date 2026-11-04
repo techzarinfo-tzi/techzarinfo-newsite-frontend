@@ -1,0 +1,71 @@
+/*
+ * Site-wide bottom blur. A fixed, click-through strip along the bottom of the viewport that blurs
+ * whatever scrolls beneath it: strongest at the very bottom (shapes show, text can't be read), easing
+ * to nothing at its top edge, so content sharpens smoothly as it scrolls up out of the strip.
+ *
+ * A single backdrop-filter can't vary its radius, so the strip stacks layers of rising blur, each
+ * masked to an overlapping band; together they read as one continuous gradient of blur.
+ */
+
+.bottom-blur {
+  --bb-h: clamp(64px, 12vh, 112px);
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  height: var(--bb-h);
+  z-index: 40; /* under the navbar (z-50), the AI guide (z-45) and the chat widget (z-70) */
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .bottom-blur {
+    --bb-h: clamp(80px, 14vh, 140px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .bottom-blur {
+    --bb-h: clamp(96px, 16vh, 180px);
+  }
+}
+
+.bottom-blur > span {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(var(--bb-blur));
+  backdrop-filter: blur(var(--bb-blur));
+  -webkit-mask-image: var(--bb-mask);
+  mask-image: var(--bb-mask);
+}
+
+/* Bands step down the strip in sevenths; each fades in, holds, then hands over to the next. */
+.bottom-blur > span:nth-child(1) {
+  --bb-blur: 0.5px;
+  --bb-mask: linear-gradient(to bottom, transparent 0%, #000 14.3%, #000 28.6%, transparent 42.9%);
+}
+.bottom-blur > span:nth-child(2) {
+  --bb-blur: 1px;
+  --bb-mask: linear-gradient(to bottom, transparent 14.3%, #000 28.6%, #000 42.9%, transparent 57.1%);
+}
+.bottom-blur > span:nth-child(3) {
+  --bb-blur: 2px;
+  --bb-mask: linear-gradient(to bottom, transparent 28.6%, #000 42.9%, #000 57.1%, transparent 71.4%);
+}
+.bottom-blur > span:nth-child(4) {
+  --bb-blur: 3.5px;
+  --bb-mask: linear-gradient(to bottom, transparent 42.9%, #000 57.1%, #000 71.4%, transparent 85.7%);
+}
+.bottom-blur > span:nth-child(5) {
+  --bb-blur: 6px;
+  --bb-mask: linear-gradient(to bottom, transparent 57.1%, #000 71.4%, #000 85.7%, transparent 100%);
+}
+.bottom-blur > span:nth-child(6) {
+  --bb-blur: 9px;
+  --bb-mask: linear-gradient(to bottom, transparent 71.4%, #000 85.7%);
+}
+
+@media print {
+  .bottom-blur {
+    display: none;
+  }
+}

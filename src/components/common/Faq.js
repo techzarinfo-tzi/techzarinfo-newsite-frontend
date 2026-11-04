@@ -10,17 +10,14 @@ function Chevron() {
   );
 }
 
-// Shared FAQ accordion: centred title over a column of white cards. One answer is open at a time
-// (the first by default). The open card lifts with a deeper shadow and its round icon turns blue and
-// points down; the answer slides open by animating the row height (0fr -> 1fr), so no measuring.
-// items: [{ q, a }]; description: optional line under the title
-export default function Faq({ title = "FAQ", description, items, className = "" }) {
+// titleWidth: optional heading max-width class, for pages whose heading needs a different break
+export default function Faq({ title = "FAQ", description, items, className = "", titleWidth = "max-w-[680px]" }) {
   const [open, setOpen] = useState(0);
   const baseId = useId();
 
   return (
     <section className={`bg-white px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-[100px] ${className}`}>
-      <h2 className="mx-auto max-w-[680px] text-center text-[26px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
+      <h2 className={`mx-auto ${titleWidth} text-center text-[26px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]`}>
         {title}
       </h2>
       {description && (

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import HeroButton, { HeroButtonGroup } from "@/components/common/HeroButton";
+import { DEMO_URL } from "@/config/demo";
 
 // The hero artwork: already tilted and cropped on its right side. The monitor starts 14.4% in from
 // the left and 13% down from the top; the rest of those margins is transparent.
@@ -45,23 +46,10 @@ export default function ErpHero() {
             together in one place
           </p>
 
-          <div
-            className="erp-hero-line mt-8 flex flex-wrap items-center justify-center gap-4 lg:mt-10 lg:justify-start lg:gap-6"
-            style={{ "--d": "0.24s" }}
-          >
-            <Link
-              href="/contact"
-              className="rounded-[3px] border border-[#002461] bg-[#002461] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#0a3480] lg:text-base"
-            >
-              Start a Project
-            </Link>
-            <Link
-              href="/demo"
-              className="rounded-[3px] border border-[#002461] px-5 py-2.5 text-sm font-medium text-[#002461] transition-colors hover:bg-[#002461]/5 lg:text-base"
-            >
-              Free Demo
-            </Link>
-          </div>
+          <HeroButtonGroup className="erp-hero-line" style={{ "--d": "0.24s" }}>
+            <HeroButton label="Start a Project" href="#contact" />
+            <HeroButton label="Free Demo" href={DEMO_URL} variant="secondary" />
+          </HeroButtonGroup>
         </div>
 
         {/* Mobile: a fixed-height window clips the artwork's bottom. Desktop: pinned from ~53vw to past

@@ -6,6 +6,7 @@ import AiGuide from "@/components/layout/AiGuide";
 import ChatWidget from "@/components/chatbot/ChatWidget";
 import ContactUsSection from "@/components/layout/ContactUsSection";
 import Footer from "@/components/layout/Footer";
+import BottomBlur from "@/components/layout/BottomBlur";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -103,6 +104,7 @@ export default function RootLayout({ children }) {
         <Testimonials />
         <ContactUsSection />
         <Footer />
+        <BottomBlur />
         <AiGuide />
         <ChatWidget />
       </body>

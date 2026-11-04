@@ -1,7 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Boxes, Building2, ChartLine, ClipboardCheck, HardHat, Layers, Plug, Settings, ShieldCheck, TrendingUp } from "lucide-react";
+import {
+  Boxes,
+  Building2,
+  ChartCandlestick,
+  ChartLine,
+  ChartNoAxesColumnIncreasing,
+  ClipboardCheck,
+  Coins,
+  HardHat,
+  IdCard,
+  Layers,
+  ListPlus,
+  Plug,
+  Settings,
+  ShieldCheck,
+  TrendingUp,
+  TrendingUpDown,
+  UserStar,
+  Wallet,
+} from "lucide-react";
 
 // Icons from Lucide (lucide.dev), drawn in the site's colour via currentColor. Names, not
 // components, so pages (server components) can pass their cards in as plain data.
@@ -17,6 +36,16 @@ const icons = {
   inventory: Boxes,
   compliance: ClipboardCheck,
   insights: ChartLine,
+  // Crypto exchange page
+  tradingFees: ChartCandlestick,
+  listingFees: ListPlus,
+  staking: Coins,
+  marginFutures: TrendingUpDown,
+  withdrawalFees: Wallet,
+  // SMS page
+  communication: UserStar,
+  learningEcosystem: ChartNoAxesColumnIncreasing,
+  personalized: IdCard,
 };
 
 // Card styles from the design, left to right: deep navy, pale blue, bright blue, royal blue, and a

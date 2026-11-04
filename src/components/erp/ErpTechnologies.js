@@ -5,19 +5,19 @@ import { useEffect, useRef, useState } from "react";
 
 const ASSETS = "/product/ERP/utilize/";
 
-// The nine logo tiles, at their centres in the design (in % of the arch box, which spans the
+// The ERP page's nine logo tiles, at their centres in the design (in % of the arch box, which spans the
 // design's full width and its band from the top tile to the bottom tiles). order: entrance order,
 // from the top of the arch outwards; depth: how far the tile drifts with the pointer.
 const tech = [
-  { name: "Web applications", file: "utilize-1.svg", x: 14.4, y: 75.3, order: 4, depth: 0.9 },
-  { name: "Laravel", file: "laravel 1.svg", x: 23.2, y: 44, order: 3, depth: 0.7 },
-  { name: "Google Cloud", file: "google-cloud 1.svg", x: 33.5, y: 22.7, order: 1, depth: 0.5 },
-  { name: "AWS", file: "aws 1.svg", x: 41, y: 50, order: 2, depth: 0.35 },
-  { name: "PHP", file: "php 1.svg", x: 49, y: 13.3, order: 0, depth: 0.25 },
-  { name: "DigitalOcean", file: "digital-ocean 1.svg", x: 57.1, y: 50, order: 2, depth: 0.35 },
-  { name: "HTML5", file: "html 1.svg", x: 63.6, y: 22.7, order: 1, depth: 0.5 },
-  { name: "JavaScript", file: "js 1.svg", x: 74.6, y: 44, order: 3, depth: 0.7 },
-  { name: "CSS3", file: "css 1.svg", x: 82.9, y: 75.3, order: 4, depth: 0.9 },
+  { name: "Web applications", src: `${ASSETS}utilize-1.svg`, x: 14.4, y: 75.3, order: 4, depth: 0.9 },
+  { name: "Laravel", src: `${ASSETS}laravel 1.svg`, x: 23.2, y: 44, order: 3, depth: 0.7 },
+  { name: "Google Cloud", src: `${ASSETS}google-cloud 1.svg`, x: 33.5, y: 22.7, order: 1, depth: 0.5 },
+  { name: "AWS", src: `${ASSETS}aws 1.svg`, x: 41, y: 50, order: 2, depth: 0.35 },
+  { name: "PHP", src: `${ASSETS}php 1.svg`, x: 49, y: 13.3, order: 0, depth: 0.25 },
+  { name: "DigitalOcean", src: `${ASSETS}digital-ocean 1.svg`, x: 57.1, y: 50, order: 2, depth: 0.35 },
+  { name: "HTML5", src: `${ASSETS}html 1.svg`, x: 63.6, y: 22.7, order: 1, depth: 0.5 },
+  { name: "JavaScript", src: `${ASSETS}js 1.svg`, x: 74.6, y: 44, order: 3, depth: 0.7 },
+  { name: "CSS3", src: `${ASSETS}css 1.svg`, x: 82.9, y: 75.3, order: 4, depth: 0.9 },
 ];
 
 // Layout from the 1440px design: the tiles (~88px, rounded, pale lilac-to-white with a soft blue
@@ -33,7 +33,8 @@ const tech = [
 //      for a little depth (one rAF write of two CSS variables per frame, eased).
 //   4. Hover/focus: a tile lifts, grows slightly and shows the technology's name.
 // Shared by other pages: title, children (the paragraph) and guide default to the ERP page's own
-// content, so that page passes nothing. The tiles are the same everywhere.
+// content, so that page passes nothing; tiles (same shape as `tech`: name, src, x, y, order, depth)
+// and titleWidth (the heading's max-width classes) default to the ERP page's too.
 export default function ErpTechnologies({
   title = "Technology We Utilize for ERP Software Development",
   children = (
@@ -45,6 +46,8 @@ export default function ErpTechnologies({
     </>
   ),
   guide = "erpTech",
+  tiles = tech,
+  titleWidth = "max-w-[560px] xl:max-w-[600px]",
 }) {
   const sectionRef = useRef(null);
   const [inView, setInView] = useState(false);
@@ -124,9 +127,9 @@ export default function ErpTechnologies({
       <div className="relative mx-auto max-w-[1440px]">
         {/* The arch: the design's 1440 x 600 band, scaled to the width */}
         <ul className="relative mx-auto aspect-[1440/600] w-full max-w-[760px] max-sm:aspect-[1440/980] xl:max-w-none">
-          {tech.map((t, i) => (
+          {tiles.map((t, i) => (
             <li
-              key={t.file}
+              key={t.src}
               className="erp-tech-in erp-tech-pop absolute -translate-1/2"
               style={{ left: `${t.x}%`, top: `${t.y}%`, "--o": t.order }}
             >
@@ -138,7 +141,7 @@ export default function ErpTechnologies({
                     className="erp-tech-tile group relative flex size-(--tile) items-center justify-center rounded-[22%] border border-white/90 bg-linear-to-br from-[#fbfcff] to-[#ebf0ff] shadow-[0_10px_24px_-8px_rgba(70,105,200,0.28),inset_0_1px_0_rgba(255,255,255,0.9)] outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
                   >
                     <Image
-                      src={encodeURI(`${ASSETS}${t.file}`)}
+                      src={encodeURI(t.src)}
                       alt=""
                       width={64}
                       height={64}
@@ -159,7 +162,7 @@ export default function ErpTechnologies({
             the flow and the section always grows to fit it; 15.4% of the width = the part of the
             arch box below the opening's top), under the arch below that */}
         <div className="erp-tech-in erp-tech-copy relative mx-auto mt-6 max-w-[820px] text-center xl:-mt-[15.4%] xl:max-w-[clamp(620px,55vw,800px)]">
-          <h2 className="mx-auto max-w-[560px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px] xl:max-w-[600px] xl:text-[clamp(34px,2.8vw,40px)]">
+          <h2 className={`mx-auto ${titleWidth} text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px] xl:text-[clamp(34px,2.8vw,40px)]`}>
             {title}
           </h2>
           <p className="mx-auto mt-3 text-[15px] leading-normal text-[#002461] sm:text-base lg:text-[17px] lg:leading-[1.35]">

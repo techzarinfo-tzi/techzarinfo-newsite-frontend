@@ -63,7 +63,7 @@ export default function CrmWhyRecognized() {
           className="why-anim why-rise mt-3 max-w-[540px] text-[15px] leading-snug text-[#002461] sm:text-base lg:mt-2 lg:text-xl lg:leading-[1.25]"
           style={{ "--i": 1 }}
         >
-          Techzarinfo is the top-rated CRM software development company that brings its own TZI CRM
+          Techzarinfo is a top-rated CRM software development company that brings its own TZI CRM
           product
         </p>
 

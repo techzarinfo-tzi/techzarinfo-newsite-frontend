@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
+import HeroButton, { HeroButtonGroup } from "@/components/common/HeroButton";
+import { DEMO_URL } from "@/config/demo";
 
 // The visual box is the person (right-aligned, 87% wide) plus room on the left, so the cards
 // have space to swing out past her arm. The card SVGs already carry their own tilt, label and heart.
@@ -88,20 +89,10 @@ export default function EcommerceHero() {
             shopping experiences.
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:mt-10 lg:justify-start lg:gap-6">
-            <Link
-              href="/contact"
-              className="rounded-[3px] border border-[#002461] bg-[#002461] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#0a3480] lg:text-base"
-            >
-              Start a Project
-            </Link>
-            <Link
-              href="/demo"
-              className="rounded-[3px] border border-[#002461] px-5 py-2.5 text-sm font-medium text-[#002461] transition-colors hover:bg-[#002461]/5 lg:text-base"
-            >
-              Free Demo
-            </Link>
-          </div>
+          <HeroButtonGroup>
+            <HeroButton label="Start a Project" href="#contact" />
+            <HeroButton label="Free Demo" href={DEMO_URL} variant="secondary" />
+          </HeroButtonGroup>
         </div>
 
         <div className="@container relative mx-auto aspect-561/652 w-[min(100%_-_2rem,460px)] sm:w-130 lg:mx-0 lg:w-[clamp(440px,44.8vw,720px)] lg:self-end">

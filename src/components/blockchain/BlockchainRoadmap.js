@@ -112,6 +112,27 @@ const ICONS = {
       <path d="M19 20c0 1.4-1.8 2-4.5 2H13" />
     </>
   ),
+  // Used by the Digital Marketing roadmap
+  rocket: (
+    <>
+      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+    </>
+  ),
+  gear: (
+    <>
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
+    </>
+  ),
+  trend: (
+    <>
+      <path d="m22 7-8.5 8.5-5-5L2 17" />
+      <path d="M16 7h6v6" />
+    </>
+  ),
 };
 
 function StepIcon({ name, className }) {
@@ -168,6 +189,26 @@ function lengthFractionAt(path, x, y) {
 // then numeral, then title and copy. Everything then stays in its final state. Without JS, or with
 // reduced motion, the section renders in its final state.
 export default function BlockchainRoadmap() {
+  return (
+    <RoadmapSection
+      guide="bcRoadmap"
+      title="Roadmap of Our Blockchain Development Process"
+      text={
+        <>
+          The basic blockchain development process is outlined below. Just as blockchain is transparent by
+          nature, our team also maintains complete transparency in our work with clients.
+        </>
+      }
+    />
+  );
+}
+
+// Shared with other pages (e.g. Crypto Exchange): pass the heading, an optional intro and up to six
+// steps (title, text, optionally icon). Each step keeps the Blockchain step's place on the curve in
+// the same position unless it passes its own `node`, `num`, `at` and `w` (canvas px, as above);
+// without `content` the Blockchain steps are used.
+export function RoadmapSection({ guide, title, text, content, titleWidth = "max-w-[600px]" }) {
+  const items = content ? content.map((step, i) => ({ ...steps[i], ...step })) : steps;
   const sectionRef = useRef(null);
   const roadRef = useRef(null);
   const lineRef = useRef(null);
@@ -178,8 +219,8 @@ export default function BlockchainRoadmap() {
 
     // Desktop: where each node sits along the road.
     const road = roadRef.current;
-    section.querySelectorAll("[data-road-step]").forEach((li, i) => {
-      const [x, y] = steps[i].node;
+    section.querySelectorAll("[data-road-step]").forEach((li) => {
+      const [x, y] = li.dataset.roadStep.split(",").map(Number); // the step's node (its own, or the Blockchain one)
       li.style.setProperty("--at", lengthFractionAt(road, x, y).toFixed(3));
     });
 
@@ -213,20 +254,21 @@ export default function BlockchainRoadmap() {
   return (
     <section
       ref={sectionRef}
-      data-guide="bcRoadmap"
+      data-guide={guide}
       className="roadmap bg-white px-4 pt-14 pb-16 sm:px-6 sm:pt-16 sm:pb-20 lg:px-8 lg:pt-[104px] lg:pb-[106px]"
     >
       <div className="text-center">
-        <h2 className="roadmap-rise mx-auto max-w-[600px] text-[32px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]">
-          Roadmap of Our Blockchain Development Process
+        <h2 className={`roadmap-rise mx-auto ${titleWidth} text-[32px] font-semibold leading-[1.25] tracking-tight text-[#002461] sm:text-[34px] lg:text-[40px]`}>
+          {title}
         </h2>
-        <p
-          className="roadmap-rise mx-auto mt-3 max-w-[712px] text-[15px] leading-[1.45] text-[#002461]/80 sm:text-base lg:mt-1 lg:text-lg"
-          style={{ "--d": "0.15s" }}
-        >
-          The basic blockchain development process is outlined below. Just as blockchain is transparent by
-          nature, our team also maintains complete transparency in our work with clients.
-        </p>
+        {text && (
+          <p
+            className="roadmap-rise mx-auto mt-3 max-w-[712px] text-[15px] leading-[1.45] text-[#002461]/80 sm:text-base lg:mt-1 lg:text-lg"
+            style={{ "--d": "0.15s" }}
+          >
+            {text}
+          </p>
+        )}
       </div>
 
       {/* Desktop canvas */}
@@ -253,8 +295,8 @@ export default function BlockchainRoadmap() {
         </svg>
 
         <ol>
-          {steps.map(({ title, text, icon, node, num, at, w }, i) => (
-            <li key={title} data-road-step>
+          {items.map(({ title, text, icon, node, num, at, w }, i) => (
+            <li key={title} data-road-step={node.join(",")}>
               <span
                 className={`roadmap-node absolute ${nodeClass}`}
                 style={{ left: u(node[0] - 43), top: u(node[1] - 43), width: u(86), height: u(86) }}
@@ -288,7 +330,7 @@ export default function BlockchainRoadmap() {
           className="roadmap-line absolute top-7 bottom-7 left-[27px] w-[6px] -translate-x-1/2 rounded-full bg-linear-to-b from-[#2aaaf7] to-[#0b5cc5] sm:left-[32px]"
           aria-hidden="true"
         />
-        {steps.map(({ title, text, icon }, i) => (
+        {items.map(({ title, text, icon }, i) => (
           <li key={title} data-line-step className="relative flex gap-4 pb-10 last:pb-0 sm:gap-6 sm:pb-12">
             <span className={`roadmap-node relative z-10 h-14 w-14 shrink-0 sm:h-16 sm:w-16 ${nodeClass}`}>
               <StepIcon name={icon} className="h-6 w-6 sm:h-7 sm:w-7" />

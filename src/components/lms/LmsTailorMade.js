@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import {
   Building2,
+  CalendarCheck,
   ChartColumn,
   ClipboardList,
   Folder,
@@ -17,6 +18,7 @@ import {
   ShieldCheck,
   ShoppingCart,
   Smartphone,
+  Users,
 } from "lucide-react";
 
 const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
@@ -72,6 +74,9 @@ const icons = {
   healthcare: HeartPulse,
   realEstate: Building2,
   retail: ShoppingCart,
+  // SMS page
+  collaboration: Users,
+  attendance: CalendarCheck,
 };
 
 // One slot per position; each slot holds a card from both sets, stacked in the same grid cell, so
@@ -283,8 +288,8 @@ export default function LmsTailorMade() {
 // The stage is the section plus a spacer; the section is sticky inside it, so it stays pinned
 // while the spacer scrolls past, which is the distance the card swap plays over.
 // Shared with other pages (e.g. CMMS): pass the heading, intro and slots. Slots with a single card
-// skip the swap (no pin, no spacer) and keep the entrance only.
-export function TailorMadeSection({ guide, title, text, slots }) {
+// skip the swap (no pin, no spacer) and keep the entrance only. titleWidth: the heading's max-width class.
+export function TailorMadeSection({ guide, title, text, slots, titleWidth = "max-w-[680px]" }) {
   const swapping = slots.some((slot) => slot.cards.length > 1);
   const stageRef = useRef(null);
   const sectionRef = useRef(null);
@@ -315,7 +320,7 @@ export function TailorMadeSection({ guide, title, text, slots }) {
         />
 
         <div className="relative mx-auto max-w-[760px] text-center xl:absolute xl:inset-x-0 xl:top-[47%] xl:max-w-none xl:px-8">
-          <h2 className="mx-auto max-w-[680px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-(--tm-heading) sm:text-[34px] lg:text-[40px]">
+          <h2 className={`mx-auto ${titleWidth} text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-(--tm-heading) sm:text-[34px] lg:text-[40px]`}>
             {title}
           </h2>
           <p className="mx-auto mt-3 max-w-[720px] text-[15px] leading-normal text-(--tm-text) sm:text-base lg:text-lg">

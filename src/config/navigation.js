@@ -18,7 +18,7 @@ export const servicesMenu = {
       title: "Blockchain & Crypto",
       links: [
         { label: "Blockchain Development", href: "/blockchain-app-development-services" },
-        { label: "Crypto Exchange Development", href: "/products/crypto-currency-exchange-development" },
+        { label: "Crypto Exchange Development", href: "/cryptocurrency-exchange-development-company" },
       ],
     },
     {
@@ -35,13 +35,13 @@ export const servicesMenu = {
       title: "AI & Digital Transformation",
       links: [
         { label: "Artificial Intelligence", href: "/services/artificial-intelligence" },
-        { label: "Digital Banking Development", href: "/services/digital-banking" },
+        { label: "Digital Banking Development", href: "/smart-digital-banking-solution" },
       ],
     },
     {
       id: "marketing",
       title: "Marketing Solution",
-      links: [{ label: "Digital Marketing Services", href: "/services/digital-marketing-services" }],
+      links: [{ label: "Digital Marketing Services", href: "/digital-marketing-services" }],
     },
   ],
 };
@@ -54,7 +54,7 @@ export const productsMenu = {
     { name: "ERP", description: "Enterprise Resource Planning", href: "/erp-software-development" },
     { name: "CRM", description: "Customer Relationship Management", href: "/custom-crm-solutions" },
     { name: "CMMS", description: "Computerized Maintenance Management", href: "/cmms-application" },
-    { name: "SMS", description: "Student Management System", href: "/products/sms" },
+    { name: "SMS", description: "Student Management System", href: "/school-management-system-software" },
     { name: "ZAAR", description: "Field Reporting Solution", href: "/products/field-report" },
   ],
 };

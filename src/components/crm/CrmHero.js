@@ -1,13 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
+import HeroButton, { HeroButtonGroup } from "@/components/common/HeroButton";
+import { DEMO_URL } from "@/config/demo";
 
-// Desktop follows the 1440px design (the same hero system as the LMS, CMMS, ERP, e-commerce and
-// blockchain pages): copy on the left, starting ~10.35vw in. The CRM user-management screenshot sits
-// on the right, ~46.4vw wide, flush with the right edge. Copy and artwork share one top offset
-// (--hero-top, ~15vw), so their tops line up exactly at every width. The artwork itself is cropped on
-// its right side, and it runs past the section bottom, where overflow-hidden clips it, so the
-// dashboard reads as continuing off-screen.
-// Below lg the copy stacks above the artwork, which stays flush right and is clipped at the bottom.
 export default function CrmHero() {
   return (
     <section
@@ -37,24 +31,13 @@ export default function CrmHero() {
             client relationships more effectively
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:mt-10 lg:justify-start lg:gap-6">
-            <Link
-              href="/contact"
-              className="rounded-[3px] border border-[#002461] bg-[#002461] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#0a3480] lg:text-base"
-            >
-              Start a Project
-            </Link>
-            <Link
-              href="/demo"
-              className="rounded-[3px] border border-[#002461] px-5 py-2.5 text-sm font-medium text-[#002461] transition-colors hover:bg-[#002461]/5 lg:text-base"
-            >
-              Free Demo
-            </Link>
-          </div>
+          <HeroButtonGroup>
+            <HeroButton label="Start a Project" href="#contact" />
+            <HeroButton label="Free Demo" href={DEMO_URL} variant="secondary" />
+          </HeroButtonGroup>
         </div>
 
-        {/* Mobile: a fixed-height window clips the artwork's bottom. Desktop: pinned to the right
-            edge and left to overflow the section bottom. */}
+
         <div className="ml-auto h-[min(72vw,460px)] w-[min(90%,560px)] overflow-hidden lg:absolute lg:top-(--hero-top) lg:right-0 lg:ml-0 lg:h-auto lg:w-[46.4vw] lg:overflow-visible">
           <Image
             src="/product/CRM/CRM-hero.svg"

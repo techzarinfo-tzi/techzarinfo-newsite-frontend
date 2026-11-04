@@ -71,7 +71,8 @@ function Glows({ reverse }) {
   );
 }
 
-function StarIcon() {
+// Also used on the SMS page (SmsSingleStop.js)
+export function StarIcon() {
   return (
     <span
       aria-hidden="true"
@@ -129,20 +130,36 @@ function FeatureCard({ title, text, points, image, reverse, outlined }) {
 
 export default function CmmsAppDevelopment() {
   return (
-    <section data-guide="cmmsAppDevelopment" className="relative bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-      <div className="mx-auto max-w-[776px] text-center">
-        <h2 className="mx-auto max-w-[600px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
-          Maintenance Management App Development Solutions
-        </h2>
-        <p className="mx-auto mt-4 text-[15px] leading-normal text-[#002461] sm:text-base lg:text-xl">
+    <FeatureStackSection
+      guide="cmmsAppDevelopment"
+      title="Maintenance Management App Development Solutions"
+      text={
+        <>
           Empowering businesses to streamline maintenance processes, improve asset performance, and ensure
           operational excellence.
-        </p>
+        </>
+      }
+      features={features}
+    />
+  );
+}
+
+// Shared with other pages (e.g. SMS): pass the heading, intro and three cards shaped like `features`
+// above (title, text, points, image with its desktop box, reverse, outlined). The glows and the star
+// bullets are the same everywhere.
+export function FeatureStackSection({ guide, title, text, features: cards }) {
+  return (
+    <section data-guide={guide} className="relative bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <div className="mx-auto max-w-[776px] text-center">
+        <h2 className="mx-auto max-w-[600px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
+          {title}
+        </h2>
+        <p className="mx-auto mt-4 text-[15px] leading-normal text-[#002461] sm:text-base lg:text-xl">{text}</p>
       </div>
 
       {/* Scroll-linked stack: each card pins and the next one slides up over it (CardStack.js) */}
       <CardStack className="mx-auto mt-10 grid max-w-[1230px] gap-6 lg:mt-16 lg:gap-[30px]">
-        {features.map((feature) => (
+        {cards.map((feature) => (
           <FeatureCard key={feature.title} {...feature} />
         ))}
       </CardStack>

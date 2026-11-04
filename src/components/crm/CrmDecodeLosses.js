@@ -3,16 +3,12 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { useInView } from "@/components/lms/LmsWhichFits";
+import { scrollToContact } from "@/components/common/ContactLink";
 
 // The tilted "High-Value Lost Deals" card; transparent around the card itself
 const ARTWORK = { src: "/product/CRM/decode.svg", width: 389, height: 362 };
 
-// Layout from the 1440px design: the locked preview on the left (a 481×370 pale-blue frame with a
-// navy border lightening towards its top-right corner), the copy on the right, ~100px apart and vertically centred. The
-// deal card inside the frame is blurred, so it reads as a teaser, with the padlock badge at its
-// top-right corner. Tablet/phone: the preview stacks above the copy.
-// Entrance (globals.css, .crm-decode): once the section is well into view, the preview and the copy
-// rise in (the LMS "Which Fits" rise keyframes). Transform and opacity only, so nothing shifts.
+
 export default function CrmDecodeLosses() {
   const sectionRef = useRef(null);
   const inView = useInView(sectionRef);
@@ -76,21 +72,6 @@ export default function CrmDecodeLosses() {
       </div>
     </section>
   );
-}
-
-// Scrolls to the site-wide Contact Us section (ContactUsSection.js, #contact) at the bottom of the
-// page, stopping where that section is laid out to sit: just under the fixed navbar, by the room it
-// reserves for it (its --cu-nav, 96px; 84px on phones), so its heading is never hidden. Smooth unless
-// the visitor prefers reduced motion. Without the script, the plain #contact link still jumps there.
-function scrollToContact(event) {
-  const contact = document.getElementById("contact");
-  if (!contact) return;
-  event.preventDefault();
-
-  const nav = parseFloat(getComputedStyle(contact.querySelector(".cu-in") ?? contact).getPropertyValue("--cu-nav")) || 96;
-  const top = contact.getBoundingClientRect().top + window.scrollY - nav;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
 }
 
 // A gold padlock: a brushed-metal shackle over a gold body with a soft top highlight, a darker base

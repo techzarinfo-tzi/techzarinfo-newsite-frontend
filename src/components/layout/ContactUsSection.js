@@ -12,7 +12,8 @@ import "./ContactUsSection.css";
 // (var(--u), see ContactUsSection.css) so the composition keeps its proportions at any width.
 //
 // data-state drives every transition: "static" (server render / reduced motion: the open form,
-// nothing animated) -> "closed" (envelope shut, waiting below the fold) -> "open" -> "sent".
+// nothing animated) -> "closed" (envelope shut, waiting below the fold) -> "open" -> "sent", and
+// back to "closed" whenever the section leaves the screen, so each visit opens it afresh.
 
 const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
@@ -200,22 +201,40 @@ export default function ContactUsSection() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
-  // Shut the envelope while it's still below the fold, then open it once it scrolls into view.
-  // Runs before paint, so a section that's already on screen (or reduced motion) just stays open.
+  // Latest state for the observer below (it is set up once)
+  const stateRef = useRef(state);
+  useLayoutEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  // Every visit starts from a shut envelope: once the section has left the screen completely, the
+  // envelope shuts (instantly, out of sight; a sent message's thank-you note is cleared and the form
+  // reset), and it opens again as soon as the section is back in view. Unsent form input is kept.
+  // The section lives in the root layout, so this also covers moving between pages. Runs before
+  // paint: a section that starts off-screen is shut before it is ever seen; one already on screen
+  // stays open until it is left. With reduced motion there is no envelope animation: leaving only
+  // clears a sent message, back to the open form.
   useLayoutEffect(() => {
     const el = sectionRef.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (el.getBoundingClientRect().top < window.innerHeight * 0.7) return;
+    if (!el) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    setState("closed");
+    const leave = () => {
+      if (stateRef.current === "sent") {
+        formRef.current?.reset();
+        setDial("+91");
+      }
+      setError("");
+      setState(still ? "static" : "closed");
+    };
+    if (!still && el.getBoundingClientRect().top >= window.innerHeight * 0.7) setState("closed");
+
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setState("open");
-          io.disconnect();
-        }
+        if (!entry.isIntersecting) leave();
+        else if (entry.intersectionRatio >= 0.35 && stateRef.current === "closed") setState("open");
       },
-      { threshold: 0.35 }
+      { threshold: [0, 0.35] }
     );
     io.observe(el);
     return () => io.disconnect();

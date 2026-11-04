@@ -7,7 +7,7 @@
  * px sizes while the envelope still spans the screen.
  *
  * The envelope is anchored to the letter's bottom edge (not the section top), so it always sits
- * 208 units above the Submit button's bottom and the letter's lower 150 units stay tucked in the
+ * 168 units above the Submit button's bottom and the letter's lower 190 units stay tucked in the
  * pocket, whatever height the form ends up at.
  *
  * Animation (see data-state in the JS): every transition is declared on the state it leads *to*,
@@ -28,13 +28,13 @@
   --cu-nav: 96px;
   --cu-screen: calc(100vh - var(--cu-nav));
   --cu-screen: calc(100dvh - var(--cu-nav));
-  /* Width sets the scale, capped so the whole section (1050 units tall) fits that room; the
+  /* Width sets the scale, capped so the whole section (1192 units tall) fits that room; the
      0.6px floor keeps the form usable on very short screens, which then simply scroll. */
   --u: min(
     calc((100cqw - 48px) / 1000),
     max(calc(100cqw / 1440), 0.78px),
     1.2px,
-    max(calc(var(--cu-screen) / 1050), 0.6px)
+    max(calc(var(--cu-screen) / 1192), 0.6px)
   );
   --ink: #062964;
   --field-bg: #ecf4fe;
@@ -95,13 +95,14 @@
   line-height: calc(32 * var(--u));
 }
 
-/* Stage: letter in flow, envelope layers pinned below it */
+/* Stage: letter in flow, envelope layers pinned below it. It starts just under the subtitle, so the
+   open letter never covers the heading or the subtitle. */
 .cu-stage {
   /* flow-root keeps the letter clip's negative margins inside the stage (no margin collapse) */
   display: flow-root;
   position: relative;
   width: calc(1000 * var(--u));
-  margin: calc(-97 * var(--u)) auto 0;
+  margin: calc(14 * var(--u)) auto 0;
 }
 
 .cu-env,
@@ -120,7 +121,7 @@
   overflow: visible;
 }
 
-/* Envelope: drawn whole, 480 units tall, its top 358 units above the stage bottom (so 208 units
+/* Envelope: drawn whole, 480 units tall, its top 358 units above the stage bottom (so 168 units
    above the Submit button) and its bottom 122 units below it, fully inside the section. */
 .cu-env,
 .cu-flap-closed {
@@ -245,7 +246,8 @@
   z-index: 3;
   width: calc(788 * var(--u));
   margin: 0 auto;
-  padding: calc(59 * var(--u)) calc(120 * var(--u)) calc(150 * var(--u));
+  /* 190 units at the bottom sit in the pocket: the Submit button ends above the side flaps' edges */
+  padding: calc(50 * var(--u)) calc(120 * var(--u)) calc(190 * var(--u));
   border: calc(3 * var(--u)) solid #dfe8f7;
   border-radius: calc(44 * var(--u));
   background: linear-gradient(180deg, #fdfdfe 0%, #fbfcfe 55%, #e8eff9 100%);
@@ -620,9 +622,11 @@
     margin-top: clamp(12px, calc(2 * var(--cu-h)), 24px);
   }
 
+  /* A little narrower and deeper in the pocket than on desktop, so the Submit button's corners stay
+     clear of the side flaps on a phone-width envelope */
   .cu-letter {
-    width: calc(900 * var(--u));
-    padding: clamp(18px, calc(3 * var(--cu-h)), 30px) 18px calc(150 * var(--u));
+    width: calc(820 * var(--u));
+    padding: clamp(18px, calc(3 * var(--cu-h)), 30px) 18px calc(150 * var(--u) + clamp(26px, calc(5.2 * var(--cu-h)), 38px));
     border-width: 2px;
     border-radius: 22px;
   }

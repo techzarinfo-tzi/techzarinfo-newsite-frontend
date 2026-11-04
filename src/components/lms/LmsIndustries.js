@@ -63,7 +63,7 @@ const industries = [
 // showing. The two faces sit in the same grid cell, so they are always exactly the same size and
 // position; the back is pre-turned 180°, so it reads the right way round once the card turns, and
 // backface-visibility hides whichever face points away (no mirrored text).
-function IndustryCard({ industry, flipped, onFlip, onHover }) {
+function IndustryCard({ industry, assets, flipped, onFlip, onHover, aspect, backText }) {
   const hover = (on) => (e) => {
     if (e.pointerType !== "touch") onHover(on);
   };
@@ -79,11 +79,11 @@ function IndustryCard({ industry, flipped, onFlip, onHover }) {
         onPointerLeave={hover(false)}
         className="group w-full touch-manipulation rounded-2xl [perspective:1100px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#005EFF]"
       >
-        <span className={`ind-flip grid aspect-205/239 w-full ${flipped ? "is-flipped" : ""}`}>
+        <span className={`ind-flip grid ${aspect} w-full ${flipped ? "is-flipped" : ""}`}>
           {/* Front: the round illustration on white */}
           <span className="ind-face col-start-1 row-start-1 flex items-center justify-center rounded-2xl border border-[#9cc2ff] bg-white shadow-[0_6px_18px_-6px_rgba(0,94,255,0.22)] transition-shadow duration-300 group-hover:shadow-[0_10px_26px_-8px_rgba(0,94,255,0.35)]">
             <Image
-              src={encodeURI(`${ASSETS}${industry.image}`)}
+              src={encodeURI(`${assets}${industry.image}`)}
               alt=""
               width={145}
               height={145}
@@ -93,7 +93,7 @@ function IndustryCard({ industry, flipped, onFlip, onHover }) {
 
           {/* Back: blue, with the industry's summary */}
           <span className="ind-face ind-back col-start-1 row-start-1 flex items-center justify-center rounded-2xl border border-[#3b7cf5] bg-linear-to-b from-[#2f6ff0] to-[#1f5fe6] px-4 text-center shadow-[0_10px_26px_-8px_rgba(0,94,255,0.45)] sm:px-5">
-            <span className="text-[12px] leading-[1.45] text-white sm:text-[13px] lg:text-sm">{industry.back}</span>
+            <span className={backText}>{industry.back}</span>
           </span>
         </span>
       </button>
@@ -113,6 +113,35 @@ function IndustryCard({ industry, flipped, onFlip, onHover }) {
 // industry name under each card. Two per row on phones, four from tablets up. Each card flips on its
 // own; this section has no scroll effects, so it never interferes with the scroll-driven sections.
 export default function LmsIndustries() {
+  return (
+    <IndustriesSection
+      guide="lmsIndustries"
+      title="Evolvera LMS Solutions for Every Industry"
+      text={
+        <>
+          Evolvera is a flexible LMS designed to support the unique learning, training, and compliance
+          needs of different industries
+        </>
+      }
+      assets={ASSETS}
+      industries={industries}
+    />
+  );
+}
+
+// Shared with other pages (e.g. Digital Marketing): the heading, intro, image folder and industries
+// (name, lines, image, back) as above. The defaults are the LMS layout; a page can pass its own
+// `listClass` (the card grid), `aspect` (card shape) and `backText` (the reverse side's type).
+export function IndustriesSection({
+  guide,
+  title,
+  text,
+  assets,
+  industries: items,
+  listClass = "mx-auto mt-10 grid max-w-[930px] grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-8 md:grid-cols-4 md:gap-x-[clamp(20px,3vw,38px)] lg:mt-14 lg:gap-y-14",
+  aspect = "aspect-205/239",
+  backText = "text-[12px] leading-[1.45] text-white sm:text-[13px] lg:text-sm",
+}) {
   const [flipped, setFlipped] = useState(() => new Set());
 
   // on: true / false sets the side; undefined toggles it
@@ -127,22 +156,24 @@ export default function LmsIndustries() {
     });
 
   return (
-    <section data-guide="lmsIndustries" className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+    <section data-guide={guide} className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
       <div className="mx-auto max-w-[760px] text-center">
         <h2 className="text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
-          Evolvera LMS Solutions for Every Industry
+          {title}
         </h2>
         <p className="mx-auto mt-3 max-w-[700px] text-[15px] leading-normal text-[#002461] sm:text-base lg:text-lg">
-          Evolvera is a flexible LMS designed to support the unique learning, training, and compliance
-          needs of different industries
+          {text}
         </p>
       </div>
 
-      <ul className="mx-auto mt-10 grid max-w-[930px] grid-cols-2 gap-x-5 gap-y-10 sm:gap-x-8 md:grid-cols-4 md:gap-x-[clamp(20px,3vw,38px)] lg:mt-14 lg:gap-y-14">
-        {industries.map((industry) => (
+      <ul className={listClass}>
+        {items.map((industry) => (
           <IndustryCard
             key={industry.name}
             industry={industry}
+            assets={assets}
+            aspect={aspect}
+            backText={backText}
             flipped={flipped.has(industry.name)}
             onFlip={() => flip(industry.name)}
             onHover={(on) => flip(industry.name, on)}

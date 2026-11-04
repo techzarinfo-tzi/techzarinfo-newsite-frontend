@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ContactLink from "@/components/common/ContactLink";
 
 // Gradient sampled from the design: solid navy across the top quarter, deepening into royal blue
 // and fading to a pale sky blue at the bottom, plus a soft light glow toward the lower right.
@@ -34,12 +35,9 @@ export default function EcommerceCta({
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4 lg:gap-[27px]">
-          <Link
-            href="/contact"
-            className="inline-flex h-11 items-center rounded-[3px] bg-white px-[15px] text-[15px] font-medium text-[#002461] transition-colors hover:bg-white/90 lg:text-base"
-          >
+          <ContactLink className="inline-flex h-11 items-center rounded-[3px] bg-white px-[15px] text-[15px] font-medium text-[#002461] transition-colors hover:bg-white/90 lg:text-base">
             Start a Project
-          </Link>
+          </ContactLink>
           <Link
             href="/demo"
             className="inline-flex h-11 items-center rounded-[3px] border border-white/70 px-[15px] text-[15px] font-medium text-white transition-colors hover:bg-white/10 lg:text-base"
