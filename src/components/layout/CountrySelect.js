@@ -1,0 +1,300 @@
+"use client";
+
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import "./CountrySelect.css";
+
+// Frosted-glass country picker for the Contact Us form: a trigger field showing the chosen flag,
+// name and dialling code, and a searchable list (combobox + listbox pattern). The list is rendered
+// into <body> because the form sits inside clipped, transformed layers (the envelope animation),
+// and is positioned against the trigger, flipping above it when there is more room there.
+//
+// A visually hidden input carries the value into the form (name/required), so the form's own
+// validation and FormData keep working; an empty submit marks the field and focuses it.
+
+const GAP = 8;
+const EDGE = 12;
+const MIN_W = 300;
+const MAX_H = 360;
+
+const fold = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+function Chevron() {
+  return (
+    <svg className="cs-chevron" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+      <path d="M1 1l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export default function CountrySelect({ id, name, countries, value, onChange, required, disabled }) {
+  const listId = useId();
+  const triggerRef = useRef(null);
+  const panelRef = useRef(null);
+  const searchRef = useRef(null);
+  const listRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [side, setSide] = useState("bottom");
+  const [query, setQuery] = useState("");
+  const [active, setActive] = useState(0);
+  const [invalid, setInvalid] = useState(false);
+
+  // The form going away (envelope closing, message sent) closes the list too
+  const [wasDisabled, setWasDisabled] = useState(disabled);
+  if (disabled !== wasDisabled) {
+    setWasDisabled(disabled);
+    if (disabled) setOpen(false);
+  }
+
+  const results = useMemo(() => {
+    const q = fold(query.trim()).replace(/^\+/, "");
+    if (!q) return countries;
+    return countries.filter(
+      (c) => fold(c.name).includes(q) || c.dial.slice(1).startsWith(q) || c.code.toLowerCase() === q
+    );
+  }, [countries, query]);
+
+  const show = (seed = "") => {
+    if (disabled) return;
+    setMounted(true);
+    setQuery(seed);
+    const i = seed ? 0 : countries.findIndex((c) => c.code === value?.code);
+    setActive(Math.max(i, 0));
+    setOpen(true);
+  };
+
+  const hide = (refocus) => {
+    setOpen(false);
+    if (refocus) triggerRef.current?.focus();
+  };
+
+  const choose = (c) => {
+    if (!c) return;
+    onChange(c);
+    setInvalid(false);
+    hide(true);
+  };
+
+  // Keep the panel against the trigger while open (scrolling, resizing, the on-screen keyboard)
+  useLayoutEffect(() => {
+    if (!open) return;
+    const trigger = triggerRef.current;
+    const panel = panelRef.current;
+    let frame = 0;
+    const place = () => {
+      frame = 0;
+      const r = trigger.getBoundingClientRect();
+      const vv = window.visualViewport;
+      const viewTop = vv ? vv.offsetTop : 0;
+      const viewBottom = viewTop + (vv ? vv.height : window.innerHeight);
+      const vw = document.documentElement.clientWidth;
+      const width = Math.min(Math.max(r.width, MIN_W), vw - 2 * EDGE);
+      const below = viewBottom - r.bottom - GAP - EDGE;
+      const above = r.top - viewTop - GAP - EDGE;
+      const up = below < 280 && above > below;
+      panel.style.left = `${Math.min(Math.max(r.left, EDGE), vw - EDGE - width)}px`;
+      panel.style.width = `${width}px`;
+      panel.style.maxHeight = `${Math.max(180, Math.min(MAX_H, up ? above : below))}px`;
+      panel.style.top = up ? "auto" : `${r.bottom + GAP}px`;
+      panel.style.bottom = up ? `${window.innerHeight - r.top + GAP}px` : "auto";
+      setSide(up ? "top" : "bottom");
+    };
+    const queue = () => {
+      frame ||= requestAnimationFrame(place);
+    };
+    place();
+    window.addEventListener("scroll", queue, { capture: true, passive: true });
+    window.addEventListener("resize", queue);
+    window.visualViewport?.addEventListener("resize", queue);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", queue, { capture: true });
+      window.removeEventListener("resize", queue);
+      window.visualViewport?.removeEventListener("resize", queue);
+    };
+  }, [open]);
+
+  // On open: focus the search field (a fine pointer or keyboard; on touch screens that would pop
+  // the keyboard over the list, so the panel takes focus instead) and bring the selection into view
+  useEffect(() => {
+    if (!open) return;
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    (fine ? searchRef.current : panelRef.current)?.focus({ preventScroll: true });
+    listRef.current?.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: "center" });
+
+    const outside = (e) => {
+      if (!panelRef.current?.contains(e.target) && !triggerRef.current?.contains(e.target)) hide(false);
+    };
+    document.addEventListener("pointerdown", outside);
+    return () => document.removeEventListener("pointerdown", outside);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    listRef.current?.children[active]?.scrollIntoView({ block: "nearest" });
+  }, [active, open]);
+
+  const onTriggerKey = (e) => {
+    if (["ArrowDown", "ArrowUp", "Enter", " "].includes(e.key)) {
+      e.preventDefault();
+      show();
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      // Typing on the closed field starts a search
+      e.preventDefault();
+      show(e.key);
+    }
+  };
+
+  const onPanelKey = (e) => {
+    const last = results.length - 1;
+    if (e.key === "ArrowDown") setActive((i) => Math.min(i + 1, last));
+    else if (e.key === "ArrowUp") setActive((i) => Math.max(i - 1, 0));
+    else if (e.key === "Home" && e.target !== searchRef.current) setActive(0);
+    else if (e.key === "End" && e.target !== searchRef.current) setActive(last);
+    else if (e.key === "PageDown") setActive((i) => Math.min(i + 8, last));
+    else if (e.key === "PageUp") setActive((i) => Math.max(i - 8, 0));
+    else if (e.key === "Enter") choose(results[active]);
+    else if (e.key === "Escape") hide(true);
+    else if (e.key === "Tab") return hide(false);
+    else return;
+    e.preventDefault();
+  };
+
+  const onInvalid = (e) => {
+    e.preventDefault();
+    setInvalid(true);
+    // Only take focus when this is the first field the browser would report
+    if (e.target.form?.querySelector(":invalid") === e.target) triggerRef.current?.focus();
+  };
+
+  const Flag = value?.Flag;
+  const activeId = results[active] ? `${listId}-${results[active].code}` : undefined;
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        id={id}
+        type="button"
+        className="cu-input cs-trigger"
+        data-open={open || undefined}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={mounted ? listId : undefined}
+        data-invalid={invalid || undefined}
+        title={value ? `${value.name} (${value.dial})` : undefined}
+        onClick={() => (open ? hide(false) : show())}
+        onKeyDown={onTriggerKey}
+      >
+        {value ? (
+          <span className="cs-value">
+            {Flag ? <Flag className="cs-flag" aria-hidden="true" /> : <span className="cs-flag" aria-hidden="true" />}
+            <span className="cs-name">{value.name}</span>
+            <span className="cs-dial">{value.dial}</span>
+          </span>
+        ) : (
+          <span className="cs-placeholder">{invalid ? "Please select your country" : "Country"}</span>
+        )}
+        <Chevron />
+      </button>
+      <input
+        className="cs-proxy"
+        name={name}
+        value={value?.name ?? ""}
+        required={required}
+        tabIndex={-1}
+        aria-hidden="true"
+        onChange={() => {}}
+        onInvalid={onInvalid}
+      />
+
+      {mounted &&
+        createPortal(
+          <div
+            ref={panelRef}
+            className="cs-panel"
+            data-open={open || undefined}
+            data-side={side}
+            tabIndex={-1}
+            inert={!open}
+            onKeyDown={onPanelKey}
+          >
+            <div className="cs-search">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <circle cx="8.75" cy="8.75" r="5.75" />
+                <path d="M13 13l4 4" strokeLinecap="round" />
+              </svg>
+              <input
+                ref={searchRef}
+                type="text"
+                role="combobox"
+                aria-label="Search country or dialling code"
+                aria-expanded={open}
+                aria-controls={listId}
+                aria-autocomplete="list"
+                aria-activedescendant={activeId}
+                placeholder="Search country or code"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="go"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setActive(0);
+                }}
+              />
+              {query && (
+                <button
+                  type="button"
+                  className="cs-clear"
+                  aria-label="Clear search"
+                  onClick={() => {
+                    setQuery("");
+                    searchRef.current?.focus();
+                  }}
+                >
+                  <svg viewBox="0 0 16 16" aria-hidden="true">
+                    <circle cx="8" cy="8" r="8" fill="currentColor" />
+                    <path d="M5.5 5.5l5 5m0-5l-5 5" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            <ul ref={listRef} id={listId} role="listbox" aria-label="Countries" className="cs-list">
+              {results.map((c, i) => {
+                const selected = c.code === value?.code;
+                return (
+                  <li
+                    key={c.code}
+                    id={`${listId}-${c.code}`}
+                    role="option"
+                    aria-selected={selected}
+                    data-active={i === active || undefined}
+                    className="cs-option"
+                    onPointerMove={() => i !== active && setActive(i)}
+                    onClick={() => choose(c)}
+                  >
+                    <c.Flag className="cs-flag" aria-hidden="true" />
+                    <span className="cs-name">{c.name}</span>
+                    <span className="cs-dial">{c.dial}</span>
+                    <svg className="cs-check" viewBox="0 0 16 12" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                      <path d="M1.5 6.5l4 4 9-9" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </li>
+                );
+              })}
+            </ul>
+            {results.length === 0 && (
+              <p className="cs-empty" role="status">
+                {countries.length ? "No matching countries" : "Loading countries…"}
+              </p>
+            )}
+          </div>,
+          document.body
+        )}
+    </>
+  );
+}

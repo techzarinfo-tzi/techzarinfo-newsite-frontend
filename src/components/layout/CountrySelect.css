@@ -1,0 +1,358 @@
+/* Country picker (CountrySelect.js): frosted glass for both the field and its list. The field keeps
+   the form's sizing (.cu-input, design units); the list is portalled into <body>, so it is sized
+   in px and carries its own colours. */
+
+/* ---------- Field ---------- */
+.cu-input.cs-trigger {
+  display: flex;
+  align-items: center;
+  padding-right: calc(64 * var(--u));
+  border-color: rgba(147, 179, 230, 0.75);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82) 0%, rgba(236, 244, 254, 0.62) 100%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  backdrop-filter: blur(16px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(6, 41, 100, 0.05),
+    0 6px 18px -10px rgba(6, 41, 100, 0.22);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, background-color 0.2s ease;
+}
+
+.cu-input.cs-trigger:hover {
+  border-color: rgba(10, 111, 240, 0.45);
+}
+
+.cu-input.cs-trigger:focus-visible,
+.cu-input.cs-trigger[data-open] {
+  border-color: #0a6ff0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 0 0 calc(3 * var(--u)) rgba(10, 111, 240, 0.16),
+    0 8px 22px -10px rgba(6, 41, 100, 0.28);
+}
+
+.cu-input.cs-trigger[data-invalid] {
+  border-color: #e5484d;
+}
+
+.cs-value {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: calc(12 * var(--u));
+  min-width: 0;
+}
+
+.cs-trigger .cs-flag {
+  width: calc(24 * var(--u));
+}
+
+.cs-trigger .cs-dial {
+  font-size: 0.85em;
+}
+
+.cs-placeholder {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cs-trigger[data-invalid] .cs-placeholder {
+  color: #c62f35;
+}
+
+.cs-chevron {
+  position: absolute;
+  top: 50%;
+  right: calc(24 * var(--u));
+  width: calc(17 * var(--u));
+  translate: 0 -50%;
+  color: var(--ink);
+  pointer-events: none;
+  transition: rotate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cs-trigger[data-open] .cs-chevron {
+  rotate: 180deg;
+}
+
+/* Carries the value into the form; sits under the field, never seen or focused */
+.cs-proxy {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- Shared bits (field + list) ---------- */
+.cs-flag {
+  flex: none;
+  width: 24px;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  border-radius: 3px;
+  box-shadow: 0 0 0 0.5px rgba(6, 41, 100, 0.2), 0 1px 2px rgba(6, 41, 100, 0.12);
+}
+
+.cs-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.cs-dial {
+  flex: none;
+  color: rgba(6, 41, 100, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- List ---------- */
+.cs-panel {
+  position: fixed;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+  background: rgba(250, 252, 255, 0.72);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    0 0 0 0.5px rgba(6, 41, 100, 0.1),
+    0 24px 60px -18px rgba(6, 41, 100, 0.35),
+    0 6px 18px -6px rgba(6, 41, 100, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  color: #062964;
+  font-size: 15px;
+  line-height: 1.3;
+  outline: none;
+  /* closed: settled slightly towards the field, faded and out of the way */
+  opacity: 0;
+  scale: 0.96;
+  translate: 0 -6px;
+  transform-origin: top center;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.18s ease,
+    scale 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    translate 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    visibility 0s linear 0.22s;
+}
+
+.cs-panel[data-side="top"] {
+  translate: 0 6px;
+  transform-origin: bottom center;
+}
+
+.cs-panel[data-open] {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.2s ease,
+    scale 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    translate 0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s;
+}
+
+/* Without backdrop blur a stronger tint keeps the list readable */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cs-panel {
+    background: rgba(250, 252, 255, 0.97);
+  }
+}
+
+.cs-search {
+  position: relative;
+  display: flex;
+  flex: none;
+  align-items: center;
+  margin: 10px 10px 6px;
+}
+
+.cs-search > svg {
+  position: absolute;
+  left: 11px;
+  width: 16px;
+  color: rgba(6, 41, 100, 0.45);
+  pointer-events: none;
+}
+
+.cs-search input {
+  width: 100%;
+  height: 38px;
+  padding: 0 34px 0 34px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: rgba(118, 128, 150, 0.12);
+  color: inherit;
+  font: inherit;
+  /* 16px keeps iOS from zooming the page when the field is focused */
+  font-size: 16px;
+  outline: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cs-search input::placeholder {
+  color: rgba(6, 41, 100, 0.45);
+}
+
+.cs-search input:focus {
+  border-color: rgba(10, 111, 240, 0.5);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 3px rgba(10, 111, 240, 0.14);
+}
+
+.cs-clear {
+  position: absolute;
+  right: 9px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: rgba(6, 41, 100, 0.32);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.cs-clear:hover {
+  color: rgba(6, 41, 100, 0.5);
+}
+
+.cs-clear svg {
+  width: 16px;
+}
+
+.cs-list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 2px 6px 6px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(6, 41, 100, 0.2) transparent;
+}
+
+.cs-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 11px;
+  cursor: pointer;
+  user-select: none;
+  /* 245 rows with inline flags: let the browser skip laying out the ones off screen */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 42px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cs-option[data-active] {
+  background: rgba(10, 111, 240, 0.09);
+}
+
+.cs-option[aria-selected="true"] {
+  background: rgba(10, 111, 240, 0.14);
+  font-weight: 600;
+}
+
+.cs-option[aria-selected="true"][data-active] {
+  background: rgba(10, 111, 240, 0.19);
+}
+
+.cs-check {
+  flex: none;
+  width: 14px;
+  color: #0a6ff0;
+  opacity: 0;
+  scale: 0.6;
+  transition: opacity 0.2s ease, scale 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cs-option[aria-selected="true"] .cs-check {
+  opacity: 1;
+  scale: 1;
+}
+
+.cs-option .cs-dial {
+  font-size: 14px;
+}
+
+.cs-empty {
+  margin: 0;
+  padding: 18px 16px 22px;
+  color: rgba(6, 41, 100, 0.55);
+  text-align: center;
+}
+
+/* ---------- Phones: roomier touch targets ---------- */
+@media (max-width: 767px) {
+  .cu-input.cs-trigger {
+    padding-right: 34px;
+  }
+
+  .cu-input.cs-trigger:focus-visible,
+  .cu-input.cs-trigger[data-open] {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 0 0 3px rgba(10, 111, 240, 0.16),
+      0 8px 22px -10px rgba(6, 41, 100, 0.28);
+  }
+
+  .cs-value {
+    gap: 8px;
+  }
+
+  .cs-trigger .cs-flag {
+    width: 20px;
+  }
+
+  /* A half-width field has no room for the code next to the name; the phone field shows it */
+  .cs-trigger .cs-dial {
+    display: none;
+  }
+
+  .cs-chevron {
+    right: 12px;
+    width: 12px;
+  }
+
+  .cs-option {
+    min-height: 46px;
+    contain-intrinsic-size: auto 46px;
+  }
+}
+
+@media (hover: none) {
+  .cs-option[data-active]:not([aria-selected="true"]) {
+    background: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-panel,
+  .cs-panel[data-open],
+  .cs-chevron,
+  .cs-check {
+    transition: none;
+  }
+}

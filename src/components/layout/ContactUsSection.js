@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { servicesMenu } from "@/config/navigation";
+import CountrySelect from "./CountrySelect";
 import "./ContactUsSection.css";
 
 // Site-wide "How can we help you ?" section (rendered from the root layout, directly above the
@@ -17,29 +18,11 @@ import "./ContactUsSection.css";
 
 const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
-const countries = [
-  { name: "India", dial: "+91" },
-  { name: "United States", dial: "+1" },
-  { name: "United Kingdom", dial: "+44" },
-  { name: "United Arab Emirates", dial: "+971" },
-  { name: "Saudi Arabia", dial: "+966" },
-  { name: "Qatar", dial: "+974" },
-  { name: "Oman", dial: "+968" },
-  { name: "Kuwait", dial: "+965" },
-  { name: "Bahrain", dial: "+973" },
-  { name: "Singapore", dial: "+65" },
-  { name: "Malaysia", dial: "+60" },
-  { name: "Australia", dial: "+61" },
-  { name: "Canada", dial: "+1" },
-  { name: "Germany", dial: "+49" },
-  { name: "France", dial: "+33" },
-  { name: "Netherlands", dial: "+31" },
-  { name: "South Africa", dial: "+27" },
-  { name: "Nigeria", dial: "+234" },
-  { name: "Kenya", dial: "+254" },
-  { name: "Sri Lanka", dial: "+94" },
-  { name: "Other", dial: "" },
-];
+// The phone field starts on India. The full country list (all flags + calling codes, see
+// contactCountries.js) is loaded after mount, flags included, so until then the flag is a blank
+// placeholder. The selected country is tracked rather than its dial code, since several countries
+// share one (e.g. +1).
+const defaultCountry = { code: "IN", name: "India", dial: "+91" };
 
 const services = [...servicesMenu.groups.flatMap((g) => g.links.map((l) => l.label)), "Other"];
 
@@ -69,23 +52,9 @@ function Chevron() {
   );
 }
 
-function DialFlag({ dial }) {
-  if (dial !== "+91") {
-    return (
-      <svg className="cu-flag cu-flag-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-        <circle cx="12" cy="12" r="9" />
-        <path d="M3 12h18M12 3c2.6 2.6 2.6 15.4 0 18M12 3c-2.6 2.6-2.6 15.4 0 18" />
-      </svg>
-    );
-  }
-  return (
-    <svg className="cu-flag" viewBox="0 0 21 14" aria-hidden="true">
-      <rect width="21" height="14" rx="1.5" fill="#fff" />
-      <path d="M1.5 0h18A1.5 1.5 0 0 1 21 1.5v3.17H0V1.5A1.5 1.5 0 0 1 1.5 0z" fill="#FF9933" />
-      <path d="M0 9.33h21v3.17A1.5 1.5 0 0 1 19.5 14h-18A1.5 1.5 0 0 1 0 12.5z" fill="#138808" />
-      <circle cx="10.5" cy="7" r="1.7" fill="none" stroke="#000080" strokeWidth="0.6" />
-    </svg>
-  );
+function DialFlag({ country, countries }) {
+  const Flag = (country.Flag ? country : countries.find((c) => c.code === country.code))?.Flag;
+  return Flag ? <Flag className="cu-flag" aria-hidden="true" /> : <span className="cu-flag" aria-hidden="true" />;
 }
 
 // Envelope outline in its own 1000 x 480 box: rounded top and bottom corners
@@ -197,7 +166,19 @@ export default function ContactUsSection() {
   const sectionRef = useRef(null);
   const formRef = useRef(null);
   const [state, setState] = useState("static");
-  const [dial, setDial] = useState("+91");
+  const [country, setCountry] = useState(defaultCountry);
+  const { dial } = country;
+  // The country picked in the Country field (none until chosen; the phone field still starts on India)
+  const [picked, setPicked] = useState(null);
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    let live = true;
+    import("./contactCountries").then((m) => live && setCountries(m.countries));
+    return () => {
+      live = false;
+    };
+  }, []);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
@@ -222,7 +203,8 @@ export default function ContactUsSection() {
     const leave = () => {
       if (stateRef.current === "sent") {
         formRef.current?.reset();
-        setDial("+91");
+        setCountry(defaultCountry);
+        setPicked(null);
       }
       setError("");
       setState(still ? "static" : "closed");
@@ -239,11 +221,6 @@ export default function ContactUsSection() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
-
-  const onCountry = (e) => {
-    const match = countries.find((c) => c.name === e.target.value);
-    if (match?.dial) setDial(match.dial);
-  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -271,7 +248,8 @@ export default function ContactUsSection() {
 
   const sendAnother = () => {
     formRef.current?.reset();
-    setDial("+91");
+    setCountry(defaultCountry);
+    setPicked(null);
     setState("open");
   };
 
@@ -333,7 +311,7 @@ export default function ContactUsSection() {
                 <div className="cu-field" style={{ "--i": 2 }}>
                   <div className="cu-input cu-phone">
                     <span className="cu-dial" aria-hidden="true">
-                      <DialFlag dial={dial} />
+                      <DialFlag country={country} countries={countries} />
                       {dial}
                     </span>
                     <label className="sr-only" htmlFor="cu-phone">Phone number ({dial})</label>
@@ -352,13 +330,18 @@ export default function ContactUsSection() {
                 <div className="cu-field cu-row" style={{ "--i": 3 }}>
                   <div className="cu-select">
                     <label className="sr-only" htmlFor="cu-country">Country</label>
-                    <select id="cu-country" name="country" className="cu-input" defaultValue="" onChange={onCountry} required>
-                      <option value="" disabled>Country</option>
-                      {countries.map((c) => (
-                        <option key={c.name} value={c.name}>{c.name}</option>
-                      ))}
-                    </select>
-                    <Chevron />
+                    <CountrySelect
+                      id="cu-country"
+                      name="country"
+                      countries={countries}
+                      value={picked}
+                      onChange={(c) => {
+                        setPicked(c);
+                        setCountry(c);
+                      }}
+                      disabled={!formLive}
+                      required
+                    />
                   </div>
                   <div className="cu-select">
                     <label className="sr-only" htmlFor="cu-service">Services</label>

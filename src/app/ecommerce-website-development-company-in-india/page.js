@@ -7,6 +7,7 @@ import EcommerceProcess from "@/components/ecommerce/EcommerceProcess";
 import EcommerceWhyChoose from "@/components/ecommerce/EcommerceWhyChoose";
 import EcommerceIndustries from "@/components/ecommerce/EcommerceIndustries";
 import EcommerceCta from "@/components/ecommerce/EcommerceCta";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/ecommerce-website-development-company-in-india";
 
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function EcommerceWebsiteDevelopmentPage() {
   return (
-    <>
+    <RevealEach>
       <EcommerceHero />
       <ServicesOfferingsTransition services={<EcommerceServices />} offerings={<EcommerceOfferings />} />
       <EcommerceSolutions />
@@ -29,6 +30,6 @@ export default function EcommerceWebsiteDevelopmentPage() {
       <EcommerceWhyChoose />
       <EcommerceIndustries />
       <EcommerceCta />
-    </>
+    </RevealEach>
   );
 }

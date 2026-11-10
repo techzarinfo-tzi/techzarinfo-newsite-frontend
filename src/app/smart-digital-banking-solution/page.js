@@ -7,6 +7,7 @@ import BankingTechStack from "@/components/banking/BankingTechStack";
 import BankingApproach from "@/components/banking/BankingApproach";
 import BankingFaq from "@/components/banking/BankingFaq";
 import BankingCta from "@/components/banking/BankingCta";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/smart-digital-banking-solution";
 
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function SmartDigitalBankingSolutionPage() {
   return (
-    <>
+    <RevealEach>
       <BankingHero />
        <Clients />
       <BankingSmartInvestment />
@@ -31,6 +32,6 @@ export default function SmartDigitalBankingSolutionPage() {
       <BankingApproach />
       <BankingFaq />
       <BankingCta />
-    </>
+    </RevealEach>
   );
 }

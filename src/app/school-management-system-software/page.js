@@ -6,6 +6,7 @@ import SmsSingleStop from "@/components/sms/SmsSingleStop";
 import SmsCustomized from "@/components/sms/SmsCustomized";
 import SmsAdvantages from "@/components/sms/SmsAdvantages";
 import SmsFaq from "@/components/sms/SmsFaq";
+import RevealEach from "@/components/common/RevealEach";
 
 // Linked from the Products menu (config/navigation.js)
 const path = "/school-management-system-software";
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function SchoolManagementSystemSoftwarePage() {
   return (
-    <>
+    <RevealEach>
       <SmsHero />
       <SmsAiPowered />
       <SmsTailorMade />
@@ -30,6 +31,6 @@ export default function SchoolManagementSystemSoftwarePage() {
       <SmsCustomized />
       <SmsAdvantages />
       <SmsFaq />
-    </>
+    </RevealEach>
   );
 }

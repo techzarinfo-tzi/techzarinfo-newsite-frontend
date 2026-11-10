@@ -263,7 +263,7 @@
 
 .cu-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: calc(10 * var(--u));
 }
 
@@ -328,12 +328,12 @@
 }
 
 .cu-flag {
+  flex: none;
   width: calc(21 * var(--u));
   height: auto;
-}
-
-.cu-flag-globe {
-  width: calc(22 * var(--u));
+  aspect-ratio: 3 / 2;
+  border-radius: calc(2 * var(--u));
+  box-shadow: 0 0 0 0.5px rgb(10 42 107 / 0.18);
 }
 
 .cu-phone input {
@@ -666,8 +666,7 @@
     gap: 8px;
   }
 
-  .cu-flag,
-  .cu-flag-globe {
+  .cu-flag {
     width: 20px;
   }
 

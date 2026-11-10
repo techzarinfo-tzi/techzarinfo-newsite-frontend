@@ -7,6 +7,7 @@ import CmmsBenefits from "@/components/cmms/CmmsBenefits";
 import CmmsDataAction from "@/components/cmms/CmmsDataAction";
 import CmmsWhyChoose from "@/components/cmms/CmmsWhyChoose";
 import CmmsFaq from "@/components/cmms/CmmsFaq";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/cmms-application";
 
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function CmmsApplicationPage() {
   return (
-    <>
+    <RevealEach>
       <CmmsHero />
       <Clients />
       <CmmsAppDevelopment />
@@ -31,6 +32,6 @@ export default function CmmsApplicationPage() {
       <CmmsDataAction />
       <CmmsWhyChoose />
       <CmmsFaq />
-    </>
+    </RevealEach>
   );
 }

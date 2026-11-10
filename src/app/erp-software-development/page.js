@@ -7,6 +7,7 @@ import ErpBenefits from "@/components/erp/ErpBenefits";
 import ErpCostEstimator from "@/components/erp/ErpCostEstimator";
 import ErpTechnologies from "@/components/erp/ErpTechnologies";
 import ErpFaq from "@/components/erp/ErpFaq";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/erp-software-development";
 
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function ErpSoftwareDevelopmentPage() {
   return (
-    <>
+    <RevealEach>
       <ErpHero />
       <Clients />
       <ErpWhatIs />
@@ -31,6 +32,6 @@ export default function ErpSoftwareDevelopmentPage() {
       <ErpCostEstimator />
       <ErpTechnologies />
       <ErpFaq />
-    </>
+    </RevealEach>
   );
 }

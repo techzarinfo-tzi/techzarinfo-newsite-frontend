@@ -5,6 +5,7 @@ import StatsRow from "./StatsRow";
 
 const stats = [
   { value: "15+", label: "Years" },
+   
   { value: "900+", label: "Projects" },
   { value: "400+", label: "Clients" },
   { value: "15+", label: "Countries" },
@@ -36,7 +37,12 @@ export default function Hero() {
 
             <HeroButtonGroup tone="home">
               <HeroButton tone="home" label="Start a Project" href="#contact" />
-              <HeroButton tone="home" label="Schedule a Demo" href="/demo" variant="secondary" />
+              <HeroButton
+                tone="home"
+                label="Schedule a Demo"
+                href="/demo"
+                variant="secondary"
+              />
             </HeroButtonGroup>
 
             <StatsRow stats={stats} />

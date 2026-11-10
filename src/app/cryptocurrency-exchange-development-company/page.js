@@ -9,6 +9,7 @@ import CryptoAiIntegrations from "@/components/crypto/CryptoAiIntegrations";
 import CryptoRoadmap from "@/components/crypto/CryptoRoadmap";
 import CryptoTechnologies from "@/components/crypto/CryptoTechnologies";
 import CryptoFaq from "@/components/crypto/CryptoFaq";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/cryptocurrency-exchange-development-company";
 
@@ -23,7 +24,7 @@ export const metadata = {
 
 export default function CryptocurrencyExchangeDevelopmentPage() {
   return (
-    <>
+    <RevealEach>
       <CryptoHero />
       <CryptoWhatIs />
       <CryptoServices />
@@ -35,6 +36,6 @@ export default function CryptocurrencyExchangeDevelopmentPage() {
       <CryptoRoadmap />
       <CryptoTechnologies />
       <CryptoFaq />
-    </>
+    </RevealEach>
   );
 }

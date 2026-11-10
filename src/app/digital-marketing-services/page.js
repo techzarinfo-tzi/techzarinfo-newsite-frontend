@@ -5,6 +5,7 @@ import MarketingRoadmap from "@/components/marketing/MarketingRoadmap";
 import MarketingIndustries from "@/components/marketing/MarketingIndustries";
 import MarketingOffers from "@/components/marketing/MarketingOffers";
 import MarketingFaq from "@/components/marketing/MarketingFaq";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/digital-marketing-services";
 
@@ -19,7 +20,7 @@ export const metadata = {
 
 export default function DigitalMarketingServicesPage() {
   return (
-    <>
+    <RevealEach>
       <MarketingHero />
       <MarketingGrowOnline />
       <MarketingWhyChoose />
@@ -27,6 +28,6 @@ export default function DigitalMarketingServicesPage() {
       <MarketingIndustries />
       <MarketingOffers />
       <MarketingFaq />
-    </>
+    </RevealEach>
   );
 }

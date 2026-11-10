@@ -1,6 +1,7 @@
 import BlogFeatured from "@/components/blogs/BlogFeatured";
 import BlogGrid from "@/components/blogs/BlogGrid";
 import { getPosts, gridPage, latestWindow } from "@/lib/blog";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/blogs";
 
@@ -26,10 +27,10 @@ export default async function BlogsPage({ searchParams }) {
       <div className="mx-auto max-w-7xl">
         <h1 className="sr-only">Blogs</h1>
         {featured ? (
-          <>
+          <RevealEach>
             <BlogFeatured featured={featured} latest={latest} />
             <BlogGrid {...gridPage(posts, { category, page })} />
-          </>
+          </RevealEach>
         ) : (
           <p className="py-24 text-center text-slate-500">No blogs have been published yet.</p>
         )}

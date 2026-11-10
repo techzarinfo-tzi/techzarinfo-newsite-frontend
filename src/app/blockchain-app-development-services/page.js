@@ -7,6 +7,7 @@ import BlockchainBenefits from "@/components/blockchain/BlockchainBenefits";
 import BlockchainTechnologies from "@/components/blockchain/BlockchainTechnologies";
 import BlockchainRoadmap from "@/components/blockchain/BlockchainRoadmap";
 import BlockchainFaq from "@/components/blockchain/BlockchainFaq";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/blockchain-app-development-services";
 
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function BlockchainAppDevelopmentServicesPage() {
   return (
-    <>
+    <RevealEach>
       <BlockchainHero />
       <BlockchainWhatIs />
       <BlockchainServices />
@@ -31,6 +32,6 @@ export default function BlockchainAppDevelopmentServicesPage() {
       <BlockchainTechnologies />
       <BlockchainRoadmap />
       <BlockchainFaq />
-    </>
+    </RevealEach>
   );
 }

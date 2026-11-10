@@ -8,6 +8,7 @@ import CrmFeatures from "@/components/crm/CrmFeatures";
 import CrmWhyRecognized from "@/components/crm/CrmWhyRecognized";
 import CrmIndustries from "@/components/crm/CrmIndustries";
 import CrmTechnologies from "@/components/crm/CrmTechnologies";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/custom-crm-solutions";
 
@@ -22,7 +23,7 @@ export const metadata = {
 
 export default function CustomCrmSolutionsPage() {
   return (
-    <>
+    <RevealEach>
       <CrmHero />
       <Clients />
       <CrmCustomDevelopment />
@@ -33,6 +34,6 @@ export default function CustomCrmSolutionsPage() {
       <CrmWhyRecognized />
       <CrmIndustries />
       <CrmTechnologies />
-    </>
+    </RevealEach>
   );
 }

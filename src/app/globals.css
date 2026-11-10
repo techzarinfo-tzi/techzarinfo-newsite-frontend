@@ -2131,3 +2131,24 @@ body {
     animation-direction: normal;
   }
 }
+
+/* Scroll reveal (components/common/Reveal.js): a section below the fold waits faded and lowered,
+   then rises into place when it enters the viewport. One timing for the whole site. */
+[data-reveal] {
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    translate 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal="hidden"] {
+  opacity: 0;
+  translate: 0 clamp(28px, 5vw, 64px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    translate: none;
+    transition: none;
+  }
+}

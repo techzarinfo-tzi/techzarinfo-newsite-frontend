@@ -7,6 +7,7 @@ import LmsIndustries from "@/components/lms/LmsIndustries";
 import LmsWhyChoose from "@/components/lms/LmsWhyChoose";
 import LmsWhichFits from "@/components/lms/LmsWhichFits";
 import EcommerceCta from "@/components/ecommerce/EcommerceCta";
+import RevealEach from "@/components/common/RevealEach";
 
 const path = "/corporate-learning-management-system";
 
@@ -21,7 +22,7 @@ export const metadata = {
 
 export default function CorporateLearningManagementSystemPage() {
   return (
-    <>
+    <RevealEach>
       <LmsHero />
       <Clients/>
       <LmsWhiteLabel />
@@ -36,6 +37,6 @@ export default function CorporateLearningManagementSystemPage() {
         text="Bring everything together in a learning platform designed around how your teams actually learn."
         guide="lmsCta"
       />
-    </>
+    </RevealEach>
   );
 }

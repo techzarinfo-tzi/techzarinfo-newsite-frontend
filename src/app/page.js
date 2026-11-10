@@ -7,10 +7,11 @@ import Services from "@/components/home/Services";
 import DevelopmentServices from "@/components/home/DevelopmentServices";
 import Solutions from "@/components/home/Solutions";
 import TziIntro from "@/components/home/TziIntro";
+import RevealEach from "@/components/common/RevealEach";
 
 export default function Home() {
   return (
-    <>
+    <RevealEach>
       <Hero />
       <Clients />
       <FlightStage>
@@ -22,6 +23,6 @@ export default function Home() {
       <TziIntro />
       <DevelopmentServices />
       <Solutions />
-    </>
+    </RevealEach>
   );
 }
