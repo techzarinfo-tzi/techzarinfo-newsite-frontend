@@ -9,7 +9,8 @@ import "./Footer.css";
 // design's own 800-unit grid (see Footer.css), so every block keeps its exact position and size
 // relative to the viewport width; below lg the same markup reflows into a stacked layout.
 
-const socialIcons = {
+// Also used by the Contact page's social links
+export const socialIcons = {
   instagram: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
       <rect x="2" y="2" width="20" height="20" rx="5.5" />

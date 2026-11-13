@@ -1,9 +1,9 @@
 export const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
+  { label: "About", href: "/about", menu: "about" },
   { label: "Industries", href: "/industries" },
   { label: "Services", href: "/services", menu: "services" },
   { label: "Products", href: "/products", menu: "products" },
+  { label: "Hire a Developer", href: "/hire-a-developer" },
   { label: "Blogs", href: "/blogs" },
 ];
 
@@ -43,6 +43,17 @@ export const servicesMenu = {
       title: "Marketing Solution",
       links: [{ label: "Digital Marketing Services", href: "/digital-marketing-services" }],
     },
+  ],
+};
+
+// Dropdown under "About". Culture/Careers hrefs match the footer (src/config/footer.js).
+export const aboutMenu = {
+  title: "About",
+  tagline: "Get to know the people and purpose behind Techzar",
+  items: [
+    { name: "About Us", description: "Our story, mission and expertise", href: "/about" },
+    { name: "Culture", description: "How we work, learn and grow together", href: "/culture" },
+    { name: "Career", description: "Build your career with us", href: "/careers" },
   ],
 };
 

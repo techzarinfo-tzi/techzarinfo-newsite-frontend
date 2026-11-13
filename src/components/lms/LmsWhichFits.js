@@ -92,7 +92,7 @@ export default function LmsWhichFits() {
             needs
           </p>
           <Link
-            href="/contact"
+            href="/contact-us"
             className="fit-btn mt-8 flex h-[52px] items-center justify-center rounded-lg bg-white text-base font-medium text-[#1f5fd0] shadow-[0_6px_16px_-6px_rgba(0,0,0,0.35)] transition-[transform,box-shadow] duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_22px_-8px_rgba(0,0,0,0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:max-w-[320px] lg:mt-auto lg:max-w-none"
           >
             Get Started

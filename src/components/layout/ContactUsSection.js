@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { servicesMenu } from "@/config/navigation";
-import CountrySelect from "./CountrySelect";
+import { useLayoutEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+import ContactForm from "./ContactForm";
 import "./ContactUsSection.css";
 
 // Site-wide "How can we help you ?" section (rendered from the root layout, directly above the
@@ -16,15 +16,8 @@ import "./ContactUsSection.css";
 // nothing animated) -> "closed" (envelope shut, waiting below the fold) -> "open" -> "sent", and
 // back to "closed" whenever the section leaves the screen, so each visit opens it afresh.
 
-const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/$/, "");
-
-// The phone field starts on India. The full country list (all flags + calling codes, see
-// contactCountries.js) is loaded after mount, flags included, so until then the flag is a blank
-// placeholder. The selected country is tracked rather than its dial code, since several countries
-// share one (e.g. +1).
-const defaultCountry = { code: "IN", name: "India", dial: "+91" };
-
-const services = [...servicesMenu.groups.flatMap((g) => g.links.map((l) => l.label)), "Other"];
+// The form itself (fields, validation, submit to /store-data) is ContactForm.js, shared with the
+// Contact Us page.
 
 // The backdrop's perspective floor grid, bowed slightly like the reference (rows sag towards the
 // edges, columns lean out from a vanishing point far above). Built once, drawn in a 1440 x 1024 box.
@@ -43,19 +36,6 @@ const grid = (() => {
   }
   return [...rows, ...cols].join("");
 })();
-
-function Chevron() {
-  return (
-    <svg className="cu-chevron" viewBox="0 0 14 8" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-      <path d="M1 1l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function DialFlag({ country, countries }) {
-  const Flag = (country.Flag ? country : countries.find((c) => c.code === country.code))?.Flag;
-  return Flag ? <Flag className="cu-flag" aria-hidden="true" /> : <span className="cu-flag" aria-hidden="true" />;
-}
 
 // Envelope outline in its own 1000 x 480 box: rounded top and bottom corners
 const ENVELOPE = "M0 26Q0 0 26 0H974Q1000 0 1000 26V454Q1000 480 974 480H26Q0 480 0 454z";
@@ -162,25 +142,19 @@ function Envelope() {
   );
 }
 
+// The Contact Us page has this same form in its own layout, so the section stays off that page.
+// (A separate component, so its observer is set up afresh whenever it comes back.)
 export default function ContactUsSection() {
+  const pathname = usePathname();
+  if (pathname === "/contact-us") return null;
+  return <ContactUsEnvelope />;
+}
+
+function ContactUsEnvelope() {
   const sectionRef = useRef(null);
+  // reset() / clearError() of the form inside the letter
   const formRef = useRef(null);
   const [state, setState] = useState("static");
-  const [country, setCountry] = useState(defaultCountry);
-  const { dial } = country;
-  // The country picked in the Country field (none until chosen; the phone field still starts on India)
-  const [picked, setPicked] = useState(null);
-  const [countries, setCountries] = useState([]);
-
-  useEffect(() => {
-    let live = true;
-    import("./contactCountries").then((m) => live && setCountries(m.countries));
-    return () => {
-      live = false;
-    };
-  }, []);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
 
   // Latest state for the observer below (it is set up once)
   const stateRef = useRef(state);
@@ -201,12 +175,8 @@ export default function ContactUsSection() {
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const leave = () => {
-      if (stateRef.current === "sent") {
-        formRef.current?.reset();
-        setCountry(defaultCountry);
-        setPicked(null);
-      }
-      setError("");
+      if (stateRef.current === "sent") formRef.current?.reset();
+      formRef.current?.clearError();
       setState(still ? "static" : "closed");
     };
     if (!still && el.getBoundingClientRect().top >= window.innerHeight * 0.7) setState("closed");
@@ -222,34 +192,8 @@ export default function ContactUsSection() {
     return () => io.disconnect();
   }, []);
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (sending) return;
-    const data = Object.fromEntries(new FormData(e.currentTarget));
-    setSending(true);
-    setError("");
-    try {
-      const res = await fetch(`${apiUrl}/store-data`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, phone: `${dial}${String(data.phone).replace(/\D/g, "")}` }),
-      });
-      const body = await res.json().catch(() => ({}));
-      if (!res.ok || body.status !== 1) {
-        throw new Error(body.message || body.errors?.[0]?.msg || "We couldn't send your request, please try again later");
-      }
-      setState("sent");
-    } catch (err) {
-      setError(err instanceof TypeError ? "We couldn't send your request, please try again later" : err.message);
-    } finally {
-      setSending(false);
-    }
-  };
-
   const sendAnother = () => {
     formRef.current?.reset();
-    setCountry(defaultCountry);
-    setPicked(null);
     setState("open");
   };
 
@@ -294,76 +238,7 @@ export default function ContactUsSection() {
           {/* Clips the rising/sinking letter at the envelope bottom edge */}
           <div className="cu-letter-clip">
             <div className="cu-letter" inert={!formLive}>
-              <form ref={formRef} className="cu-form" onSubmit={onSubmit}>
-                {error && (
-                  <p className="cu-error" role="alert">
-                    {error}
-                  </p>
-                )}
-                <div className="cu-field" style={{ "--i": 0 }}>
-                  <label className="sr-only" htmlFor="cu-name">Name</label>
-                  <input id="cu-name" name="name" className="cu-input" placeholder="Name" autoComplete="name" maxLength={100} required />
-                </div>
-                <div className="cu-field" style={{ "--i": 1 }}>
-                  <label className="sr-only" htmlFor="cu-email">Email</label>
-                  <input id="cu-email" name="email" type="email" className="cu-input" placeholder="Email" autoComplete="email" required />
-                </div>
-                <div className="cu-field" style={{ "--i": 2 }}>
-                  <div className="cu-input cu-phone">
-                    <span className="cu-dial" aria-hidden="true">
-                      <DialFlag country={country} countries={countries} />
-                      {dial}
-                    </span>
-                    <label className="sr-only" htmlFor="cu-phone">Phone number ({dial})</label>
-                    <input
-                      id="cu-phone"
-                      name="phone"
-                      type="tel"
-                      inputMode="numeric"
-                      autoComplete="tel-national"
-                      pattern="[0-9 \-]{5,}"
-                      maxLength={15 - dial.length}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="cu-field cu-row" style={{ "--i": 3 }}>
-                  <div className="cu-select">
-                    <label className="sr-only" htmlFor="cu-country">Country</label>
-                    <CountrySelect
-                      id="cu-country"
-                      name="country"
-                      countries={countries}
-                      value={picked}
-                      onChange={(c) => {
-                        setPicked(c);
-                        setCountry(c);
-                      }}
-                      disabled={!formLive}
-                      required
-                    />
-                  </div>
-                  <div className="cu-select">
-                    <label className="sr-only" htmlFor="cu-service">Services</label>
-                    <select id="cu-service" name="service" className="cu-input" defaultValue="" required>
-                      <option value="" disabled>Services</option>
-                      {services.map((s) => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
-                    </select>
-                    <Chevron />
-                  </div>
-                </div>
-                <div className="cu-field" style={{ "--i": 4 }}>
-                  <label className="sr-only" htmlFor="cu-message">Your message</label>
-                  <textarea id="cu-message" name="message" className="cu-input cu-message" placeholder="Your message" maxLength={5000} required />
-                </div>
-                <div className="cu-field" style={{ "--i": 5 }}>
-                  <button type="submit" className="cu-submit" disabled={sending}>
-                    {sending ? "Sending…" : "Submit"}
-                  </button>
-                </div>
-              </form>
+              <ContactForm ref={formRef} live={formLive} onSent={() => setState("sent")} />
             </div>
           </div>
         </div>

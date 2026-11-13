@@ -35,8 +35,8 @@ export default function SmsHero() {
           </p>
 
           <HeroButtonGroup>
-            <HeroButton label="Get a Free Quote" href="/contact" />
-            <HeroButton label="Book a Free Consultation" href="/contact" variant="secondary" />
+            <HeroButton label="Get a Free Quote" href="/contact-us" />
+            <HeroButton label="Book a Free Consultation" href="/contact-us" variant="secondary" />
           </HeroButtonGroup>
         </div>
 

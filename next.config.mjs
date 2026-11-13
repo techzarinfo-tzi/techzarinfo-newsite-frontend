@@ -16,6 +16,10 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  // The Contact Us page moved from /contact to /contact-us; keep old links and bookmarks working
+  async redirects() {
+    return [{ source: "/contact", destination: "/contact-us", permanent: true }];
+  },
   turbopack: {
     root: __dirname,
   },

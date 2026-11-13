@@ -110,7 +110,7 @@ export default function MarketingOffers() {
             support business growth.
           </p>
           <Link
-            href="/contact"
+            href="/contact-us"
             className="relative mt-8 inline-flex h-[42px] items-center rounded-full bg-white px-6 text-[15px] font-semibold text-[#1c3fc5] transition-colors hover:bg-white/90 lg:mt-10"
           >
             Get Started

@@ -58,8 +58,8 @@ export default function MarketingHero() {
           </p>
 
           <HeroButtonGroup className="erp-hero-line" style={{ "--d": "0.24s" }}>
-            <HeroButton label="Get Free Proposal" href="/contact" />
-            <HeroButton label="Free SEO Audit" href="/contact" variant="secondary" />
+            <HeroButton label="Get Free Proposal" href="/contact-us" />
+            <HeroButton label="Free SEO Audit" href="/contact-us" variant="secondary" />
           </HeroButtonGroup>
 
           <dl

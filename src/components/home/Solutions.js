@@ -177,7 +177,7 @@ export default function Solutions() {
 
         <div className="relative mt-12 text-center lg:mt-14">
           <Link
-            href="/contact"
+            href="/contact-us"
             className="inline-flex items-center justify-center rounded-[10px] bg-[#002148] px-10 py-3.5 text-[16px] font-medium text-white transition-colors hover:bg-[#003070]"
           >
             Let&rsquo;s Talk

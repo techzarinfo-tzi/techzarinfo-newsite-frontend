@@ -2152,3 +2152,55 @@ body {
     transition: none;
   }
 }
+
+/* Careers job modal (components/careers/JobCard.js): rises and fades in over a fading backdrop. */
+.job-dialog[open] {
+  animation: job-dialog-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.job-dialog[open]::backdrop {
+  animation: job-backdrop-in 0.35s ease-out both;
+}
+
+@keyframes job-dialog-in {
+  from { opacity: 0; translate: 0 1.5rem; scale: 0.97; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+@keyframes job-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .job-dialog[open],
+  .job-dialog[open]::backdrop {
+    animation: none;
+  }
+}
+
+/* The job's full description: the admin panel's rich text, in the site's type colours. */
+.job-description > :first-child { margin-top: 0; }
+.job-description p { margin-top: 0.75rem; }
+.job-description h3,
+.job-description h4 {
+  margin-top: 1.25rem;
+  font-weight: 600;
+  color: #002461;
+}
+.job-description h3 { font-size: 1.125rem; }
+.job-description h4 { font-size: 1rem; }
+.job-description strong,
+.job-description b { font-weight: 600; color: #002461; }
+.job-description ul,
+.job-description ol { margin-top: 0.75rem; padding-left: 1.25rem; }
+.job-description ul { list-style: disc; }
+.job-description ol { list-style: decimal; }
+.job-description li { margin-top: 0.35rem; }
+.job-description li::marker { color: #0A50A5; }
+.job-description a { color: #0A50A5; font-weight: 500; text-decoration: underline; text-underline-offset: 2px; }
+.job-description blockquote {
+  margin-top: 0.75rem;
+  border-left: 3px solid #7fa8e6;
+  padding-left: 1rem;
+}

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
-import { navLinks, productsMenu, servicesMenu } from "@/config/navigation";
+import { aboutMenu, navLinks, productsMenu, servicesMenu } from "@/config/navigation";
 import {
   clearDissolveMask,
   getDissolve,
@@ -16,6 +16,7 @@ import {
 
 // Mega menus keyed by the `menu` field in navLinks; desktop card width per menu.
 const MENUS = {
+  about: { data: aboutMenu, width: "w-[min(44rem,100%)]" },
   services: { data: servicesMenu, width: "w-[min(64rem,100%)]" },
   products: { data: productsMenu, width: "w-[min(54rem,100%)]" },
 };
@@ -37,10 +38,12 @@ function MenuHeader({ data, compact }) {
 
 // Body of a mega menu. `compact` is the touch layout inside the mobile menu.
 function MenuBody({ menu, idPrefix, compact, pathname, onSelect }) {
-  if (menu === "products") {
+  // Flat item lists (Products, About) share one layout; Services uses grouped columns.
+  const { items } = MENUS[menu].data;
+  if (items) {
     return (
       <ul className={compact ? "grid gap-1 sm:grid-cols-2" : "grid grid-cols-3 gap-x-6 gap-y-2"}>
-        {productsMenu.items.map((item) => (
+        {items.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
@@ -90,7 +93,7 @@ function MenuBody({ menu, idPrefix, compact, pathname, onSelect }) {
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  // Only one desktop mega menu is open at a time: "services" | "products" | null.
+  // Only one desktop mega menu is open at a time: a MENUS key or null.
   const [openMenu, setOpenMenu] = useState(null);
   // Only one mobile accordion section is expanded at a time.
   const [mobileSection, setMobileSection] = useState(null);
@@ -462,7 +465,7 @@ export default function Navbar() {
         </nav>
 
         <Link
-          href="/contact"
+          href="/contact-us"
           className="hidden shrink-0 rounded-full bg-blue-950 px-6 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-blue-900 lg:inline-block"
         >
           Contact Us
@@ -610,7 +613,7 @@ export default function Navbar() {
             )}
           </nav>
           <Link
-            href="/contact"
+            href="/contact-us"
             onClick={(e) => selectItem("mobile", e)}
             inert={dissolving.mobile}
             className="mt-4 block rounded-full bg-blue-950 px-6 py-2.5 text-center text-sm font-semibold text-white shadow-md"

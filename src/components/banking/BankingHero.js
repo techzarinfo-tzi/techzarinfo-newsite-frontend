@@ -45,7 +45,7 @@ export default function BankingHero() {
           </p>
 
           <HeroButtonGroup className="erp-hero-line" style={{ "--d": "0.24s" }}>
-            <HeroButton label="Contact Us" href="/contact" />
+            <HeroButton label="Contact Us" href="/contact-us" />
             <HeroButton label="Book a Demo" href="/demo" variant="secondary" />
           </HeroButtonGroup>
 

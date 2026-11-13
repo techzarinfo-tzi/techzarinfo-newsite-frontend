@@ -1,6 +1,48 @@
 export const guideAvoidPaths = [];
 
 export const guideSteps = {
+  // Careers page
+  careersHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Looking to grow your career? You're in the right place.",
+  },
+  careersOpenings: {
+    side: "right",
+    mood: "point",
+    text: "Here are our current openings. Tap the arrow on a card to read the full job description.",
+  },
+  careersShareResume: {
+    side: "left",
+    mood: "hop",
+    text: "Don't see the right role? Email your resume or give us a call, we'd love to hear from you.",
+  },
+  careersApply: {
+    side: "right",
+    mood: "boost",
+    text: "Fill in your details, upload your resume and hit Submit, our team reviews every application.",
+  },
+  // About Us page
+  aboutHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Let me introduce you to the people behind TZI.",
+  },
+  aboutMissionVision: {
+    side: "right",
+    mood: "point",
+    text: "Our mission and vision: real business results for clients all over the world.",
+  },
+  aboutBuiltAround: {
+    side: "left",
+    mood: "hop",
+    text: "Consultative, secure, agile and transparent, that's how we build around your business.",
+  },
+  aboutCeo: {
+    side: "right",
+    mood: "boost",
+    text: "A word from our founder. Tap 'Read Full Message' to read his complete letter.",
+  },
   hero: {
     side: "left",
     mood: "wave",

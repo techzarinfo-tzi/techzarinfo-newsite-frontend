@@ -467,7 +467,7 @@ export default function ChatWidget() {
             </form>
             <p className="pt-2 text-center text-[11px] leading-snug text-[#002148]/55">
               AI answers can be imperfect. For specifics,{" "}
-              <Link href="/contact" onClick={() => setOpen(false)} className="underline">
+              <Link href="/contact-us" onClick={() => setOpen(false)} className="underline">
                 contact our team
               </Link>
               .

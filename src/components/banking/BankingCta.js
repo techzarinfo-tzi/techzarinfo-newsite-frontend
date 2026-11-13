@@ -89,7 +89,7 @@ export default function BankingCta() {
             Ready to Build Your Smart Digital Banking Platform?
           </h2>
           <Link
-            href="/contact"
+            href="/contact-us"
             className="relative mt-8 inline-flex h-11 items-center rounded-[3px] bg-white px-[15px] text-[15px] font-medium text-[#002461] transition-colors hover:bg-white/90 lg:mt-10 lg:text-base"
           >
             Talk to Our Experts

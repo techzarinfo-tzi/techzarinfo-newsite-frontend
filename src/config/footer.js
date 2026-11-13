@@ -15,7 +15,7 @@ export const footerColumns = [
       { label: "Blogs", href: "/blogs" },
       { label: "Industries", href: "/industries" },
       { label: "Careers", href: "/careers" },
-      { label: "Contact us", href: "/contact" },
+      { label: "Contact us", href: "/contact-us" },
     ],
   },
   {
