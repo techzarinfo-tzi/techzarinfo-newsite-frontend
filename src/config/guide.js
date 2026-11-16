@@ -1,6 +1,47 @@
 export const guideAvoidPaths = [];
 
 export const guideSteps = {
+  // Hire a Developer page
+  hireHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Need developers for your project? Let's find the right team for you.",
+  },
+  hireWhy: {
+    side: "right",
+    mood: "point",
+    text: "Hover or tap a card to open it and see why teams choose our experts.",
+  },
+  hirePerks: {
+    side: "left",
+    mood: "boost",
+    text: "Flexibility, cost savings and full transparency, the perks of hiring your team with TZI.",
+  },
+  hireStack: {
+    side: "right",
+    mood: "hop",
+    text: "AI, blockchain, full-stack or mobile, pick the expert you need and tap to get started.",
+  },
+  hireSkills: {
+    side: "left",
+    mood: "wave",
+    text: "Need a skill that's not listed? Hit 'Send Request' and we'll find the right people for you.",
+  },
+  hireStrengths: {
+    side: "right",
+    mood: "point",
+    text: "Keep scrolling to see what our team brings to every project.",
+  },
+  hireProcess: {
+    side: "left",
+    mood: "point",
+    text: "Hiring with us takes just a few simple steps. Here's how it works.",
+  },
+  hireCommitments: {
+    side: "right",
+    mood: "boost",
+    text: "Quality, security, deadlines and your IP, these are the promises we keep on every project.",
+  },
   // Careers page
   careersHero: {
     side: "left",

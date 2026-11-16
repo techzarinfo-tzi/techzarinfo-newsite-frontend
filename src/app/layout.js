@@ -8,6 +8,10 @@ import ContactUsSection from "@/components/layout/ContactUsSection";
 import Footer from "@/components/layout/Footer";
 import BottomBlur from "@/components/layout/BottomBlur";
 import Reveal from "@/components/common/Reveal";
+import HiddenOn from "@/components/common/HiddenOn";
+
+// Pages that skip the site-wide Testimonials and "How can we help you ?" sections
+const FOOTER_ONLY_PAGES = ["/about", "/contact-us"];
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -102,12 +106,15 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Navbar />
         {children}
-        <Reveal>
-          <Testimonials />
-        </Reveal>
-        <Reveal>
-          <ContactUsSection />
-        </Reveal>
+        {/* The About Us and Contact Us pages end with the footer only */}
+        <HiddenOn paths={FOOTER_ONLY_PAGES}>
+          <Reveal>
+            <Testimonials />
+          </Reveal>
+          <Reveal>
+            <ContactUsSection />
+          </Reveal>
+        </HiddenOn>
         <Footer />
         <BottomBlur />
         <AiGuide />

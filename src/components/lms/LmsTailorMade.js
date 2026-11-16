@@ -173,8 +173,13 @@ function useScrollTimeline(stageRef, sectionRef, listRef, slotRefs, windowRefs, 
     let entryEl = section;
     let rises = [];
     let clipped = false;
+    // False once unmounted: callbacks that outlive the section (document.fonts.ready, a queued
+    // frame) must not touch its elements, whose refs React has cleared to null by then
+    let alive = true;
+    const ready = () => alive && section.isConnected && slotEls.every(Boolean) && setA.every(Boolean);
 
     const measure = () => {
+      if (!ready()) return;
       // Pin at the top; a section taller than the screen pins with its bottom on-screen instead.
       pinTop = Math.min(0, window.innerHeight - section.offsetHeight);
       section.style.top = `${pinTop}px`;
@@ -194,6 +199,7 @@ function useScrollTimeline(stageRef, sectionRef, listRef, slotRefs, windowRefs, 
 
     const update = () => {
       raf = 0;
+      if (!ready()) return;
       const vh = window.innerHeight;
       // Entry: 0 as the cards' area reaches the bottom of the screen, 1 once it's 40% up.
       const entry = clamp((vh - entryEl.getBoundingClientRect().top) / (vh * 0.6));
@@ -216,7 +222,7 @@ function useScrollTimeline(stageRef, sectionRef, listRef, slotRefs, windowRefs, 
       }
 
       setA.forEach((el, i) => setCard(el, 1 - easeOut(staggered(entry, i)), -rises[i] * swap, 1 - swap));
-      setB.forEach((el, i) => setCard(el, 0, rises[i] * (1 - swap), swap));
+      setB.forEach((el, i) => el && setCard(el, 0, rises[i] * (1 - swap), swap));
     };
 
     const schedule = () => {
@@ -236,6 +242,7 @@ function useScrollTimeline(stageRef, sectionRef, listRef, slotRefs, windowRefs, 
     document.fonts?.ready.then(onResize);
 
     return () => {
+      alive = false;
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", onResize);

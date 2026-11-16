@@ -56,14 +56,6 @@ function MailIcon() {
 export default function Footer() {
   return (
     <footer data-guide="footer" className="site-footer">
-      {/* Animated backdrop: the clip is light on black, so it's screen-blended (black drops out,
-          only the glow shows) at low strength behind everything. A plain <img> inside <picture>
-          so reduced-motion visitors get a still frame (alt="" marks it decorative); lazy since the
-          footer is below the fold. */}
-      <picture className="ft-bg">
-        <source media="(prefers-reduced-motion: reduce)" srcSet="/footer-bg-still.jpg" />
-        <img src="/footer-bg.webp" alt="" loading="lazy" decoding="async" />
-      </picture>
       <div className="ft">
         <Link href="/" className="ft-logo" aria-label={`${siteConfig.name} home`}>
           <Image src="/white-logo.png" alt={`${siteConfig.name} logo`} width={3126} height={626} />

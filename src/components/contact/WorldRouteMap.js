@@ -1,14 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { geoInterpolate, geoPath, geoProjection } from "d3-geo";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { geoPath, geoProjection } from "d3-geo";
 import { select } from "d3-selection";
 import { zoom, zoomIdentity } from "d3-zoom";
 import "./WorldRouteMap.css";
 
 // The Contact Us page's world map: real land outlines (Natural Earth, via world-atlas) drawn as a
-// dotted map on a canvas, our locations pinned on it and joined by one continuous great-circle
-// route, with three planes flying separate stretches of it at once.
+// dotted map on a canvas, with a slowly spinning 3D pin on each of our offices (the India head
+// office larger). Hovering a pin (or tapping it on a touch screen, or focusing it) pops up that
+// office's address and enquiry numbers.
 //
 // Interaction: drag sideways to rotate the world (it wraps round endlessly, like spinning a globe)
 // and up/down to pan; pinch, Ctrl/Cmd + scroll or the buttons to zoom. On touch screens a
@@ -31,15 +32,92 @@ const projection = geoProjection(stretched)
   .translate([BASE_W / 2, BASE_H / 2]);
 const project = (lonLat) => projection(lonLat);
 
-// Pins, in route order (west to east), so the route runs through them as one line
+// Our offices: where each pin sits (the office's city), its label, and the address card shown on
+// hover / tap. Addresses and numbers as on the company's office list.
 const LOCATIONS = [
-  { id: "usa", name: "USA", lonLat: [-89, 38.5] },
-  { id: "africa", name: "Africa", lonLat: [18, 1.5] },
-  { id: "uae", name: "Middle East", sub: "(UAE)", lonLat: [55.27, 25.2] },
-  { id: "india", name: "India", lonLat: [80.27, 13.08] },
-  { id: "malaysia", name: "Malaysia", lonLat: [101.69, 3.14] },
+  {
+    id: "usa",
+    name: "USA",
+    lonLat: [-77.2, 39.14], // Gaithersburg, Maryland
+    office: "USA Office",
+    places: [
+      {
+        city: "Maryland",
+        address: "6835 Olney Laytonsville Rd, Gaithersburg, MD 20882",
+        phones: [["+1-7039525250", "+17039525250"]],
+      },
+    ],
+  },
+  {
+    id: "uk",
+    name: "UK",
+    lonLat: [-1.47, 53.38], // Sheffield
+    office: "UK Office",
+    places: [
+      {
+        city: "South Yorkshire",
+        address: "27 Batemoor Close, Sheffield, United Kingdom S8 8EA",
+        phones: [
+          ["+44-7587719203", "+447587719203"],
+          ["+44-1223790170", "+441223790170"],
+        ],
+      },
+    ],
+  },
+  {
+    id: "africa",
+    name: "Africa",
+    lonLat: [57.58, -20.01], // Grand Baie, Mauritius
+    office: "Africa Office",
+    places: [
+      {
+        city: "Mauritius",
+        address: "B11 Fond Du Sac Road, The Precinct M2 Junction, Grand Baie 1305-02.",
+        phones: [["+230-54773555", "+23054773555"]],
+      },
+    ],
+  },
+  {
+    id: "uae",
+    name: "Middle East",
+    sub: "(UAE)",
+    lonLat: [54.37, 24.45], // Abu Dhabi
+    office: "Middle East Office",
+    places: [{ city: "UAE", address: "Mazyad Mall, Abudhabi - UAE" }],
+  },
+  {
+    id: "india",
+    name: "India",
+    lonLat: [80.21, 12.95], // Chennai
+    hq: true,
+    office: "India Office",
+    places: [
+      {
+        city: "Chennai",
+        address: "No: 34, Rakshan, Block-A, Sengalani Amman St, IIT Colony, Pallikaranai, Chennai - 600100.",
+        phones: [["+91-9952885799", "+919952885799"]],
+      },
+      {
+        city: "Trichy",
+        address: "No.3D, M.S Tower, 4th Floor, Convent Rd, Cantonment, Tiruchirappalli - 620001.",
+        phones: [["+91-9952885799", "+919952885799"]],
+      },
+    ],
+  },
+  {
+    id: "malaysia",
+    name: "Malaysia",
+    lonLat: [101.69, 3.14], // Kuala Lumpur
+    office: "Malaysia Office",
+    places: [
+      {
+        city: "Kuala Lumpur",
+        address: "6, Jalan Bullion Mewah 10, Taman Bullion Mewah, 68100, Kuala Lumpur.",
+        phones: [["+60-146634733", "+60146634733"]],
+      },
+    ],
+  },
 ];
-const at = (id) => LOCATIONS.find((l) => l.id === id).lonLat;
 
 // The part of the world framed at first (lon/lat): the Americas to South-East Asia
 const VIEW = { west: -122, east: 146, north: 74, south: -48 };
@@ -51,84 +129,6 @@ const MAX_ZOOM = 8; // times the framing zoom
 const FAR = 1e9;
 
 const DOT_STEP = 4.2; // base units between dots (~1.5 degrees)
-const ARC_STEPS = 64; // points per leg of a route
-const PLANE_COPIES = 4; // plane elements per flight (one per world copy that can be in view)
-
-const reducedMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-// A great-circle polyline through the given stops, in base space, with running lengths. A route
-// that crosses the date line is kept continuous (x carries on past the world's edge into the next
-// copy) rather than jumping back across the map.
-function polyline(stops) {
-  const points = [];
-  for (let i = 0; i < stops.length - 1; i++) {
-    const leg = geoInterpolate(stops[i], stops[i + 1]);
-    for (let s = i === 0 ? 0 : 1; s <= ARC_STEPS; s++) {
-      const [x, y] = project(leg(s / ARC_STEPS));
-      const prev = points[points.length - 1];
-      const unwrapped = prev ? x + Math.round((prev[0] - x) / BASE_W) * BASE_W : x;
-      points.push([unwrapped, y]);
-    }
-  }
-  const lengths = [0];
-  for (let i = 1; i < points.length; i++) {
-    lengths.push(lengths[i - 1] + Math.hypot(points[i][0] - points[i - 1][0], points[i][1] - points[i - 1][1]));
-  }
-  return { points, lengths, total: lengths[lengths.length - 1] };
-}
-
-// The connected route through every location (drawn dashed)
-const ROUTE = polyline(LOCATIONS.map((l) => l.lonLat));
-
-// Three flights on separate stretches of that route, so no two ever share a line. They run on one
-// shared CYCLE_MS clock: the Atlantic crossing (twice as long as the other two) flies once per
-// cycle, the shorter flights twice, so their speeds stay close and the pattern repeats exactly.
-// `phase` (a fraction of each flight's own loop) staggers them so a plane leaves a shared pin
-// halfway between arrivals there: the closest two visible planes get is ~48 base units (~40px),
-// and each fades out on landing and in at take-off.
-//
-// The return flight (Malaysia -> USA, east across the Pacific and the date line) is a fourth
-// flight on the same clock, drawn as its own pink route with arrowheads so its direction reads at
-// a glance. It leaves Malaysia halfway between the Asia flight's arrivals there and lands in the
-// USA halfway between the Atlantic flight's departures.
-const CYCLE_MS = 9000;
-const RETURN_ROUTE = polyline([at("malaysia"), at("usa")]);
-const FLIGHTS = [
-  { id: "atlantic", route: polyline([at("usa"), at("africa")]), loops: 1, phase: 0.15 },
-  { id: "gulf", route: polyline([at("africa"), at("uae")]), loops: 2, phase: 0.8 },
-  { id: "asia", route: polyline([at("uae"), at("india"), at("malaysia")]), loops: 2, phase: 0.3 },
-  // The Pacific crossing is over twice the Atlantic's length, so it takes two cycles (loops 0.5)
-  // to fly at about the same speed as the others
-  { id: "return", route: RETURN_ROUTE, loops: 0.5, phase: 0.7, isReturn: true },
-];
-
-// Arrowheads along the return route (every ARROW_GAP base units), pointing the way it flies
-const ARROW_GAP = 46;
-const RETURN_ARROWS = [];
-for (let d = ARROW_GAP; d < RETURN_ROUTE.total - ARROW_GAP / 2; d += ARROW_GAP) {
-  RETURN_ARROWS.push(pointAlong(RETURN_ROUTE, d / RETURN_ROUTE.total));
-}
-FLIGHTS.forEach((f) => {
-  f.ms = CYCLE_MS / f.loops;
-  // Fade over the first/last stretch of each flight (shorter flights fade over a shorter distance)
-  f.fade = Math.min(f.route.total * 0.12, 18);
-});
-
-// Where a plane is after `fraction` of its route: its point, heading and the index reached
-function pointAlong(route, fraction) {
-  const target = fraction * route.total;
-  const { points, lengths } = route;
-  let i = 1;
-  while (i < lengths.length - 1 && lengths[i] < target) i++;
-  const seg = lengths[i] - lengths[i - 1] || 1;
-  const f = Math.min(1, Math.max(0, (target - lengths[i - 1]) / seg));
-  const [x0, y0] = points[i - 1];
-  const [x1, y1] = points[i];
-  return { x: x0 + (x1 - x0) * f, y: y0 + (y1 - y0) * f, angle: Math.atan2(y1 - y0, x1 - x0), index: i, dist: target };
-}
-
-const pathFrom = (pts) => pts.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join("");
-
 // The world copies (n) that overlap the view, with `margin` px to spare for labels at the edges
 function copiesInView(t, width, margin = 0) {
   const span = BASE_W * t.k;
@@ -166,6 +166,10 @@ async function buildDots() {
       buckets[Math.floor((h - Math.floor(h)) * 4)].push(x, y);
     }
   }
+  // Each office gets a bright dot at its exact spot, so its pin always stands on visible land: the
+  // dot grid (~1.5 degrees apart) can leave a coastal city (Chennai, Abu Dhabi) just past the last
+  // row of land dots, and an island too small for the land data (Mauritius) would have none at all
+  for (const { lonLat } of LOCATIONS) buckets[3].push(...project(lonLat));
   return buckets.map((list) => Float32Array.from(list));
 }
 
@@ -184,21 +188,21 @@ function framedView(w, h, k, centreX = null) {
 export default function WorldRouteMap({ className = "" }) {
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
-  const routeRef = useRef(null);
-  const returnRef = useRef(null);
-  const arrowsRef = useRef(null);
-  const trailRefs = useRef([]);
-  const planeRefs = useRef([]);
   const dotsRef = useRef(null);
   const zoomRef = useRef(null);
   const transformRef = useRef(zoomIdentity);
   const fitRef = useRef(1);
   const animRef = useRef(0);
-  // Each flight's progress (0-1 along its route)
-  const progressRef = useRef(FLIGHTS.map((f) => f.phase));
   // The current view, the framing zoom it can't go below, and the map's width (for the pins and
   // zoom buttons)
-  const [view, setView] = useState({ t: zoomIdentity, fit: 1, w: 0 });
+  const [view, setView] = useState({ t: zoomIdentity, fit: 1, w: 0, h: 0 });
+  // Which pin's address card is open: hovered/focused (mouse, keyboard) or tapped (touch), as
+  // "copy-id" keys; the hovered one wins
+  const [hoverPin, setHoverPin] = useState(null);
+  const [tapPin, setTapPin] = useState(null);
+  const openPin = hoverPin ?? tapPin;
+  const pressType = useRef("mouse");
+  const uid = useId();
   const transform = view.t;
   // The key named in the "scroll to zoom" hint while it shows ("Ctrl" or "⌘"), else ""
   const [hint, setHint] = useState("");
@@ -236,58 +240,6 @@ export default function WorldRouteMap({ className = "" }) {
     });
   }, []);
 
-  // Draws the route, each flight's flown trail and its plane, for the current view and progress
-  const drawFlights = useCallback((fade = true) => {
-    const wrap = wrapRef.current;
-    if (!wrap) return;
-    const t = transformRef.current;
-    // One extra copy on the left: the return route runs on past the world's right edge, so the
-    // copy to the left of the view is the one whose return flight crosses it
-    const inView = copiesInView(t, wrap.clientWidth, 40);
-    const copies = [inView[0] - 1, ...inView];
-    const screen = (n) => ([x, y]) => [(x + n * BASE_W) * t.k + t.x, y * t.k + t.y];
-
-    routeRef.current?.setAttribute("d", copies.map((n) => pathFrom(ROUTE.points.map(screen(n)))).join(""));
-    returnRef.current?.setAttribute("d", copies.map((n) => pathFrom(RETURN_ROUTE.points.map(screen(n)))).join(""));
-    // Arrowheads: a small open chevron at each point, turned to the route's heading
-    arrowsRef.current?.setAttribute(
-      "d",
-      copies
-        .map((n) =>
-          RETURN_ARROWS.map((a) => {
-            const [x, y] = screen(n)([a.x, a.y]);
-            const c = Math.cos(a.angle);
-            const s = Math.sin(a.angle);
-            const pt = (u, v) => `${(x + u * c - v * s).toFixed(1)} ${(y + u * s + v * c).toFixed(1)}`;
-            return `M${pt(-3, -3.5)}L${pt(2, 0)}L${pt(-3, 3.5)}`;
-          }).join("")
-        )
-        .join("")
-    );
-
-    FLIGHTS.forEach((flight, f) => {
-      const p = progressRef.current[f];
-      const pos = pointAlong(flight.route, p);
-      const flown = [...flight.route.points.slice(0, pos.index), [pos.x, pos.y]];
-      trailRefs.current[f]?.setAttribute("d", copies.map((n) => pathFrom(flown.map(screen(n)))).join(""));
-      // Fades in at take-off and out on landing, so each loop restarts smoothly
-      const opacity = fade ? Math.max(0, Math.min(1, pos.dist / flight.fade, (flight.route.total - pos.dist) / flight.fade)) : 1;
-      const angle = ((pos.angle * 180) / Math.PI).toFixed(1);
-      for (let c = 0; c < PLANE_COPIES; c++) {
-        const plane = planeRefs.current[f * PLANE_COPIES + c];
-        if (!plane) continue;
-        const n = copies[c];
-        if (n === undefined) {
-          plane.style.opacity = "0";
-          continue;
-        }
-        const [px, py] = screen(n)([pos.x, pos.y]);
-        plane.setAttribute("transform", `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${angle}) scale(0.8)`);
-        plane.style.opacity = String(opacity);
-      }
-    });
-  }, []);
-
   // Zoom, pan and rotation, sizing, and the land dots
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -309,9 +261,8 @@ export default function WorldRouteMap({ className = "" }) {
       })
       .on("zoom", (e) => {
         transformRef.current = e.transform;
-        setView({ t: e.transform, fit: fitRef.current, w: wrap.clientWidth });
+        setView({ t: e.transform, fit: fitRef.current, w: wrap.clientWidth, h: wrap.clientHeight });
         drawDots();
-        drawFlights(!reducedMotion());
       });
     zoomRef.current = behavior;
     const sel = select(wrap).call(behavior);
@@ -398,47 +349,27 @@ export default function WorldRouteMap({ className = "" }) {
       wrap.removeEventListener("pointercancel", onUp);
       sel.on(".zoom", null);
     };
-  }, [drawDots, drawFlights]);
+  }, [drawDots]);
 
-  // The flights: each loops along its own route while the map is on screen. With reduced motion
-  // the planes rest part-way along their routes, with no movement.
+  // A tapped address card closes on a tap elsewhere on the map, and any card on Escape
   useEffect(() => {
     const wrap = wrapRef.current;
     if (!wrap) return;
-    if (reducedMotion()) {
-      progressRef.current = FLIGHTS.map(() => 0.5);
-      drawFlights(false);
-      return;
-    }
-    let frame = 0;
-    let last = 0;
-    let visible = false;
-    const tick = (now) => {
-      if (last) {
-        const dt = now - last;
-        progressRef.current = progressRef.current.map((p, f) => (p + dt / FLIGHTS[f].ms) % 1);
-      }
-      last = now;
-      drawFlights(true);
-      frame = requestAnimationFrame(tick);
+    const onDown = (e) => {
+      if (!e.target.closest(".wrm-pin")) setTapPin(null);
     };
-    const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !visible) {
-        visible = true;
-        last = 0;
-        frame = requestAnimationFrame(tick);
-      } else if (!entry.isIntersecting && visible) {
-        visible = false;
-        cancelAnimationFrame(frame);
-      }
-    });
-    io.observe(wrap);
-    drawFlights(true);
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      setTapPin(null);
+      setHoverPin(null);
+    };
+    wrap.addEventListener("pointerdown", onDown);
+    wrap.addEventListener("keydown", onKey);
     return () => {
-      io.disconnect();
-      cancelAnimationFrame(frame);
+      wrap.removeEventListener("pointerdown", onDown);
+      wrap.removeEventListener("keydown", onKey);
     };
-  }, [drawFlights]);
+  }, []);
 
   // Animated move to a new view (the zoom buttons and pins)
   const animateTo = useCallback((target, ms = 550) => {
@@ -510,7 +441,7 @@ export default function WorldRouteMap({ className = "" }) {
       ref={wrapRef}
       className={`wrm ${className}`}
       role="region"
-      aria-label="Map of Techzarinfo locations: USA, Africa, Middle East (UAE), India and Malaysia. Drag to rotate the world, zoom with the buttons."
+      aria-label="Map of Techzarinfo offices: USA, UK, Africa, Middle East (UAE), India and Malaysia. Hover or tap a pin to see its address; drag to rotate the world, zoom with the buttons."
     >
       {/* Faint globe lines behind the land */}
       <svg className="wrm-globe" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -525,43 +456,17 @@ export default function WorldRouteMap({ className = "" }) {
 
       <svg className="wrm-route" aria-hidden="true">
         <defs>
-          <linearGradient id="wrm-trail" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#7dd3fc" stopOpacity="0.35" />
-            <stop offset="1" stopColor="#c4b5fd" />
+          {/* The 3D pins' shading: lit from the left, falling to deep blue on the right */}
+          <linearGradient id="wrm-pin-body" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#8cc4ff" />
+            <stop offset="0.38" stopColor="#2f86ff" />
+            <stop offset="1" stopColor="#0a3a9c" />
           </linearGradient>
-          <linearGradient id="wrm-trail-return" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stopColor="#f9a8d4" stopOpacity="0.35" />
-            <stop offset="1" stopColor="#f472b6" />
-          </linearGradient>
+          <radialGradient id="wrm-pin-shine" cx="0.32" cy="0.26" r="0.5">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0.75" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </radialGradient>
         </defs>
-        <path ref={routeRef} className="wrm-route-line" />
-        {/* The return route (Malaysia -> USA), with arrowheads showing its direction */}
-        <path ref={returnRef} className="wrm-route-line wrm-route-return" />
-        <path ref={arrowsRef} className="wrm-route-arrows" />
-        {FLIGHTS.map((flight, f) => (
-          <path
-            key={flight.id}
-            ref={(el) => {
-              trailRefs.current[f] = el;
-            }}
-            className={flight.isReturn ? "wrm-route-trail wrm-route-trail-return" : "wrm-route-trail"}
-          />
-        ))}
-        {FLIGHTS.flatMap((flight, f) =>
-          Array.from({ length: PLANE_COPIES }, (_, c) => (
-            <g
-              key={`${flight.id}-${c}`}
-              ref={(el) => {
-                planeRefs.current[f * PLANE_COPIES + c] = el;
-              }}
-              className="wrm-plane"
-              style={{ opacity: 0 }}
-            >
-              {/* Points right (0deg), centred on its own origin */}
-              <path d="M11 0L-2 -2.2-6.5 -9.5-9 -9.5-6 -1.9-10.5 -1.4-12.5 -4.2-14 -4.2-13 0-14 4.2-12.5 4.2-10.5 1.4-6 1.9-9 9.5-6.5 9.5-2 2.2Z" />
-            </g>
-          ))
-        )}
       </svg>
 
       {/* Pins: positioned from the current view (on every copy of the world in view); they don't
@@ -573,9 +478,61 @@ export default function WorldRouteMap({ className = "" }) {
             const x = (bx + n * BASE_W) * transform.k + transform.x;
             const y = by * transform.k + transform.y;
             if (view.w && (x < -80 || x > view.w + 80)) return null;
+            const key = `${n}-${loc.id}`;
+            const open = openPin === key;
+            const cardId = `${uid}-${key}`;
+            // The card opens below a pin in the upper part of the map, above it lower down, and
+            // leans inwards near the left/right edges so the map never clips it
+            const v = view.h && y < view.h * 0.45 ? "below" : "above";
+            const h = x < 140 ? "left" : view.w && x > view.w - 140 ? "right" : "center";
             return (
-              <li key={`${n}-${loc.id}`} className="wrm-pin" style={{ left: `${x}px`, top: `${y}px`, "--d": `${i * 0.35}s` }}>
-                <button type="button" onClick={() => focusPin(loc, n)} aria-label={`Zoom to ${loc.name}${loc.sub ? ` ${loc.sub}` : ""}`}>
+              <li
+                key={key}
+                className={loc.hq ? "wrm-pin wrm-pin-hq" : "wrm-pin"}
+                data-open={open || undefined}
+                style={{ left: `${x}px`, top: `${y}px`, "--d": `${i * 0.35}s` }}
+                onPointerEnter={(e) => e.pointerType === "mouse" && setHoverPin(key)}
+                onPointerLeave={(e) => e.pointerType === "mouse" && setHoverPin((k) => (k === key ? null : k))}
+                onFocus={() => setHoverPin(key)}
+                onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setHoverPin((k) => (k === key ? null : k))}
+              >
+                {/* Address card: fades and pops in while the pin is hovered, focused or tapped */}
+                <div id={cardId} className="wrm-office" data-v={v} data-h={h} inert={!open} aria-hidden={!open}>
+                  <p className="wrm-office-title">{loc.office}</p>
+                  {loc.places.map((place) => (
+                    <div key={place.city} className="wrm-office-place">
+                      <p className="wrm-office-city">{place.city}</p>
+                      <p className="wrm-office-address">{place.address}</p>
+                      {place.phones && (
+                        <p className="wrm-office-phones">
+                          <span>Enquiry</span>
+                          {place.phones.map(([label, tel]) => (
+                            <a key={tel} href={`tel:${tel}`}>
+                              {label}
+                            </a>
+                          ))}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={cardId}
+                  aria-label={`${loc.office}: show address`}
+                  onPointerDown={(e) => {
+                    pressType.current = e.pointerType;
+                  }}
+                  onClick={() => {
+                    // Touch: a tap opens (or closes) the address card; mouse and keyboard keep
+                    // zooming to the pin, as before (the card already shows on hover / focus)
+                    if (pressType.current === "touch") setTapPin((k) => (k === key ? null : key));
+                    else focusPin(loc, n);
+                    pressType.current = "mouse";
+                  }}
+                >
                   <span className="wrm-chip">
                     <svg viewBox="0 0 12 16" aria-hidden="true">
                       <path d="M6 0a6 6 0 00-6 6c0 4.4 6 10 6 10s6-5.6 6-10a6 6 0 00-6-6zm0 8.4A2.4 2.4 0 116 3.6a2.4 2.4 0 010 4.8z" />
@@ -585,8 +542,28 @@ export default function WorldRouteMap({ className = "" }) {
                       {loc.sub && <small>{loc.sub}</small>}
                     </span>
                   </span>
-                  <span className="wrm-stem" />
-                  <span className="wrm-dot" />
+                  {/* A glossy 3D pin, its tip on the location, slowly spinning: two crossed faces
+                      so it keeps its body side-on, with a ground shadow and a pulse ring */}
+                  <span className="wrm-pin3d">
+                    <span className="wrm-pin3d-ring" />
+                    <span className="wrm-pin3d-shadow" />
+                    <span className="wrm-pin3d-spin">
+                      {[0, 1].map((face) => (
+                        <svg key={face} className="wrm-pin3d-face" viewBox="0 0 24 32">
+                          <path
+                            d="M12 1C6.2 1 1.5 5.6 1.5 11.4c0 7.6 9 18.3 9.7 19.2a1 1 0 001.6 0c.7-.9 9.7-11.6 9.7-19.2C22.5 5.6 17.8 1 12 1z"
+                            fill="url(#wrm-pin-body)"
+                          />
+                          <path
+                            d="M12 1C6.2 1 1.5 5.6 1.5 11.4c0 7.6 9 18.3 9.7 19.2a1 1 0 001.6 0c.7-.9 9.7-11.6 9.7-19.2C22.5 5.6 17.8 1 12 1z"
+                            fill="url(#wrm-pin-shine)"
+                          />
+                          <circle cx="12" cy="11.4" r="4" fill="#ffffff" />
+                          <circle cx="12" cy="11.4" r="1.9" fill="#1f6ff0" />
+                        </svg>
+                      ))}
+                    </span>
+                  </span>
                 </button>
               </li>
             );

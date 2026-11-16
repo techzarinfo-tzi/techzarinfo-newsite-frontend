@@ -1,5 +1,6 @@
-/* Contact page world map (WorldRouteMap.js): deep navy night map, blue land dots, glowing violet
-   pins with dark label chips, a dashed route with a bright flown trail and a glowing plane. */
+/* Contact page world map (WorldRouteMap.js): deep navy night map, blue land dots, glowing blue
+   3D location pins (spinning slowly) with dark label chips, and an address card per office that
+   pops up on hover / focus / tap. */
 
 .wrm {
   position: relative;
@@ -42,28 +43,6 @@
   overflow: visible;
 }
 
-.wrm-route-line {
-  fill: none;
-  stroke: rgba(147, 197, 253, 0.45);
-  stroke-width: 1.4;
-  stroke-dasharray: 4 5;
-  stroke-linecap: round;
-}
-
-.wrm-route-trail {
-  fill: none;
-  stroke: url(#wrm-trail);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  filter: drop-shadow(0 0 3px rgba(125, 211, 252, 0.85));
-}
-
-.wrm-plane {
-  fill: #f8fbff;
-  filter: drop-shadow(0 0 4px rgba(125, 211, 252, 0.95)) drop-shadow(0 0 10px rgba(167, 139, 250, 0.6));
-}
-
 /* ---------- Pins ---------- */
 .wrm-pins {
   position: absolute;
@@ -82,7 +61,7 @@
 
 .wrm-pin button {
   position: absolute;
-  bottom: -4px;
+  bottom: 0;
   left: 0;
   display: flex;
   flex-direction: column;
@@ -139,33 +118,80 @@
   transform: translateY(-2px);
 }
 
-.wrm-stem {
-  width: 1px;
-  height: 14px;
-  background: linear-gradient(180deg, rgba(196, 181, 253, 0.9), rgba(196, 181, 253, 0.2));
-}
-
-.wrm-dot {
+/* 3D location pin: tip exactly on the location, the ground shadow and pulse ring centred on it; two crossed faces spin slowly about the vertical axis so
+   the pin keeps its body side-on; a soft ground shadow and a pulse ring sit at the tip */
+.wrm-pin3d {
   position: relative;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #ffffff 0%, #c4b5fd 45%, #7c3aed 100%);
-  box-shadow: 0 0 8px 3px rgba(167, 139, 250, 0.8), 0 0 22px 8px rgba(124, 58, 237, 0.45);
+  display: block;
+  width: 18px;
+  height: 24px;
+  margin-top: 2px;
+  perspective: 160px;
 }
 
-.wrm-dot::after {
-  content: "";
+.wrm-pin-hq .wrm-pin3d {
+  width: 26px;
+  height: 35px;
+}
+
+.wrm-pin3d-spin {
   position: absolute;
-  inset: -6px;
-  border: 1.5px solid rgba(196, 181, 253, 0.8);
+  inset: 0;
+  transform-style: preserve-3d;
+  animation: wrm-spin 5s linear var(--d, 0s) infinite;
+}
+
+.wrm-pin3d-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  backface-visibility: visible;
+  filter: drop-shadow(0 0 4px rgba(47, 134, 255, 0.75));
+}
+
+.wrm-pin3d-face + .wrm-pin3d-face {
+  transform: rotateY(90deg);
+}
+
+.wrm-pin3d-shadow {
+  position: absolute;
+  bottom: -2.5px;
+  left: 50%;
+  width: 70%;
+  height: 5px;
   border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(80, 160, 255, 0.85) 0%, rgba(47, 134, 255, 0) 70%);
+  translate: -50% 0;
+}
+
+.wrm-pin3d-ring {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 22px;
+  height: 12px;
+  border: 1.5px solid rgba(125, 200, 255, 0.85);
+  border-radius: 50%;
+  translate: -50% 0;
   animation: wrm-ping 2.4s ease-out var(--d, 0s) infinite;
+}
+
+.wrm-pin-hq .wrm-pin3d-ring {
+  width: 30px;
+  height: 15px;
+  bottom: -7.5px;
+  border-color: rgba(159, 212, 255, 0.95);
+}
+
+@keyframes wrm-spin {
+  to { transform: rotateY(360deg); }
 }
 
 @keyframes wrm-ping {
   0% { opacity: 0.9; scale: 0.4; }
-  80%, 100% { opacity: 0; scale: 2.2; }
+  80%, 100% { opacity: 0; scale: 2; }
 }
 
 /* ---------- Controls ---------- */
@@ -246,39 +272,183 @@
     font-size: 8.5px;
   }
 
-  .wrm-stem {
-    height: 10px;
+  .wrm-pin3d {
+    width: 15px;
+    height: 20px;
+  }
+
+  .wrm-pin-hq .wrm-pin3d {
+    width: 21px;
+    height: 28px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .wrm-dot::after {
+  .wrm-pin3d-ring {
     animation: none;
     opacity: 0;
   }
 
+  .wrm-pin3d-spin {
+    animation: none;
+  }
+
   .wrm-chip,
-  .wrm-hint {
+  .wrm-hint,
+  .wrm-office {
     transition: none;
   }
 }
 
-/* ---------- Return route (Malaysia -> USA) ----------
-   Pink like the pin icons, so it reads apart from the blue outbound route; arrowheads along it
-   point the way the return flight goes. */
-.wrm-route-return {
-  stroke: rgba(244, 114, 182, 0.5);
+/* ---------- Office address card (hover / focus / tap a pin) ----------
+   The map's dark chip style, larger. It sits above the pin (or below it, near the top of the map),
+   centred on it or leaning inwards near the edges, and fades and pops in from slightly smaller. */
+.wrm-office {
+  position: absolute;
+  z-index: 5;
+  width: max-content;
+  max-width: min(250px, 70vw);
+  padding: 10px 12px 11px;
+  border: 1px solid rgba(165, 180, 252, 0.55);
+  border-radius: 10px;
+  background: rgba(5, 12, 40, 0.94);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(47, 134, 255, 0.15);
+  color: #e6edff;
+  text-align: left;
+  white-space: normal;
+  cursor: default;
+  opacity: 0;
+  scale: 0.92;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    scale 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.25s;
 }
 
-.wrm-route-arrows {
-  fill: none;
-  stroke: rgba(249, 168, 212, 0.85);
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.wrm-pin[data-open] {
+  z-index: 4;
 }
 
-.wrm-route-trail-return {
-  stroke: url(#wrm-trail-return);
-  filter: drop-shadow(0 0 3px rgba(244, 114, 182, 0.85));
+.wrm-pin[data-open] .wrm-office {
+  opacity: 1;
+  scale: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    opacity 0.22s ease,
+    scale 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s;
+}
+
+/* An invisible bridge over the gap between the card and its pin, so the pointer can travel from
+   the pin to the card (to reach the phone links) without leaving the pin and closing the card */
+.wrm-office::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 22px;
+}
+
+.wrm-office[data-v="above"]::after {
+  top: 100%;
+}
+
+.wrm-office[data-v="below"]::after {
+  bottom: 100%;
+}
+
+/* Vertical: above the label chip and pin, or below the location */
+.wrm-office[data-v="above"] {
+  bottom: 62px;
+  transform-origin: bottom center;
+}
+
+.wrm-pin-hq .wrm-office[data-v="above"] {
+  bottom: 72px;
+}
+
+.wrm-office[data-v="below"] {
+  top: 14px;
+  transform-origin: top center;
+}
+
+/* Horizontal: centred on the pin, or leaning inwards near an edge */
+.wrm-office[data-h="center"] {
+  left: 0;
+  translate: -50% 0;
+}
+
+.wrm-office[data-h="left"] {
+  left: -18px;
+}
+
+.wrm-office[data-h="right"] {
+  right: -18px;
+}
+
+.wrm-office p {
+  margin: 0;
+}
+
+.wrm-office-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.wrm-office-place {
+  margin-top: 7px;
+}
+
+.wrm-office-place + .wrm-office-place {
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(165, 180, 252, 0.25);
+}
+
+.wrm-office-city {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #9fd4ff;
+}
+
+.wrm-office-address {
+  margin-top: 2px !important;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: rgba(230, 237, 255, 0.85);
+}
+
+.wrm-office-phones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  margin-top: 5px !important;
+  font-size: 11.5px;
+}
+
+.wrm-office-phones span {
+  color: rgba(230, 237, 255, 0.6);
+}
+
+.wrm-office-phones a {
+  color: #7dd3fc;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.wrm-office-phones a:hover {
+  text-decoration: underline;
+}
+
+.wrm-office-phones a:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: 2px;
+  border-radius: 3px;
 }
