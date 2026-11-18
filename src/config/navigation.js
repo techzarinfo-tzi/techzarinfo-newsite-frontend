@@ -25,7 +25,7 @@ export const servicesMenu = {
       id: "software",
       title: "Software Development",
       links: [
-        { label: "Website Development", href: "/services/web-application-development" },
+        { label: "Website Development", href: "/web-development-company-in-chennai" },
         { label: "Mobile App Development", href: "/services/mobile-app-development" },
         { label: "E-commerce Development", href: "/ecommerce-website-development-company-in-india" },
       ],
@@ -34,7 +34,7 @@ export const servicesMenu = {
       id: "ai",
       title: "AI & Digital Transformation",
       links: [
-        { label: "Artificial Intelligence", href: "/services/artificial-intelligence" },
+        { label: "Artificial Intelligence", href: "/artificial-intelligence" },
         { label: "Digital Banking Development", href: "/smart-digital-banking-solution" },
       ],
     },

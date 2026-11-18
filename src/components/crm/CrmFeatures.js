@@ -28,26 +28,26 @@ const features = [
   },
 ];
 
-// The design's artwork (Content.svg), split into its layers so each card can scale on its own. Every
+// The design's artwork (Content.webp), split into its layers so each card can scale on its own. Every
 // layer keeps the full 702×766 canvas, so stacked in this order they draw exactly the original.
 // origin: the card's centre on that canvas, which it scales about. range: the stretch of the
 // section's scroll progress over which it grows, staggered back to front.
 const backdrop = { src: `${ASSETS}/backdrop.svg` };
 const cards = [
   {
-    src: `${ASSETS}/pipeline.svg`,
+    src: `${ASSETS}/pipeline.webp`,
     alt: "Pipeline statistics card with an average score, qualifications, proposals, invoices and won deals",
     origin: "64.7% 78.3%",
     range: [0, 0.8],
   },
   {
-    src: `${ASSETS}/quick-actions.svg`,
+    src: `${ASSETS}/quick-actions.webp`,
     alt: "Quick actions card with new deal, qualification, proposals, invoices and export shortcuts",
     origin: "31.9% 41.3%",
     range: [0.1, 0.9],
   },
   {
-    src: `${ASSETS}/classification.svg`,
+    src: `${ASSETS}/classification.webp`,
     alt: "Classification donut chart splitting customers into upsell, top value, dormant and at risk",
     origin: "73.5% 40.5%",
     range: [0.2, 1],

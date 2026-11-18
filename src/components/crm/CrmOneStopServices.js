@@ -12,7 +12,7 @@ const services = [
     title: "Custom CRM Development",
     text: "Our tailored solutions to meet the unique needs of your businesses. Custom CRM development ensures that the software matches with specific workflows, customer interaction processes, and integration with other business tools.",
     image: {
-      src: `${ASSETS}/custom-crm.svg`,
+      src: `${ASSETS}/custom-crm.webp`,
       width: 290,
       height: 290,
       alt: "Custom CRM dashboard with total sales, earnings and sales analytics",
@@ -22,7 +22,7 @@ const services = [
     title: "Mobile CRM Development",
     text: "Our mobile app development team can build CRM solutions that are mobile-friendly or specifically designed as mobile apps. This is crucial for sales teams and customer service representatives who need access to CRM data on the go.",
     image: {
-      src: `${ASSETS}/mobile-app-crm.svg`,
+      src: `${ASSETS}/mobile-app-crm.webp`,
       width: 313,
       height: 312,
       alt: "Hand holding a phone running a mobile CRM app with notes, tasks and reminders",
@@ -32,7 +32,7 @@ const services = [
     title: "Enterprise CRM Software",
     text: "Our robust CRM platforms are designed to meet the complex needs of large enterprises. These systems support large datasets, offer advanced customization, and integrate with various enterprise applications to optimize customer management at scale.",
     image: {
-      src: `${ASSETS}/Enterprice.svg`,
+      src: `${ASSETS}/Enterprice.webp`,
       width: 313,
       height: 312,
       alt: "Laptop showing an enterprise CRM dashboard for wind power generation",
@@ -42,7 +42,7 @@ const services = [
     title: "CRM Integration Services",
     text: "We have an expert team to integrate CRM systems with existing software like marketing platforms, ERP systems, or third-party tools. This ensures seamless data flow across platforms, improving operational efficiency and customer experience.",
     image: {
-      src: `${ASSETS}/crm-integraion.svg`,
+      src: `${ASSETS}/crm-integraion.webp`,
       width: 313,
       height: 312,
       alt: "Laptop showing an enterprise CRM dashboard for wind power generation",
@@ -52,7 +52,7 @@ const services = [
     title: "CRM Migration & Upgrades",
     text: "TZI is best at migrating from your old CRM system to a new one, or upgrading an existing CRM to newer versions with more features. This process helps businesses keep up with technological advancements and stay competitive in managing customer relationships.",
     image: {
-      src: `${ASSETS}/nigration.svg`,
+      src: `${ASSETS}/nigration.webp`,
       width: 313,
       height: 312,
       alt: "Laptop showing an upgraded CRM analytics dashboard with sales charts and a world map",
@@ -62,7 +62,7 @@ const services = [
     title: "Startup CRM Software",
     text: "Techzarinfo's CRM solutions are designed for the specific needs of startups, offering scalability, cost-efficiency, and easy-to-use interfaces. These CRMs help startups manage customer relationships while growing their businesses.",
     image: {
-      src: `${ASSETS}/start-up-crm.svg`,
+      src: `${ASSETS}/start-up-crm.webp`,
       width: 313,
       height: 312,
       alt: "Laptop on a desk showing a startup CRM subscription dashboard",

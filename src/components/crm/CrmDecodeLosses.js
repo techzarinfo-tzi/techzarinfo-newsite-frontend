@@ -6,7 +6,7 @@ import { useInView } from "@/components/lms/LmsWhichFits";
 import { scrollToContact } from "@/components/common/ContactLink";
 
 // The tilted "High-Value Lost Deals" card; transparent around the card itself
-const ARTWORK = { src: "/product/CRM/decode.svg", width: 389, height: 362 };
+const ARTWORK = { src: "/product/CRM/decode.webp", width: 389, height: 362 };
 
 
 export default function CrmDecodeLosses() {

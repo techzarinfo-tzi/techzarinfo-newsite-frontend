@@ -1,6 +1,93 @@
 export const guideAvoidPaths = [];
 
 export const guideSteps = {
+  // Artificial Intelligence page
+  aiHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Move your mouse over the scene, then let's explore what AI can do for you.",
+  },
+  aiIntro: {
+    side: "right",
+    mood: "point",
+    text: "Keep scrolling: AI software learns from your data, automates the busywork and keeps assisting around the clock.",
+  },
+  aiServices: {
+    side: "left",
+    mood: "boost",
+    text: "Scroll slowly and step aboard: custom AI, AI products and AI integration, all under one roof.",
+  },
+  aiIsland: {
+    side: "right",
+    mood: "hop",
+    text: "Watch the light touch and a new world open up: custom AI built around your requirements.",
+  },
+  aiIndustries: {
+    side: "left",
+    mood: "wave",
+    text: "Through the clouds and into every industry: finance, healthcare, retail, logistics and more.",
+  },
+  aiApproach: {
+    side: "right",
+    mood: "hop",
+    text: "Jump through the portal and meet our way of building AI, one thoughtful step at a time.",
+  },
+  aiJourney: {
+    side: "left",
+    mood: "point",
+    text: "Here's our map: six steps from your first idea to launch, all steering towards development.",
+  },
+  aiHire: {
+    side: "right",
+    mood: "boost",
+    text: "Need sharper prompts? Hire our Claude AI prompt engineers in four simple steps.",
+  },
+  aiFeatures: {
+    side: "left",
+    mood: "wave",
+    text: "Straight out of the laptop: tap a feature to see what our AI solutions can do.",
+  },
+  aiTools: {
+    side: "right",
+    mood: "hop",
+    text: "These are the tools we build with. Hover a logo and watch it bounce!",
+  },
+  // Web Development page
+  webHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Let's build a website that grows your business.",
+  },
+  webTrusted: {
+    side: "right",
+    mood: "point",
+    text: "Save up to 42% on development costs, with experts across web, mobile, cloud and testing.",
+  },
+  webWhyChoose: {
+    side: "left",
+    mood: "hop",
+    text: "Keep scrolling and watch the cards roll by, here's why businesses build their websites with TZI.",
+  },
+  webServices: {
+    side: "right",
+    mood: "point",
+    text: "From requirements and UI/UX to SEO, deployment and maintenance, we cover every step of your website.",
+  },
+  webTech: {
+    side: "left",
+    mood: "boost",
+    text: "React, Next.js, Node.js and more, the modern stack powering the websites we build.",
+  },
+  webFaq: {
+    side: "right",
+    mood: "point",
+    text: "Got questions about cost, timelines or support? Tap a question, or tap me to chat with our AI.",
+  },
+  webCta: {
+    side: "left",
+    mood: "wave",
+    text: "Ready when you are! Start a project or book a free demo, I'll be right here.",
+  },
   // Hire a Developer page
   hireHero: {
     side: "left",

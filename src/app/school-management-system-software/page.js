@@ -7,18 +7,19 @@ import SmsCustomized from "@/components/sms/SmsCustomized";
 import SmsAdvantages from "@/components/sms/SmsAdvantages";
 import SmsFaq from "@/components/sms/SmsFaq";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 // Linked from the Products menu (config/navigation.js)
 const path = "/school-management-system-software";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "School Management System",
   description:
     "Simplify school operations, automate daily tasks, and keep your entire school connected with one smart platform: Techzarinfo's school management system for modern education.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function SchoolManagementSystemSoftwarePage() {
   return (

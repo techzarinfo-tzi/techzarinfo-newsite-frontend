@@ -8,17 +8,18 @@ import LmsWhyChoose from "@/components/lms/LmsWhyChoose";
 import LmsWhichFits from "@/components/lms/LmsWhichFits";
 import EcommerceCta from "@/components/ecommerce/EcommerceCta";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/corporate-learning-management-system";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "Learning Management System for Online Training",
   description:
     "A powerful Learning Management System (LMS) for online training that streamlines training, tracks learner progress and supports effective skill development.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function CorporateLearningManagementSystemPage() {
   return (

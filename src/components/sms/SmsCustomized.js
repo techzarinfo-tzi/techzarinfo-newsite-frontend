@@ -15,7 +15,7 @@ export default function SmsCustomized() {
       columns={2}
       reverse
       image={{
-        src: "/product/SMS/customised-school.svg",
+        src: "/product/SMS/customised-school.webp",
         width: 693,
         height: 474,
         alt: "School management dashboard surrounded by panels for reports, curriculum, cohorts, assessment, attendance and classroom",

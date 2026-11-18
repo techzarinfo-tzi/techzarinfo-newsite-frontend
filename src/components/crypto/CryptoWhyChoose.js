@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 const DIR = "/service/crypto/whychoose/layers";
 
-// The section artwork ("why choose.svg", one 1672 x 941 image) split in two: the background with
+// The section artwork ("why choose.webp", one 1672 x 941 image) split in two: the background with
 // the coin taken out (plate.webp: where the coin sat, the beam carries on from the machine), and the
 // coin itself (coin.webp, a 400 x 400 cut-out). COIN is the coin layer's spot in the image's pixels,
 // so at rest the two layers line up exactly with the original artwork.

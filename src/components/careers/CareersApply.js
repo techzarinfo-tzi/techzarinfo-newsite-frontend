@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { ArrowUpRight, CloudUpload, FileText, X } from "lucide-react";
 import GlassSelect from "@/components/common/GlassSelect";
 import CountrySelect from "@/components/layout/CountrySelect";
+import { useCountries } from "@/components/layout/useCountries";
 import { apiUrl } from "@/lib/blog";
 import { APPLY_EVENT, APPLY_SECTION_ID } from "@/lib/careers";
 
@@ -52,7 +53,9 @@ export default function CareersApply({ openings }) {
 
   const [position, setPosition] = useState("");
   const [country, setCountry] = useState(defaultCountry);
-  const [countries, setCountries] = useState([]);
+  // Every country's flag and calling code; heavy, so fetched once the section nears the screen or
+  // is used (as in the Contact form; see useCountries)
+  const countries = useCountries(sectionRef);
   const [resume, setResume] = useState(null);
   const [resumeError, setResumeError] = useState("");
   const [dragging, setDragging] = useState(false);
@@ -60,14 +63,6 @@ export default function CareersApply({ openings }) {
   const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
 
-  // Every country's flag and calling code; heavy, so loaded after mount (as in the Contact form)
-  useEffect(() => {
-    let live = true;
-    import("@/components/layout/contactCountries").then((m) => live && setCountries(m.countries));
-    return () => {
-      live = false;
-    };
-  }, []);
 
   // "Apply Now" on a job card: select that opening and bring the form into view
   useEffect(() => {

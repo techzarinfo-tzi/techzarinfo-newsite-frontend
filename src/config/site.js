@@ -20,7 +20,7 @@ export const siteConfig = {
   },
   images: {
     ogImage: "/og-image.png",
-    logo: "/logo.svg",
+    logo: "/logo.webp",
   },
 };
 

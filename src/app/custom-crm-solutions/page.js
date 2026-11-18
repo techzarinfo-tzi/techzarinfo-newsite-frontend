@@ -9,17 +9,18 @@ import CrmWhyRecognized from "@/components/crm/CrmWhyRecognized";
 import CrmIndustries from "@/components/crm/CrmIndustries";
 import CrmTechnologies from "@/components/crm/CrmTechnologies";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/custom-crm-solutions";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "CRM Development Company",
   description:
     "Every client inquiry can be a revenue-driving opportunity. Techzarinfo offers CRM solutions that help businesses manage valuable client relationships more effectively.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function CustomCrmSolutionsPage() {
   return (

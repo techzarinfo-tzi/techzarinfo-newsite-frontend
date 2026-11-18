@@ -6,17 +6,18 @@ import MarketingIndustries from "@/components/marketing/MarketingIndustries";
 import MarketingOffers from "@/components/marketing/MarketingOffers";
 import MarketingFaq from "@/components/marketing/MarketingFaq";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/digital-marketing-services";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "Digital Marketing Company in Chennai",
   description:
     "Techzarinfo is a digital marketing company in Chennai helping businesses grow through SEO, Google Ads, Meta Ads, and social media marketing focused on visibility, qualified leads, and conversions.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function DigitalMarketingServicesPage() {
   return (

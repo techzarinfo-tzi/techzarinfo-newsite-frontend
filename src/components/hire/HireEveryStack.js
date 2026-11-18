@@ -7,13 +7,13 @@ import { ArrowRight } from "lucide-react";
 
 // "Onboard Top Tech Talent Across Every Stack": heading and intro, then (lg+) the design's orbit:
 // a ring with drifting dots around a glowing </> stack, and seven developer cards placed round it.
-// Positions are the design's (every-stack.svg, measured on a 700 x 466 frame) as percentages of a
+// Positions are the design's (every-stack.webp, measured on a 700 x 466 frame) as percentages of a
 // box with the same 1144:763 shape, so the composition scales as a whole. Below lg the centrepiece
 // sits above the cards, which go two across from sm and stack on phones.
 //
 // Motion: the cards fade up one after another when the section scrolls into view; the centrepiece
 // floats, its glow breathes and the ring's dots drift (all off with reduced motion). Cards lift on
-// hover. Icon and centrepiece art are cropped from every-stack.svg into public/hire-a-developer/every-stack/.
+// hover. Icon and centrepiece art are cropped from every-stack.webp into public/hire-a-developer/every-stack/.
 
 const ART = "/hire-a-developer/every-stack";
 

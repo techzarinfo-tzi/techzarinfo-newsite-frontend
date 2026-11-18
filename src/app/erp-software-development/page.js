@@ -8,17 +8,18 @@ import ErpCostEstimator from "@/components/erp/ErpCostEstimator";
 import ErpTechnologies from "@/components/erp/ErpTechnologies";
 import ErpFaq from "@/components/erp/ErpFaq";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/erp-software-development";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "ERP Software Development Company",
   description:
     "A customized ERP brings your teams, data, and daily operations together in one place. Techzarinfo builds ERP software tailored to how your business runs.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function ErpSoftwareDevelopmentPage() {
   return (

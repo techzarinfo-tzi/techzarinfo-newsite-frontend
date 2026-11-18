@@ -17,7 +17,7 @@ const features = [
       "Personalized course assignments",
     ],
     image: {
-      src: `${ASSETS}/curriculam.svg`,
+      src: `${ASSETS}/curriculam.webp`,
       width: 588,
       height: 485,
       alt: "Curriculum management screen with a course outline, chapter progress and lesson resources",
@@ -31,7 +31,7 @@ const features = [
     text: "Manage Classrooms and monitor individual student progress and engagement in courses and assignments for efficient analysis, tracking, targeted support",
     points: ["Interactive dashboards", "Performance summaries", "Skill-based progress tracking", "Comparative analytics"],
     image: {
-      src: `${ASSETS}/student.svg`,
+      src: `${ASSETS}/student.webp`,
       width: 566,
       height: 413,
       alt: "Student profile with attendance, upcoming assignments and subject performance over the term",
@@ -45,7 +45,7 @@ const features = [
     text: "Facilitate group projects, discussion forums, and peer learning opportunities for Collaborative Learning and enable smooth communication for effective engagement",
     points: ["Virtual classrooms", "Discussion boards", "Secure portal", "Peer collaboration spaces"],
     image: {
-      src: `${ASSETS}/collabrative.svg`,
+      src: `${ASSETS}/collabrative.webp`,
       width: 588,
       height: 451,
       alt: "Group project workspace with a class discussion, a video call and a shared task list",

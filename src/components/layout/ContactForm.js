@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useImperativeHandle, useRef, useState } from "react";
 import { servicesMenu } from "@/config/navigation";
 import GlassSelect from "@/components/common/GlassSelect";
 import CountrySelect from "./CountrySelect";
+import { useCountries } from "./useCountries";
 
 // The website's contact enquiry form: name, email, phone (with the selected country's code),
 // country, service and message, posted to the backend's /store-data (saved as a Contact enquiry
@@ -17,7 +18,7 @@ import CountrySelect from "./CountrySelect";
 const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
 // The phone field starts on India. The full country list (all flags + calling codes, see
-// contactCountries.js) is loaded after mount, flags included, so until then the flag is a blank
+// contactCountries.js) is loaded when the form nears the screen, so until then the flag is a blank
 // placeholder. The selected country is tracked rather than its dial code, since several countries
 // share one (e.g. +1).
 const defaultCountry = { code: "IN", name: "India", dial: "+91" };
@@ -40,17 +41,11 @@ export default function ContactForm({ ref, live = true, onSent, idPrefix = "cu",
   // The country picked in the Country field (none until chosen; the phone field still starts on India)
   const [picked, setPicked] = useState(null);
   const [service, setService] = useState(null);
-  const [countries, setCountries] = useState([]);
+  // Fetched once the form nears the screen or is used (see useCountries)
+  const countries = useCountries(formRef);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    let alive = true;
-    import("./contactCountries").then((m) => alive && setCountries(m.countries));
-    return () => {
-      alive = false;
-    };
-  }, []);
 
   useImperativeHandle(
     ref,

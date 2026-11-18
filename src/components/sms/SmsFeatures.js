@@ -10,22 +10,22 @@ const features = [
   {
     title: "Classroom Management",
     text: "Efficiently organize and manage classroom activities, resources, and student interactions, creating an optimized learning environment.",
-    image: { src: `${ASSETS}/classroom.svg`, width: 266, height: 169, alt: "Teacher at an interactive board with class rosters, lesson tasks and a progress chart" },
+    image: { src: `${ASSETS}/classroom.webp`, width: 266, height: 169, alt: "Teacher at an interactive board with class rosters, lesson tasks and a progress chart" },
   },
   {
     title: "Timetable & Attendance Management",
     text: "Streamline scheduling, monitor attendance, and ensure efficient time management for both students and staff with seamless tracking and reporting.",
-    image: { src: `${ASSETS}/time-timetable.svg`, width: 251, height: 168, alt: "Weekly class timetable beside a student attendance register" },
+    image: { src: `${ASSETS}/time-timetable.webp`, width: 251, height: 168, alt: "Weekly class timetable beside a student attendance register" },
   },
   {
     title: "Curriculum Management",
     text: "Simplify curriculum planning, mapping, and implementation, ensuring alignment with educational objectives and smooth progression throughout the academic year.",
-    image: { src: `${ASSETS}/curriculam%20(2).svg`, width: 246, height: 164, alt: "Curriculum planner with subjects, units and lesson schedules" },
+    image: { src: `${ASSETS}/curriculam%20(2).webp`, width: 246, height: 164, alt: "Curriculum planner with subjects, units and lesson schedules" },
   },
   {
     title: "Assessments",
     text: "Conduct diverse assessments, including quizzes, exams, and assignments, providing insightful evaluations and fostering continuous student growth and development.",
-    image: { src: `${ASSETS}/assesment.svg`, width: 253, height: 169, alt: "Assessment dashboard with exam results, quiz scores and assignment status" },
+    image: { src: `${ASSETS}/assesment.webp`, width: 253, height: 169, alt: "Assessment dashboard with exam results, quiz scores and assignment status" },
   },
 ];
 
@@ -73,7 +73,6 @@ export default function SmsFeatures() {
                   alt={image.alt}
                   width={image.width}
                   height={image.height}
-                  unoptimized
                   className="h-auto w-full max-w-[300px]"
                 />
               </div>

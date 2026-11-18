@@ -46,7 +46,7 @@ export default function LmsHero() {
             visible top edge on the same line as the copy. */}
         <div className="ml-auto h-[min(72vw,460px)] w-[min(90%,560px)] overflow-hidden lg:absolute lg:top-(--hero-top) lg:right-0 lg:translate-y-[-8.8%] lg:ml-0 lg:h-auto lg:w-[46.4vw] lg:overflow-visible">
           <Image
-            src="/product/LMS/Lms-hero.svg"
+            src="/product/LMS/Lms-hero.webp"
             alt="Learning management system dashboard showing a course video, lessons and course details"
             width={704}
             height={731}

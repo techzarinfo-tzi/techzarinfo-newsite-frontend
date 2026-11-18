@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
 // The tablet artwork (hands holding the CRM dashboard). Its top ~16% is transparent, above the tablet.
-const ARTWORK = { src: "/product/CRM/CRM-page-2.svg", width: 1007, height: 657 };
+const ARTWORK = { src: "/product/CRM/CRM-page-2.webp", width: 1007, height: 657 };
 
 // Flips true once the whole section is on screen (once only). A section taller than the viewport can
 // never be fully visible, so for it "whole" means it fills the viewport instead.

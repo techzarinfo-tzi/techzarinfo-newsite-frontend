@@ -7,7 +7,7 @@ import { Layers, ShieldCheck, Zap } from "lucide-react";
 // Below lg the art sits centred above the copy; the cards go three across from sm, stacked below.
 // Cards lift on hover like the Careers job cards.
 //
-// Art: public/hire-a-developer/majore-perk.webp, rendered at 2x from the supplied majore-perk.svg
+// Art: public/hire-a-developer/majore-perk.webp, rendered at 2x from the supplied majore-perk.webp
 // (a 1.3 MB PNG-in-SVG), transparent background kept.
 const PERKS = [
   {

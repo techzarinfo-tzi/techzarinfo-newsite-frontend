@@ -9,15 +9,15 @@ const ASSETS = "/product/ERP/utilize/";
 // design's full width and its band from the top tile to the bottom tiles). order: entrance order,
 // from the top of the arch outwards; depth: how far the tile drifts with the pointer.
 const tech = [
-  { name: "Web applications", src: `${ASSETS}utilize-1.svg`, x: 14.4, y: 75.3, order: 4, depth: 0.9 },
-  { name: "Laravel", src: `${ASSETS}laravel 1.svg`, x: 23.2, y: 44, order: 3, depth: 0.7 },
-  { name: "Google Cloud", src: `${ASSETS}google-cloud 1.svg`, x: 33.5, y: 22.7, order: 1, depth: 0.5 },
-  { name: "AWS", src: `${ASSETS}aws 1.svg`, x: 41, y: 50, order: 2, depth: 0.35 },
-  { name: "PHP", src: `${ASSETS}php 1.svg`, x: 49, y: 13.3, order: 0, depth: 0.25 },
-  { name: "DigitalOcean", src: `${ASSETS}digital-ocean 1.svg`, x: 57.1, y: 50, order: 2, depth: 0.35 },
-  { name: "HTML5", src: `${ASSETS}html 1.svg`, x: 63.6, y: 22.7, order: 1, depth: 0.5 },
-  { name: "JavaScript", src: `${ASSETS}js 1.svg`, x: 74.6, y: 44, order: 3, depth: 0.7 },
-  { name: "CSS3", src: `${ASSETS}css 1.svg`, x: 82.9, y: 75.3, order: 4, depth: 0.9 },
+  { name: "Web applications", src: `${ASSETS}utilize-1.webp`, x: 14.4, y: 75.3, order: 4, depth: 0.9 },
+  { name: "Laravel", src: `${ASSETS}laravel 1.webp`, x: 23.2, y: 44, order: 3, depth: 0.7 },
+  { name: "Google Cloud", src: `${ASSETS}google-cloud 1.webp`, x: 33.5, y: 22.7, order: 1, depth: 0.5 },
+  { name: "AWS", src: `${ASSETS}aws 1.webp`, x: 41, y: 50, order: 2, depth: 0.35 },
+  { name: "PHP", src: `${ASSETS}php 1.webp`, x: 49, y: 13.3, order: 0, depth: 0.25 },
+  { name: "DigitalOcean", src: `${ASSETS}digital-ocean 1.webp`, x: 57.1, y: 50, order: 2, depth: 0.35 },
+  { name: "HTML5", src: `${ASSETS}html 1.webp`, x: 63.6, y: 22.7, order: 1, depth: 0.5 },
+  { name: "JavaScript", src: `${ASSETS}js 1.webp`, x: 74.6, y: 44, order: 3, depth: 0.7 },
+  { name: "CSS3", src: `${ASSETS}css 1.webp`, x: 82.9, y: 75.3, order: 4, depth: 0.9 },
 ];
 
 // Layout from the 1440px design: the tiles (~88px, rounded, pale lilac-to-white with a soft blue

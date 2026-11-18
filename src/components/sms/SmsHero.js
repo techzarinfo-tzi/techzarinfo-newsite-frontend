@@ -14,11 +14,10 @@ export default function SmsHero() {
         { label: "Book a Free Consultation", href: "/contact-us", variant: "secondary" },
       ]}
       image={{
-        src: "/product/SMS/hero/SMS-hero.svg",
+        src: "/product/SMS/hero/SMS-hero.webp",
         alt: "School management dashboard showing student, teacher and class totals, weekly attendance and recent activity",
         width: 658,
         height: 701,
-        unoptimized: true,
       }}
       artClassName="ml-auto w-[min(92%,600px)] lg:absolute lg:top-[clamp(90px,7.9vw,120px)] lg:right-0 lg:ml-0 lg:w-[46.2vw]"
     />

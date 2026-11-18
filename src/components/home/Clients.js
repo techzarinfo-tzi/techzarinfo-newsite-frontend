@@ -3,22 +3,22 @@ import Image from "next/image";
 const base = "/home/clients/";
 
 const rowOne = [
-  "2bfound 1.svg",
-  "Businessside 1.svg",
-  "Netafim 1.svg",
-  "Netwo 1.svg",
-  "Zeverin 1.svg",
-  "c32 1.svg",
+  "2bfound 1.webp",
+  "Businessside 1.webp",
+  "Netafim 1.webp",
+  "Netwo 1.webp",
+  "Zeverin 1.webp",
+  "c32 1.webp",
 ];
 
 const rowTwo = [
   "goverment.webp",
-  "icecream 1.svg",
-  "lisrc 1.svg",
-  "maxmoney 1.svg",
-  "norinco 1.svg",
-  "obeikan 1.svg",
-  "skillbil-logo 2.svg",
+  "icecream 1.webp",
+  "lisrc 1.webp",
+  "maxmoney 1.webp",
+  "norinco 1.webp",
+  "obeikan 1.webp",
+  "skillbil-logo 2.webp",
 ];
 
 function altFor(file) {

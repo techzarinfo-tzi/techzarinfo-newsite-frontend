@@ -8,17 +8,18 @@ import EcommerceWhyChoose from "@/components/ecommerce/EcommerceWhyChoose";
 import EcommerceIndustries from "@/components/ecommerce/EcommerceIndustries";
 import EcommerceCta from "@/components/ecommerce/EcommerceCta";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/ecommerce-website-development-company-in-india";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "E-commerce Development Company in India",
   description:
     "Launch a high-performing e-commerce website built around your brand and business goals. We develop scalable online stores with seamless shopping experiences.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function EcommerceWebsiteDevelopmentPage() {
   return (

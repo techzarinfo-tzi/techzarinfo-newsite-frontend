@@ -27,7 +27,7 @@ export default function SmsSingleStop() {
       }
       points={points}
       image={{
-        src: "/product/SMS/single-stop/single-stop.svg",
+        src: "/product/SMS/single-stop/single-stop.webp",
         width: 725,
         height: 517,
         alt: "School management dashboard surrounded by panels for content delivery, collaboration tools, progress tracking and communication",
@@ -107,7 +107,6 @@ export function SmsSplitSection({ guide, title, text, points: items, image, reve
             alt={image.alt}
             width={image.width}
             height={image.height}
-            unoptimized
             className="h-auto w-full"
           />
         </div>

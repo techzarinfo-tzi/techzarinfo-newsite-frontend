@@ -1,9 +1,10 @@
 import DemoReturn from "./DemoReturn";
+import { withSeo } from "@/lib/seo";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "Demo booked",
   robots: { index: false },
-};
+});
 
 // Calendly's redirect target after a "Free Demo" booking (Calendly event type > Booking page
 // options > Confirmation page > "Redirect to an external site": https://www.techzarinfo.com/demo-booked,

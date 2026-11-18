@@ -9,6 +9,7 @@ import Footer from "@/components/layout/Footer";
 import BottomBlur from "@/components/layout/BottomBlur";
 import Reveal from "@/components/common/Reveal";
 import HiddenOn from "@/components/common/HiddenOn";
+import StructuredData from "@/components/common/StructuredData";
 
 // Pages that skip the site-wide Testimonials and "How can we help you ?" sections
 const FOOTER_ONLY_PAGES = ["/about", "/contact-us"];
@@ -104,6 +105,7 @@ export default function RootLayout({ children }) {
       className={`${plusJakartaSans.variable} ${plusJakartaSansItalic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        <StructuredData />
         <Navbar />
         {children}
         {/* The About Us and Contact Us pages end with the footer only */}

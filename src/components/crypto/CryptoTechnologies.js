@@ -8,9 +8,9 @@ const TECH = "/service/crypto/technologies/";
 // order/depth as on the ERP page (entrance from the top outwards; outer tiles drift more).
 const tiles = [
   { name: "Solidity", src: `${TECH}solidity.svg`, x: 14.4, y: 75.3, order: 4, depth: 0.9 },
-  { name: "Polygon", src: `${CHAINS}polygon 2.svg`, x: 23.2, y: 44, order: 3, depth: 0.7 },
-  { name: "BNB Chain", src: `${CHAINS}binance-smart-chain 2.svg`, x: 33.5, y: 22.7, order: 1, depth: 0.5 },
-  { name: "Ethereum", src: `${CHAINS}ethereum 2.svg`, x: 49, y: 13.3, order: 0, depth: 0.25 },
+  { name: "Polygon", src: `${CHAINS}polygon 2.webp`, x: 23.2, y: 44, order: 3, depth: 0.7 },
+  { name: "BNB Chain", src: `${CHAINS}binance-smart-chain 2.webp`, x: 33.5, y: 22.7, order: 1, depth: 0.5 },
+  { name: "Ethereum", src: `${CHAINS}ethereum 2.webp`, x: 49, y: 13.3, order: 0, depth: 0.25 },
   { name: "Kubernetes", src: `${TECH}kubernetes.svg`, x: 49, y: 45.6, order: 2, depth: 0.35 },
   { name: "React", src: `${TECH}react.svg`, x: 63.6, y: 22.7, order: 1, depth: 0.5 },
   { name: "Node.js", src: `${TECH}nodejs.svg`, x: 74.6, y: 44, order: 3, depth: 0.7 },

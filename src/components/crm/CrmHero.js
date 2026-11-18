@@ -40,7 +40,7 @@ export default function CrmHero() {
 
         <div className="ml-auto h-[min(72vw,460px)] w-[min(90%,560px)] overflow-hidden lg:absolute lg:top-(--hero-top) lg:right-0 lg:ml-0 lg:h-auto lg:w-[46.4vw] lg:overflow-visible">
           <Image
-            src="/product/CRM/CRM-hero.svg"
+            src="/product/CRM/CRM-hero.webp"
             alt="CRM user management screen listing team members, their roles and account permissions"
             width={675}
             height={574}

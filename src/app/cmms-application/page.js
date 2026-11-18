@@ -8,17 +8,18 @@ import CmmsDataAction from "@/components/cmms/CmmsDataAction";
 import CmmsWhyChoose from "@/components/cmms/CmmsWhyChoose";
 import CmmsFaq from "@/components/cmms/CmmsFaq";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/cmms-application";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "CMMS Application for Smarter Maintenance",
   description:
     "A Computerized Maintenance Management System (CMMS) to schedule preventive maintenance, manage work orders and track asset performance with less downtime.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 export default function CmmsApplicationPage() {
   return (

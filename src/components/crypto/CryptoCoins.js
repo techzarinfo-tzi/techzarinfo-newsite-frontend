@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const DIR = "/service/crypto/hero/layers";
 
-// The hero artwork ("crypto coin 1.svg", a 440 x 562 frame around one 1086 x 1448 PNG) split into
+// The hero artwork ("crypto coin 1.webp", a 440 x 562 frame around one 1086 x 1448 PNG) split into
 // one layer per coin tile, each cut out at its original spot. Positions are in the PNG's pixels;
 // FRAME is the part of the PNG the SVG shows, so the layers line up exactly with the original.
 // Where a tile was hidden behind the one in front (Tether's top-left corner under Ethereum,

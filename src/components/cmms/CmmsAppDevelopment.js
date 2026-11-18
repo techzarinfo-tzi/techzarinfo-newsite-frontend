@@ -14,7 +14,7 @@ const features = [
     text: "Proactive upkeep at your fingertips: Streamline preventive maintenance with our CMMS, ensuring equipment longevity and uninterrupted operations",
     points: ["Scheduled Inspections and Tasks", "Asset Performance Monitoring", "Notification and Alerts", "Historical Analysis"],
     image: {
-      src: `${ASSETS}/app-1.svg`,
+      src: `${ASSETS}/app-1.webp`,
       width: 660,
       height: 479,
       alt: "Preventive maintenance dashboard with scheduled inspections, maintenance tasks and an upcoming inspection",
@@ -28,7 +28,7 @@ const features = [
     text: "Swift resolution, minimal disruption: Address unexpected breakdowns promptly with our CMMS, optimizing equipment uptime and productivity",
     points: ["Instant Issue Reporting", "Prioritization and Assignment", "Real-time Communication", "Maintenance Tracking"],
     image: {
-      src: `${ASSETS}/app-2.svg`,
+      src: `${ASSETS}/app-2.webp`,
       width: 593,
       height: 399,
       alt: "Breakdown maintenance dashboard with recent incidents, resolution stats and an incident overview chart",
@@ -42,7 +42,7 @@ const features = [
     text: "Efficient inventory control at a glance: Manage and optimize spares inventory seamlessly within our CMMS for streamlined maintenance operations",
     points: ["Inventory Monitoring", "Ordering and Procurement Integration", "Supplier Management", "Reporting and Analysis"],
     image: {
-      src: `${ASSETS}/app-3.svg`,
+      src: `${ASSETS}/app-3.webp`,
       width: 615,
       height: 415,
       alt: "Spares inventory dashboard with stock levels, purchase orders and supplier details",
@@ -60,13 +60,13 @@ function Glows({ reverse }) {
   const glow = "pointer-events-none absolute hidden h-[939px] w-[947px] max-w-none lg:block";
   return reverse ? (
     <>
-      <img src={`${ASSETS}/glow-1.svg`} alt="" aria-hidden="true" className={`${glow} top-[-263px] left-[-13px]`} />
-      <img src={`${ASSETS}/glow-2.svg`} alt="" aria-hidden="true" className={`${glow} top-[-163px] left-[-273px]`} />
+      <img src={`${ASSETS}/glow-1.svg`} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`${glow} top-[-263px] left-[-13px]`} />
+      <img src={`${ASSETS}/glow-2.svg`} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`${glow} top-[-163px] left-[-273px]`} />
     </>
   ) : (
     <>
-      <img src={`${ASSETS}/glow-1.svg`} alt="" aria-hidden="true" className={`${glow} top-[-265px] right-[-52px]`} />
-      <img src={`${ASSETS}/glow-2.svg`} alt="" aria-hidden="true" className={`${glow} top-[-165px] right-[-312px]`} />
+      <img src={`${ASSETS}/glow-1.svg`} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`${glow} top-[-265px] right-[-52px]`} />
+      <img src={`${ASSETS}/glow-2.svg`} alt="" aria-hidden="true" loading="lazy" decoding="async" className={`${glow} top-[-165px] right-[-312px]`} />
     </>
   );
 }

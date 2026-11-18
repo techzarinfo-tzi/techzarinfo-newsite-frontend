@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const groups = [
   {
-    icon: { src: "admin.svg", width: 142, height: 104 },
+    icon: { src: "admin.webp", width: 142, height: 104 },
     title: "Admin Features",
     items: [
       "Personalized Dashboard Analytics",
@@ -17,7 +17,7 @@ const groups = [
     ],
   },
   {
-    icon: { src: "user.svg", width: 106, height: 97 },
+    icon: { src: "user.webp", width: 106, height: 97 },
     title: "User Features",
     items: [
       "Strong Trade Engine",
@@ -29,7 +29,7 @@ const groups = [
     ],
   },
   {
-    icon: { src: "secure.svg", width: 105, height: 102 },
+    icon: { src: "secure.webp", width: 105, height: 102 },
     title: "Security Features",
     items: ["Data Encryption", "DDoS", "Biometric", "2FA", "SSL Certification", "Withdrawal Whitelisting"],
   },

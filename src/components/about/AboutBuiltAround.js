@@ -5,7 +5,7 @@ import { Star } from "lucide-react";
 // a round blue star badge) on the left; the meeting-room photo on the right. Same width as the
 // sections above (max-w-[69rem]); below lg the photo moves under the text.
 //
-// Photo: public/about/buildaround.webp, rendered from the supplied buildaround.svg (a PNG wrapped
+// Photo: public/about/buildaround.webp, rendered from the supplied buildaround.webp (a PNG wrapped
 // in SVG, 3.7 MB) at twice its 495 x 521 size, so the crop is exactly the SVG's.
 const POINTS = ["Consultative Approach", "Enterprise Security Mindset", "Agile Engineering Processes", "Transparent Communication"];
 

@@ -2,17 +2,18 @@ import BlogFeatured from "@/components/blogs/BlogFeatured";
 import BlogGrid from "@/components/blogs/BlogGrid";
 import { getPosts, gridPage, latestWindow } from "@/lib/blog";
 import RevealEach from "@/components/common/RevealEach";
+import { withSeo } from "@/lib/seo";
 
 const path = "/blogs";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "Blogs",
   description:
     "Insights, guides and updates from TechZar on AI, web, mobile app, e-commerce and blockchain development.",
   alternates: {
     canonical: path,
   },
-};
+});
 
 // ?category= and ?page= pick the grid page, so every page has its own link
 export default async function BlogsPage({ searchParams }) {

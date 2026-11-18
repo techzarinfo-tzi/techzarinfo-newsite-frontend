@@ -5,7 +5,7 @@ import { CAREERS_EMAIL, CAREERS_PHONE } from "@/lib/careers";
 // "Share Your Resume": a soft blue card with the envelope-and-résumé illustration on the left and
 // the careers email and phone as two white pills under the title. Same page frame as the openings
 // above (max-w-7xl). Below md the illustration sits above the text and the pills stack.
-// The artwork is public/careers/career.webp, a resized copy of the PNG inside career.svg (1.8 MB).
+// The artwork is public/careers/career.webp, a resized copy of the PNG inside career.webp (1.8 MB).
 export default function CareersShareResume() {
   const contacts = [
     { icon: Mail, label: CAREERS_EMAIL, href: `mailto:${CAREERS_EMAIL}`, srLabel: "Email" },

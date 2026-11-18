@@ -8,6 +8,7 @@ import HeroButton from "@/components/common/HeroButton";
 import { TailorMadeSection } from "@/components/lms/LmsTailorMade";
 import HireProcess from "@/components/hire/HireProcess";
 import HireCommitments from "@/components/hire/HireCommitments";
+import { withSeo } from "@/lib/seo";
 
 // Capability / Agility / Infrastructure, then Experience / Quality Testing / End-to-End Services:
 // the LMS "Tailor-Made" section (TailorMadeSection, as reused by the CRM, CMMS and SMS pages), with
@@ -72,10 +73,10 @@ const BLOCKCHAIN = "/service/blockchain/blockchain-tools/";
 const TECH = "/service/crypto/technologies/";
 const SKILLS = [
   { name: "Solidity", src: `${TECH}solidity.svg`, x: 15.5, y: 75.8, order: 4, depth: 0.9 },
-  { name: "Polygon", src: `${BLOCKCHAIN}polygon 2.svg`, x: 24.4, y: 44.5, order: 3, depth: 0.7 },
-  { name: "BNB Chain", src: `${BLOCKCHAIN}binance-smart-chain 2.svg`, x: 34.9, y: 22.8, order: 1, depth: 0.5 },
+  { name: "Polygon", src: `${BLOCKCHAIN}polygon 2.webp`, x: 24.4, y: 44.5, order: 3, depth: 0.7 },
+  { name: "BNB Chain", src: `${BLOCKCHAIN}binance-smart-chain 2.webp`, x: 34.9, y: 22.8, order: 1, depth: 0.5 },
   { name: "Kubernetes", src: `${TECH}kubernetes.svg`, x: 39.8, y: 45.8, order: 2, depth: 0.35 },
-  { name: "Ethereum", src: `${BLOCKCHAIN}ethereum 2.svg`, x: 50.7, y: 13.3, order: 0, depth: 0.25 },
+  { name: "Ethereum", src: `${BLOCKCHAIN}ethereum 2.webp`, x: 50.7, y: 13.3, order: 0, depth: 0.25 },
   { name: "Kubernetes", src: "/hire-a-developer/skills/kubernetes-2.svg", x: 50.7, y: 33.8, order: 1, depth: 0.3 },
   { name: "Kubernetes", src: "/hire-a-developer/skills/kubernetes-3.svg", x: 61.7, y: 45.8, order: 2, depth: 0.35 },
   { name: "React", src: `${TECH}react.svg`, x: 65.5, y: 22.8, order: 1, depth: 0.5 },
@@ -85,19 +86,16 @@ const SKILLS = [
 
 const path = "/hire-a-developer";
 
-export const metadata = {
+export const metadata = withSeo({
   title: "Hire Dedicated Software Developers",
   description:
     "Hire a developer to build secure, scalable web, mobile, and enterprise software customized to your business needs, with full-stack developers, cloud engineers, and Claude AI developers.",
   alternates: {
     canonical: path,
   },
-};
+});
 
-// Hero: the shared product hero (common/ProductHero.js), as on the SMS page. Per the design the
-// artwork (public/hire-a-developer/hero/hire-a-dev-hero.webp, rendered at 2x from the supplied
-// hire-a-dev-hero.svg, a 3.6 MB PNG-in-SVG) sits level with the copy, ~47vw wide, just in from the
-// right edge.
+
 export default function HireADeveloperPage() {
   return (
     <RevealEach>
@@ -156,5 +154,5 @@ export default function HireADeveloperPage() {
       <HireProcess />
       <HireCommitments />
     </RevealEach>
-  );
+  );  
 }

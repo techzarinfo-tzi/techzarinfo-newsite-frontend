@@ -4,7 +4,7 @@ import { DEMO_URL } from "@/config/demo";
 
 // The hero artwork: already tilted and cropped on its right side. The monitor starts 14.4% in from
 // the left and 13% down from the top; the rest of those margins is transparent.
-const ARTWORK = { src: "/product/ERP/ERO-Hero.svg", width: 704, height: 572 };
+const ARTWORK = { src: "/product/ERP/ERO-Hero.webp", width: 704, height: 572 };
 
 // Desktop follows the 1440px design (the same hero system as the LMS, e-commerce and blockchain
 // pages): copy on the left, starting ~10.35vw in and vertically centred; the tilted dashboard on the
