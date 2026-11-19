@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { createFrameFilm } from "@/components/ai/frameFilm";
+import { createFrameFilm, isLowPower, mobileSet } from "@/components/ai/frameFilm";
 import { HOLE } from "@/components/ai/AiIndustries";
 import GlassCard from "@/components/ai/GlassCard";
 
@@ -82,6 +82,7 @@ export default function AiApproach() {
       stage,
       count: FRAMES,
       src: frameSrc,
+      mobile: mobileSet("approach", FRAMES),
       ease: 9,
       onFrameReady: () => kick(),
     });
@@ -164,7 +165,7 @@ export default function AiApproach() {
         film.startLoading();
         kick();
       },
-      { rootMargin: "100% 0px" }
+      { rootMargin: isLowPower() ? "60% 0px" : "100% 0px" }
     );
     near.observe(track);
     const io = new IntersectionObserver(([e]) => {

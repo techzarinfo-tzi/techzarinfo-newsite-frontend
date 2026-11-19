@@ -1,3 +1,5 @@
+import { isLowPower } from "@/components/ai/frameFilm";
+
 // Cloud hand-over on the AI page: the island film ends with the clouds closing to white; this layer
 // starts as that same white and parts like clouds, revealing the industries section behind it.
 // WebGL on a transparent (premultiplied) canvas over the section, driven by one progress t (0..1).
@@ -126,7 +128,7 @@ export function createCloudReveal({ canvas, src }) {
       return ready && !gl.isContextLost();
     },
     resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, isLowPower() ? 1 : 1.5); // phones: lighter
       canvas.width = Math.round(canvas.clientWidth * dpr);
       canvas.height = Math.round(canvas.clientHeight * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);

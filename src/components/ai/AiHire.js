@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { createBurnReveal } from "@/components/ai/burnReveal";
+import { isLowPower } from "@/components/ai/frameFilm";
 
 // "Hire Our Claude AI Prompt Engineer" on the AI page, after the parchment-map process section.
 //
@@ -122,7 +123,7 @@ export default function AiHire() {
         startBurn();
         kick();
       },
-      { rootMargin: "100% 0px" }
+      { rootMargin: isLowPower() ? "60% 0px" : "100% 0px" }
     );
     near.observe(track);
     const io = new IntersectionObserver(([e]) => {

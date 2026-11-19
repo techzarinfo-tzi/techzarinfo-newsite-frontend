@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { BrainCircuit, Rocket, Workflow } from "lucide-react";
-import { createFrameFilm } from "@/components/ai/frameFilm";
+import { createFrameFilm, isLowPower, mobileSet } from "@/components/ai/frameFilm";
 
 // "Our One-Stop AI Development Services" on the Artificial Intelligence page: a scroll-driven film.
 // The section is a tall scroll track with a pinned, one-screen stage. Scrolling through the track
@@ -69,6 +69,7 @@ export default function AiOneStop() {
       stage,
       count: FRAMES,
       src: frameSrc,
+      mobile: mobileSet("one-stop", FRAMES),
       ease: EASE,
       onFrameReady: () => kick(),
     });
@@ -104,7 +105,7 @@ export default function AiOneStop() {
     }
 
     // Start loading about a screen before the section arrives; run only while it is on screen
-    const near = new IntersectionObserver(([e]) => e.isIntersecting && film.startLoading(), { rootMargin: "100% 0px" });
+    const near = new IntersectionObserver(([e]) => e.isIntersecting && film.startLoading(), { rootMargin: isLowPower() ? "60% 0px" : "100% 0px" });
     near.observe(track);
     const io = new IntersectionObserver(([e]) => {
       onScreen = e.isIntersecting;

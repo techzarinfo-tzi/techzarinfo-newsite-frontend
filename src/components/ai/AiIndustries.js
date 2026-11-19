@@ -16,7 +16,7 @@ import {
   UtensilsCrossed,
   Zap,
 } from "lucide-react";
-import { createFrameFilm } from "@/components/ai/frameFilm";
+import { createFrameFilm, isLowPower, mobileSet } from "@/components/ai/frameFilm";
 import { createCloudReveal } from "@/components/ai/cloudReveal";
 
 // "Our AI Software Development Services for Wider Industries" on the AI page, after the island film.
@@ -142,8 +142,10 @@ export default function AiIndustries() {
       stage,
       count: FRAMES,
       src: frameSrc,
+      mobile: mobileSet("industries", FRAMES),
       ease: 9,
       background: "#f7f7f7",
+      cropBackground: "#ffffff", // the phone frames have the lift baked in: #f7f7f7 -> white
       place: (cw) => {
         const k = cw / cssW;
         return { x: box.x * k, y: box.y * k, w: box.w * k, h: box.h * k };
@@ -220,7 +222,7 @@ export default function AiIndustries() {
         startClouds();
         kick();
       },
-      { rootMargin: "100% 0px" }
+      { rootMargin: isLowPower() ? "60% 0px" : "100% 0px" }
     );
     near.observe(track);
     const io = new IntersectionObserver(([e]) => {
@@ -231,6 +233,8 @@ export default function AiIndustries() {
     const ro = new ResizeObserver(() => {
       layout();
       film.resize();
+      // the phone crop set has the 3.3% lift baked in; full frames get it from the CSS filter
+      canvasRef.current.style.filter = film.mode === "crop" ? "none" : "brightness(1.033)";
       clouds?.resize();
       kick();
     });

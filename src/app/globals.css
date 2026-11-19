@@ -2572,3 +2572,29 @@ body {
     animation: none;
   }
 }
+
+/* AI page on phones and small touch tablets (same query as isLowPower in frameFilm.js): the
+   heaviest compositor work is swapped for look-alikes; desktop is untouched. */
+@media (max-width: 767px), (pointer: coarse) and (max-width: 1180px) {
+  /* Glass: a frosted fill instead of a live backdrop blur over a moving film */
+  .ai-glass {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background:
+      linear-gradient(150deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.14) 50%, rgba(255, 255, 255, 0.1) 100%),
+      linear-gradient(rgba(16, 26, 24, 0.36), rgba(16, 26, 24, 0.36)) !important;
+  }
+  .ai-glass-dark {
+    background:
+      linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06)),
+      linear-gradient(rgba(14, 20, 36, 0.72), rgba(14, 20, 36, 0.72)) !important;
+  }
+  /* Text reveals: keep the fade and rise, drop the animated blur (a full repaint per frame) */
+  section[data-guide^="ai"] [style*="blur(calc"] {
+    filter: none !important;
+  }
+  /* The intro's word-by-word lighting follows the scroll directly (no per-word transitions) */
+  [data-ai-words] > span {
+    transition: none !important;
+  }
+}

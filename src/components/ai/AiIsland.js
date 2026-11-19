@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { createFrameFilm } from "@/components/ai/frameFilm";
+import { createFrameFilm, isLowPower, mobileSet } from "@/components/ai/frameFilm";
 import { createTouchPortal } from "@/components/ai/touchPortal";
 import GlassCard from "@/components/ai/GlassCard";
 
@@ -78,6 +78,7 @@ export default function AiIsland() {
       stage,
       count: FRAMES,
       src: frameSrc,
+      mobile: mobileSet("island", FRAMES),
       ease: EASE,
       onFrameReady: () => kick(),
     });
@@ -148,7 +149,7 @@ export default function AiIsland() {
         startPortal();
         kick();
       },
-      { rootMargin: "100% 0px" }
+      { rootMargin: isLowPower() ? "60% 0px" : "100% 0px" }
     );
     near.observe(track);
     const io = new IntersectionObserver(([e]) => {

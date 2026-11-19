@@ -96,9 +96,20 @@ export default function AiJourney() {
       stage.style.setProperty("--r", ease(r).toFixed(4));
       stage.style.setProperty("--q", q.toFixed(4));
     };
+    // Only while the section is on screen (or about to be); one last update as it leaves, so its
+    // end state is exact even after a fast fling
+    let onScreen = true;
     const request = () => {
-      if (!raf) raf = requestAnimationFrame(update);
+      if (onScreen && !raf) raf = requestAnimationFrame(update);
     };
+    const gate = new IntersectionObserver(
+      ([e]) => {
+        onScreen = e.isIntersecting;
+        if (!raf) raf = requestAnimationFrame(update);
+      },
+      { rootMargin: "25% 0px" }
+    );
+    gate.observe(track);
     fit();
     update();
     const ro = new ResizeObserver(() => {
@@ -109,6 +120,7 @@ export default function AiJourney() {
     window.addEventListener("scroll", request, { passive: true });
     reduced.addEventListener("change", request);
     return () => {
+      gate.disconnect();
       cancelAnimationFrame(raf);
       ro.disconnect();
       window.removeEventListener("scroll", request);

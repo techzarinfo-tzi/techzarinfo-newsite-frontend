@@ -60,15 +60,27 @@ export default function AiHeroStage({ hero, children }) {
         words.style.setProperty("--r", clamp01((vh * 0.9 - top) / (vh * 0.5)).toFixed(4));
       }
     };
+    // Only while the section is on screen (or about to be); one last update as it leaves, so its
+    // end state is exact even after a fast fling
+    let onScreen = true;
     const request = () => {
-      if (!frame) frame = requestAnimationFrame(update);
+      if (onScreen && !frame) frame = requestAnimationFrame(update);
     };
+    const gate = new IntersectionObserver(
+      ([e]) => {
+        onScreen = e.isIntersecting;
+        if (!frame) frame = requestAnimationFrame(update);
+      },
+      { rootMargin: "25% 0px" }
+    );
+    gate.observe(stage);
 
     update();
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request);
     reduced.addEventListener("change", request);
     return () => {
+      gate.disconnect();
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", request);
       window.removeEventListener("resize", request);

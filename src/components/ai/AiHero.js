@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ContactLink from "@/components/common/ContactLink";
 import DemoLink from "@/components/common/DemoLink";
+import { isLowPower } from "@/components/ai/frameFilm";
 
 // Artificial Intelligence hero: the supplied photo (a hall under a funnel of glowing screens, a
 // figure standing below its bright ring), full-bleed. A WebGL shader brings it to life:
@@ -216,7 +217,7 @@ export default function AiHero() {
       const w = section.clientWidth;
       const h = section.clientHeight;
       if (!w || !h) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, isLowPower() ? 1.25 : 2); // phones: lighter
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);

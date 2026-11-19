@@ -1,3 +1,5 @@
+import { isLowPower } from "@/components/ai/frameFilm";
+
 // "Touch" transition between the AI page's two films (after the Shopify Editions "Renaissance" hand-
 // over, where two figures touch and a portal of light opens): drawn by WebGL on a transparent canvas
 // over the pinned train scene, driven by one progress value t (0..1, from the scroll).
@@ -220,7 +222,7 @@ export function createTouchPortal({ canvas, srcA, srcB, touch }) {
   });
 
   const resize = () => {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, isLowPower() ? 1 : 1.5); // phones: lighter
     canvas.width = Math.round(canvas.clientWidth * dpr);
     canvas.height = Math.round(canvas.clientHeight * dpr);
     gl.viewport(0, 0, canvas.width, canvas.height);

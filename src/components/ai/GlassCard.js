@@ -7,7 +7,7 @@ import { BrainCircuit } from "lucide-react";
 export default function GlassCard({ title, text, icon: Icon = BrainCircuit }) {
   return (
     <div
-      className="relative overflow-hidden rounded-[22px] border border-white/25 p-5 lg:p-6"
+      className="ai-glass relative overflow-hidden rounded-[22px] border border-white/25 p-5 lg:p-6"
       style={{
         background: "linear-gradient(150deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.05) 100%)",
         backdropFilter: "blur(22px) saturate(170%)",

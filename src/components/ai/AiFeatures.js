@@ -119,14 +119,26 @@ export default function AiFeatures() {
       glow.style.borderRadius = `${radius}px`;
       glow.style.opacity = (Math.min(1, e * 12) * (1 - g)).toFixed(3);
     };
+    // Only while the section is on screen (or about to be); one last update as it leaves, so its
+    // end state is exact even after a fast fling
+    let onScreen = true;
     const request = () => {
-      if (!raf) raf = requestAnimationFrame(update);
+      if (onScreen && !raf) raf = requestAnimationFrame(update);
     };
+    const gate = new IntersectionObserver(
+      ([e]) => {
+        onScreen = e.isIntersecting;
+        if (!raf) raf = requestAnimationFrame(update);
+      },
+      { rootMargin: "25% 0px" }
+    );
+    gate.observe(track);
     update();
     window.addEventListener("scroll", request, { passive: true });
     window.addEventListener("resize", request);
     reduced.addEventListener("change", request);
     return () => {
+      gate.disconnect();
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", request);
       window.removeEventListener("resize", request);
@@ -226,7 +238,7 @@ export default function AiFeatures() {
                         }}
                       >
                         <div
-                          className="overflow-hidden rounded-xl border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-colors duration-300 hover:border-white/35"
+                          className="ai-glass ai-glass-dark overflow-hidden rounded-xl border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_30px_-12px_rgba(0,0,0,0.6)] transition-colors duration-300 hover:border-white/35"
                           style={{
                             background:
                               "linear-gradient(160deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))",

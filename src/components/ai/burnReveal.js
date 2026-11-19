@@ -1,3 +1,5 @@
+import { isLowPower } from "@/components/ai/frameFilm";
+
 // Fire hand-over on the AI page: the parchment-map section burns away from the centre, revealing the
 // "Hire Our Claude AI Prompt Engineer" section. WebGL on a transparent (premultiplied) canvas over the
 // pinned map stage, driven by one progress t (0..1, from the scroll).
@@ -167,7 +169,7 @@ export function createBurnReveal({ canvas, src }) {
       return ready && !gl.isContextLost();
     },
     resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, isLowPower() ? 1 : 1.5); // phones: lighter
       canvas.width = Math.round(canvas.clientWidth * dpr);
       canvas.height = Math.round(canvas.clientHeight * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
