@@ -26,7 +26,7 @@ export const servicesMenu = {
       title: "Software Development",
       links: [
         { label: "Website Development", href: "/web-development-company-in-chennai" },
-        { label: "Mobile App Development", href: "/services/mobile-app-development" },
+        { label: "Mobile App Development", href: "/mobile-app-development-company" },
         { label: "E-commerce Development", href: "/ecommerce-website-development-company-in-india" },
       ],
     },

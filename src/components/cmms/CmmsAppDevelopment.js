@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import CardStack from "@/components/cmms/CardStack";
 
 const ASSETS = "/product/CMMS/app-development";
@@ -71,23 +72,26 @@ function Glows({ reverse }) {
   );
 }
 
-// Also used on the SMS page (SmsSingleStop.js)
-export function StarIcon() {
+// Also used on the SMS page (SmsSingleStop.js) and the Mobile App page (smaller, via sizeClass)
+export function StarIcon({ sizeClass = "size-[26px] lg:size-[29px]" }) {
   return (
     <span
       aria-hidden="true"
-      className="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-linear-to-b from-[#005EFF] to-[#5593FF] lg:size-[29px]"
+      className={`flex shrink-0 items-center justify-center rounded-full bg-linear-to-b from-[#005EFF] to-[#5593FF] ${sizeClass}`}
     >
-      <img src={`${ASSETS}/star.svg`} alt="" width={17.4} height={17.4} className="size-[15px] lg:size-[17.4px]" />
+      <img src={`${ASSETS}/star.svg`} alt="" width={17.4} height={17.4} className="size-[60%]" />
     </span>
   );
 }
 
-function FeatureCard({ title, text, points, image, reverse, outlined }) {
+// Optional per card (pages other than CMMS): `link` ({ label, href }) adds a button under the text,
+// `points` can be left out, and `copyBox` overrides the desktop copy column. `heightClass` comes from
+// the section.
+function FeatureCard({ title, text, points, link, image, reverse, outlined, copyBox, heightClass }) {
   return (
     <li
       data-stack-card
-      className={`relative flex flex-col overflow-hidden rounded-[20px] bg-[#e9f5ff] lg:h-[clamp(440px,40.8vw,502px)] lg:flex-row lg:items-center ${
+      className={`relative flex flex-col overflow-hidden rounded-[20px] bg-[#e9f5ff] ${heightClass} lg:flex-row lg:items-center ${
         outlined ? "border-2 border-[#77a3fa]" : ""
       } ${reverse ? "lg:justify-end" : ""}`}
     >
@@ -96,7 +100,7 @@ function FeatureCard({ title, text, points, image, reverse, outlined }) {
       <div
         className={`relative z-10 px-6 pt-8 sm:px-10 sm:pt-10 lg:p-0 ${
           // Copy column: left 48 / 667 wide, or (mirrored) from 593 to 44 short of the right edge
-          reverse ? "lg:w-[51.8%] lg:pr-[3.6%]" : "lg:w-[58.1%] lg:pl-[3.9%]"
+          copyBox ?? (reverse ? "lg:w-[51.8%] lg:pr-[3.6%]" : "lg:w-[58.1%] lg:pl-[3.9%]")
         }`}
       >
         <h3 className="text-2xl font-semibold leading-tight tracking-tight text-[#002461] sm:text-[28px] lg:text-[clamp(26px,2.2vw,30px)]">
@@ -106,14 +110,27 @@ function FeatureCard({ title, text, points, image, reverse, outlined }) {
           {text}
         </p>
 
-        <ul className="mt-6 grid gap-3.5 sm:grid-cols-2 sm:gap-x-6 lg:mt-10 lg:grid-cols-1 lg:gap-[23px]">
-          {points.map((label) => (
-            <li key={label} className="flex items-center gap-[15px] text-base text-[#002461] sm:text-lg lg:text-[clamp(17px,1.4vw,20px)]">
-              <StarIcon />
-              {label}
-            </li>
-          ))}
-        </ul>
+        {points?.length > 0 && (
+          <ul className="mt-6 grid gap-3.5 sm:grid-cols-2 sm:gap-x-6 lg:mt-10 lg:grid-cols-1 lg:gap-[23px]">
+            {points.map((label) => (
+              <li key={label} className="flex items-center gap-[15px] text-base text-[#002461] sm:text-lg lg:text-[clamp(17px,1.4vw,20px)]">
+                <StarIcon />
+                {label}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Read more: the design's 123x45 button, 10px radius, #0A50A5 */}
+        {link && (
+          <Link
+            href={link.href}
+            aria-label={`${link.label} about ${title}`}
+            className="mt-6 inline-flex h-[42px] items-center rounded-[10px] bg-[#0A50A5] px-4 text-base text-white transition-colors duration-200 hover:bg-[#002461] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0A50A5] lg:mt-[clamp(20px,2.3vw,33px)] lg:h-[45px] lg:px-[11px] lg:text-[clamp(17px,1.4vw,20px)]"
+          >
+            {link.label}
+          </Link>
+        )}
       </div>
 
       {/* Mobile: below the copy, at its natural size. Desktop: the design's box on the card. */}
@@ -147,20 +164,28 @@ export default function CmmsAppDevelopment() {
 // Shared with other pages (e.g. SMS): pass the heading, intro and three cards shaped like `features`
 // above (title, text, points, image with its desktop box, reverse, outlined). The glows and the star
 // bullets are the same everywhere.
-export function FeatureStackSection({ guide, title, text, features: cards }) {
+export function FeatureStackSection({
+  guide,
+  title,
+  text,
+  features: cards,
+  cardHeightClass = "lg:h-[clamp(440px,40.8vw,502px)]",
+}) {
   return (
     <section data-guide={guide} className="relative bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-      <div className="mx-auto max-w-[776px] text-center">
-        <h2 className="mx-auto max-w-[600px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
-          {title}
-        </h2>
-        <p className="mx-auto mt-4 text-[15px] leading-normal text-[#002461] sm:text-base lg:text-xl">{text}</p>
-      </div>
+      {title && (
+        <div className="mx-auto mb-10 max-w-[776px] text-center lg:mb-16">
+          <h2 className="mx-auto max-w-[600px] text-[28px] font-semibold leading-[1.25] tracking-tight text-balance text-[#002461] sm:text-[34px] lg:text-[40px]">
+            {title}
+          </h2>
+          {text && <p className="mx-auto mt-4 text-[15px] leading-normal text-[#002461] sm:text-base lg:text-xl">{text}</p>}
+        </div>
+      )}
 
       {/* Scroll-linked stack: each card pins and the next one slides up over it (CardStack.js) */}
-      <CardStack className="mx-auto mt-10 grid max-w-[1230px] gap-6 lg:mt-16 lg:gap-[30px]">
+      <CardStack className="mx-auto grid max-w-[1230px] gap-6 lg:gap-[30px]">
         {cards.map((feature) => (
-          <FeatureCard key={feature.title} {...feature} />
+          <FeatureCard key={feature.title} heightClass={cardHeightClass} {...feature} />
         ))}
       </CardStack>
     </section>

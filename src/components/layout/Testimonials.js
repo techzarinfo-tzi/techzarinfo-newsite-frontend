@@ -1,4 +1,5 @@
 import TestimonialVideo from "./TestimonialVideo";
+import TestimonialsHeading from "./TestimonialsHeading";
 
 // Site-wide section (rendered from the root layout, like Navbar) — appears under every page,
 // not just the homepage. The three video cards play real client videos; each already carries its
@@ -105,9 +106,8 @@ export default function Testimonials() {
   return (
     <section data-guide="testimonials" className="bg-white py-14 sm:py-16 lg:py-20">
       <div className="mx-auto w-full max-w-[1100px] px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-[26px] font-bold leading-[1.2] text-[#002148] sm:text-[32px] lg:text-[36px]">
-          What our clients says about us
-        </h2>
+        {/* Default heading, or the current page's own (TestimonialsHeading.js) */}
+        <TestimonialsHeading />
 
         <div className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-12 lg:gap-6">
           {columns.map((order, i) => (

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { createFrameFilm, isLowPower, mobileSet } from "@/components/ai/frameFilm";
 import { HOLE } from "@/components/ai/AiIndustries";
 import GlassCard from "@/components/ai/GlassCard";
+import { AppWindowMac, Box, GraduationCap } from "lucide-react";
 
 // "Our Approach to AI Software Development" on the AI page, after the industries section. A scroll
 // film like the others (143 frames, every 2nd of the supplied 285): the camera starts close on the
@@ -41,11 +42,24 @@ const CARDS_AT = [0.3, 0.36, 0.42]; // each card rises in
 const CARDS_OUT = 0.56; // they lift away together
 const HEADING_AT = 0.86;
 
-// Card copy as in the design (the cards currently share it)
-const CARD = {
-  title: "Custom AI Development",
-  text: "We code the intelligence you imagine. We build custom AI that understands your requirements, adapts to your processes, and creates new possibilities beyond conventional software",
-};
+// Card copy, one per card in order (CARDS_AT)
+const CARDS = [
+  {
+    icon: GraduationCap,
+    title: "AI Powered LMS Software",
+    text: "Our AI-powered LMS personalizes your training paths, recommends courses, and tracks progress for smarter learning experiences. Get our affordable LMS development solutions.",
+  },
+  {
+    icon: Box,
+    title: "AI Integrated ERP Software",
+    text: "Our AI-integrated ERP software streamlines your finance, HR, supply chains, and manufacturing with intelligent automation and predictive insights.",
+  },
+  {
+    icon: AppWindowMac,
+    title: "AI-Driven CRM Software",
+    text: "Turn every customer interaction into a growth opportunity with AI-powered CRM software. Analyze customer behavior and identify promising leads with intelligent data.",
+  },
+];
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (a, b, v) => {
@@ -247,7 +261,8 @@ export default function AiApproach() {
                   "translate3d(0, calc((1 - var(--c)) * 36px - var(--o) * 44px), 0) scale(calc(0.96 + var(--c) * 0.04 - var(--o) * 0.04))",
               }}
             >
-              <GlassCard {...CARD} />
+              {/* sizeSet: all three cards come out the same size (GlassCard.js) */}
+              <GlassCard {...CARDS[i]} sizeSet={CARDS} />
             </li>
           ))}
         </ul>

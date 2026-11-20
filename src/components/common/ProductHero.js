@@ -12,7 +12,8 @@ import HeroButton, { HeroButtonGroup } from "@/components/common/HeroButton";
 // - buttons: [{ label, href, variant }] for HeroButton
 // - image: { src, alt, width, height, unoptimized }
 // - artClassName: where the artwork sits and how wide it is (per design)
-export default function ProductHero({ guide, lines, description, buttons, image, artClassName, descriptionClassName = "lg:max-w-[620px]" }) {
+// - art: optional composed artwork (a React node) used in place of the single image
+export default function ProductHero({ guide, lines, description, buttons, image, art, artClassName, descriptionClassName = "lg:max-w-[620px]" }) {
   return (
     <section
       data-guide={guide}
@@ -50,16 +51,18 @@ export default function ProductHero({ guide, lines, description, buttons, image,
         </div>
 
         <div className={artClassName}>
-          <Image
-            src={image.src}
-            alt={image.alt}
-            width={image.width}
-            height={image.height}
-            preload
-            unoptimized={image.unoptimized}
-            sizes={image.unoptimized ? undefined : "(min-width: 1024px) 48vw, 92vw"}
-            className="h-auto w-full"
-          />
+          {art ?? (
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              preload
+              unoptimized={image.unoptimized}
+              sizes={image.unoptimized ? undefined : "(min-width: 1024px) 48vw, 92vw"}
+              className="h-auto w-full"
+            />
+          )}
         </div>
       </div>
 

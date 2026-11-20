@@ -88,6 +88,49 @@ export const guideSteps = {
     mood: "wave",
     text: "Ready when you are! Start a project or book a free demo, I'll be right here.",
   },
+  // Industries page
+  industriesSphere: {
+    side: "left",
+    mood: "wave",
+    text: "Move your mouse to spin the globe of industries, and tap any card to read it up close!",
+  },
+  // Culture page
+  culturePhotos: {
+    side: "left",
+    mood: "wave",
+    text: "Welcome to life at TZI! Scroll slowly and watch our moments rise and ripple by.",
+  },
+  // Mobile App Development page
+  mobileHero: {
+    side: "left",
+    mood: "wave",
+    text: "Hi, I'm your TZI AI guide! Let's build a mobile app your customers will love.",
+  },
+  mobileServices: {
+    side: "right",
+    mood: "point",
+    text: "Android, iOS, hybrid or blockchain: keep scrolling and watch each app type stack up.",
+  },
+  mobileWhyChoose: {
+    side: "left",
+    mood: "hop",
+    text: "Hover a card to fan it out: here's why businesses build their apps with TZI.",
+  },
+  mobileProcess: {
+    side: "right",
+    mood: "point",
+    text: "From idea to launch and beyond: follow the arrows round our eight-step app development process.",
+  },
+  mobileEngagement: {
+    side: "left",
+    mood: "point",
+    text: "Fixed price, time and material, or a dedicated team: pick the model that fits your project.",
+  },
+  mobileIndustries: {
+    side: "right",
+    mood: "hop",
+    text: "IoT, healthcare, lifestyle and more: hover a card to take a closer look.",
+  },
   // Hire a Developer page
   hireHero: {
     side: "left",

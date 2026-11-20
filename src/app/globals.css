@@ -1518,6 +1518,175 @@ body {
   }
 }
 
+/* Process diagram motion (EcommerceProcess.js with `animated`, driven by ProcessMotion.js).
+   Desktop: each piece is the full diagram clipped to one region (--clip). Pieces show at rest
+   unless the wrapper is [data-proc="ready"] (JS on, motion allowed); then they wait hidden until
+   the diagram gets [data-in]: the centre pops, each card rises in turn (--d) and each arrow draws
+   out in the direction it points (its clip opens from --clip-from). Once all are in, the cards take
+   turns lifting (--loop-d, one 11.2s cycle for all eight), a hovered card lifts and grows, and the
+   centre floats. Loop and float use `translate`, entrance and hover `transform`/`scale`, so they
+   never fight. Below lg each stacked card and arrow rises in as it scrolls into view. */
+.proc-piece {
+  clip-path: var(--clip);
+  pointer-events: none;
+}
+
+.proc-card {
+  pointer-events: auto;
+  transition: scale 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.proc-card:hover {
+  scale: 1.04;
+}
+
+[data-proc="ready"] .proc-piece {
+  opacity: 0;
+  transition:
+    opacity 0.55s ease var(--d, 0s),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s),
+    clip-path 0.6s cubic-bezier(0.65, 0, 0.35, 1) var(--d, 0s),
+    scale 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-proc="ready"] .proc-centre {
+  transform: scale(0.6) rotate(-8deg);
+}
+
+[data-proc="ready"] .proc-card {
+  transform: translate3d(0, 28px, 0) scale(0.92);
+}
+
+[data-proc="ready"] .proc-arrow {
+  clip-path: var(--clip-from);
+}
+
+[data-proc="ready"] [data-in] .proc-piece {
+  opacity: 1;
+  transform: none;
+  clip-path: var(--clip);
+}
+
+[data-proc="ready"] [data-in] .proc-centre {
+  animation: proc-float 4.5s ease-in-out 1.2s infinite;
+}
+
+[data-proc="ready"] [data-in] .proc-card {
+  animation: proc-step-lift 11.2s ease-in-out var(--loop-d, 0s) infinite;
+}
+
+@keyframes proc-float {
+  50% {
+    translate: 0 -10px;
+  }
+}
+
+/* Each card lifts for its 1/8 share of the cycle, then rests while the others take their turn */
+@keyframes proc-step-lift {
+  0%, 12.5%, 100% {
+    translate: 0 0;
+  }
+  4%, 8.5% {
+    translate: 0 -10px;
+  }
+}
+
+[data-proc="ready"] .proc-m-card,
+[data-proc="ready"] .proc-m-arrow {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 0.55s ease,
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-proc="ready"] .proc-m-arrow {
+  transform: translate3d(0, -10px, 0);
+}
+
+[data-proc="ready"] .proc-m-card[data-in],
+[data-proc="ready"] .proc-m-arrow[data-in] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proc-card,
+  .proc-card:hover {
+    transition: none;
+    scale: none;
+  }
+}
+
+/* Mobile App "Engagement Models" (components/mobile/MobileEngagementModels.js). Hover always works;
+   the entrance only runs once ProcessMotion marks the wrapper ready (JS on, motion allowed): each
+   card fades up as it scrolls in (--i staggers the row), then its points slide in one by one (--j). */
+.em-card {
+  transition:
+    translate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+.em-card:hover {
+  translate: 0 -6px;
+}
+
+.em-tile {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.em-card:hover .em-tile {
+  transform: translate3d(0, -3px, 0) rotate(-6deg);
+}
+
+[data-proc="ready"] .em-card {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity 0.6s ease calc(var(--i, 0) * 140ms),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i, 0) * 140ms),
+    translate 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+[data-proc="ready"] .em-point {
+  opacity: 0;
+  transform: translate3d(-12px, 0, 0);
+  transition:
+    opacity 0.45s ease calc(var(--i, 0) * 140ms + 350ms + var(--j, 0) * 90ms),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i, 0) * 140ms + 350ms + var(--j, 0) * 90ms);
+}
+
+[data-proc="ready"] .em-card[data-in],
+[data-proc="ready"] .em-card[data-in] .em-point {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .em-card,
+  .em-tile {
+    transition: none;
+  }
+
+  .em-card:hover,
+  .em-card:hover .em-tile {
+    translate: none;
+    transform: none;
+  }
+}
+
+/* Mobile App hero: the icon tiles and analytics card bob gently around the phone */
+.mobile-hero-float {
+  animation: erp-float 4s ease-in-out var(--d, 0s) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-hero-float {
+    animation: none;
+  }
+}
+
 .erp-hero-line {
   animation: erp-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0s) backwards;
 }
@@ -1548,7 +1717,8 @@ body {
   --card: min(340px, calc((100vw - 5rem) / 4.38));
   --pitch: calc(var(--card) * 0.675);
   --card-h: max(calc(var(--card) * 1.12), 355px);
-  width: calc(var(--card) + var(--pitch) * 4);
+  /* --n: number of cards (set inline by ServicesFan; 5 on ERP, 4 on Mobile App) */
+  width: calc(var(--card) + var(--pitch) * (var(--n, 5) - 1));
   height: calc(var(--card-h) + 24px);
   padding-top: 24px;
 }

@@ -188,7 +188,7 @@ export default function AiJourney() {
           <Compass />
 
           {/* The six steps */}
-          <ol className="grid w-full max-w-[26rem] grid-cols-2 gap-2.5 md:contents">
+          <ol className="grid w-full max-w-[26rem] auto-rows-fr grid-cols-2 gap-2.5 md:contents">
             {STEPS.map(({ title, icon: Icon, x, y }, i) => (
               <li
                 key={title}

@@ -5,6 +5,17 @@ import Image from "next/image";
 import { createFrameFilm, isLowPower, mobileSet } from "@/components/ai/frameFilm";
 import { createTouchPortal } from "@/components/ai/touchPortal";
 import GlassCard from "@/components/ai/GlassCard";
+import {
+  ChartColumnIncreasing,
+  Globe,
+  LayoutGrid,
+  MessageSquareMore,
+  NotebookPen,
+  Package,
+  SquareCode,
+  SquareUser,
+  Waypoints,
+} from "lucide-react";
 
 // The AI page's second scroll film, after "One-Stop AI Development Services": the camera rises from a
 // phone on a wooden tray in the grass, over an island in the sea, up through the clouds into white
@@ -33,13 +44,57 @@ const MOON = [0.495, 0.369]; // the touch point: the moon in the train's last fr
 const FILM_END = 0.94;
 const EASE = 9;
 
-// Card copy as in the design (all cards currently share it)
-const CARD = {
-  title: "Custom AI Development",
-  text: "We code the intelligence you imagine. We build custom AI that understands your requirements, adapts to your processes, and creates new possibilities beyond conventional software",
-};
+// The nine AI services, in the design's order (the group positions follow in CARDS)
+const SERVICES = [
+  {
+    icon: Waypoints,
+    title: "Custom AI Development",
+    text: "Custom AI Development delivers ready-to-deploy, white-label intelligent solutions that help your businesses to brand, scale, and resell as their own platforms in the market. Our systems are crafted with configurable AI models, modular architectures, and multi-tenant support to suit SaaS providers, enterprises, and startups alike. This type of method shortens development time",
+  },
+  {
+    icon: Package,
+    title: "AI Product Development",
+    text: "We can develop intelligent mobile and web apps using sophisticated machine learning algorithms that learn from user behavior in real-time. Our platforms will enable users to have a personalized experience based on recommendations, dynamic content, and predictive analytics. Our AI-enabled platforms will enhance engagement, retention, and productivity worldwide.",
+  },
+  {
+    icon: SquareCode,
+    title: "AI Integration Services",
+    text: "Our AI Integration services can integrate intelligent algorithms with your current enterprise systems like CRMs, ERPs, SaaS applications, and data pipelines to improve automation and decision-making. Our solution implementation allows real-time insights, predictive analytics, and intelligent workflows while ensuring secure and scalable implementation with effortless performance.",
+  },
+  {
+    icon: SquareUser,
+    title: "AI Agents & Virtual Assistants",
+    text: "Our AI Agents & Virtual Assistants will help your businesses to automate conversations, routine tasks, scheduling, and internal support across departments. Our platform understands user requests, provides instant responses, and connects with enterprise systems to complete actions. Our advanced agents can learn from interactions to improve accuracy over time.",
+  },
+  {
+    icon: MessageSquareMore,
+    title: "AI Chatbot Development",
+    text: "AI chatbot development will support your businesses as conversational systems that handle your customer inquiries, lead generation, appointment booking, and support requests around the clock. Our chatbots can easily understand natural language and respond with accurate, contextual answers across websites, mobile apps, and messaging platforms to your clients.",
+  },
+  {
+    icon: NotebookPen,
+    title: "Generative AI Solutions",
+    text: "We are a leading generative AI development company in this business. Our experienced AI developers can develop platforms for text, image, video, research, documentation, and code that will allow your businesses to automate content creation, speed up development cycles, and improve the creative work process.",
+  },
+  {
+    icon: ChartColumnIncreasing,
+    title: "Predictive Analytics & Forecasting Systems",
+    text: "Our team is capable of developing personalized engines using AI programming languages that will help to analyze the historical data of your businesses to predict demands, identify risks, and make decisions that help businesses shift from being reactive to proactive. Our software identifies the underlying patterns in sales, supply chains, customer behaviors, and financials.",
+  },
+  {
+    icon: LayoutGrid,
+    title: "Computer Vision Applications",
+    text: "We will develop computer vision applications that can be utilized for the development of sophisticated image and video recognition models for automating quality inspection, facial recognition, medical image analysis, and security surveillance. Our system will be capable of processing visual data in real-time to identify defects or threats.",
+  },
+  {
+    icon: Globe,
+    title: "Natural Language Processing (NLP) Systems",
+    text: "Our AI software developers can create language-driven solutions such as sentiment analysis, speech recognition, translation, and document intelligence that helps your businesses to understand and work with text and voice data more easily. Our systems can read your business customer messages, convert speech into text, translate conversations across languages, and extract key details from documents.",
+  },
+];
 // Desktop: group (gd), side and a stagger offset (od, svh) within the group.
 // Phones: group (gm) of two stacked cards, the second offset by om (svh).
+// Six card slots: each shows the service at the same position in SERVICES.
 const CARDS = [
   { side: "L", gd: 0, od: 0, gm: 0, om: 0 },
   { side: "R", gd: 0, od: 14, gm: 0, om: 36 },
@@ -48,6 +103,9 @@ const CARDS = [
   { side: "R", gd: 2, od: 14, gm: 2, om: 0 },
   { side: "C", gd: 3, od: 0, gm: 2, om: 36 },
 ];
+// The services that have a card slot (sizes every card to the tallest of these)
+const SHOWN = SERVICES.slice(0, CARDS.length);
+
 const SIDE = {
   L: "left-1/2 [--x:-50%] md:left-[5%] md:[--x:0%]",
   R: "left-1/2 [--x:-50%] md:left-auto md:right-[5%] md:[--x:0%]",
@@ -231,7 +289,8 @@ export default function AiIsland() {
                   "translate3d(var(--x), calc(var(--y) * 1svh - 50% + (1 - var(--a)) * 28px), 0) scale(calc(0.94 + var(--a) * 0.06))",
               }}
             >
-              <GlassCard {...CARD} />
+              {/* sizeSet: the shown cards all come out the same size (GlassCard.js) */}
+              <GlassCard {...SERVICES[i]} sizeSet={SHOWN} />
             </li>
           ))}
         </ul>

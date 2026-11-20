@@ -166,8 +166,8 @@ export default function ErpServices() {
   );
 }
 
-// Shared with other pages (e.g. CMMS): pass the heading, an optional intro and five cards (icon
-// name, title, text). Each card takes the look of the ERP card in the same position.
+// Shared with other pages (e.g. CMMS, Mobile App): pass the heading, an optional intro and up to five
+// cards (icon name, title, text). Each card takes the look of the ERP card in the same position.
 export function ServicesFan({ guide, title, text, services, titleWidth = "max-w-[620px]" }) {
   const items = services.map((service, i) => ({ ...fanLooks[i], ...service }));
   const [active, setActive] = useState(null);
@@ -209,7 +209,7 @@ export function ServicesFan({ guide, title, text, services, titleWidth = "max-w-
       </div>
 
       {/* Desktop (1280px and up): the fan */}
-      <div className="erp-fan relative mx-auto mt-14 hidden xl:block" onPointerLeave={hover(clear)}>
+      <div className="erp-fan relative mx-auto mt-14 hidden xl:block" style={{ "--n": items.length }} onPointerLeave={hover(clear)}>
         {items.map((service, i) => (
           <Card
             key={service.title}

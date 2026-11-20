@@ -147,7 +147,7 @@ export default function HireADeveloperPage() {
       {/* Heading and intro as in the design screenshot, until this page's own copy is supplied */}
       <TailorMadeSection
         guide="hireStrengths"
-        title="Tailor-Made White Label LMS for Corporate Training App Development"
+        title="Corporate Training App Development"
         text="Discover the potential of a tailored Learning Management System designed to meet your organization's unique training needs"
         slots={STRENGTH_SLOTS}
       />
